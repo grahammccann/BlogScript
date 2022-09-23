@@ -36,7 +36,7 @@
 		$total = DB::getInstance()->selectValue('SELECT count(*) FROM `posts`');
 		
 		if (!count($posts)) {
-			stderr('There is <strong>no</strong> posts to show yet!');
+			stderr('There are <strong>no</strong> posts to show yet!');
 			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
 			exit;
 		}	
