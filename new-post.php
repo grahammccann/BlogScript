@@ -129,7 +129,7 @@
 				  
 				  <div class="mb-3">
 					<label for="post_body" class="form-label"><strong>Body:</strong></label>
-					<textarea class="form-control" id="post_body" name="post_body" rows="8" required></textarea>
+					<textarea class="form-control" id="post_body" name="post_body" rows="15" required></textarea>
 				  </div>
 				  
 				  <div class="mb-3">
