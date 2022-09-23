@@ -1,0 +1,6 @@
+User-agent: * 
+Disallow:
+Disallow: images/
+Disallow: includes/
+Disallow: uploads/
+Sitemap: https://www.topricecookers.org/sitemap.xml

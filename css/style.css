@@ -1,0 +1,12 @@
+.badge-sm {
+    min-width: 1.8em;
+    padding: .25em !important;
+    margin-left: .1em;
+    margin-right: .1em;
+    color: white !important;
+    cursor: pointer;
+}
+
+.btn:focus{
+    box-shadow: none!important;
+}
