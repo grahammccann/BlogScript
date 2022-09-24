@@ -297,7 +297,7 @@ class DB
     protected function normalizeParams(array $params = []) {
         $normParams = [];
         foreach($params as $paramKey => $paramValue) {
-            $normParams[(strlen($paramKey) && (':' === $paramKey{0}))? $paramKey: ':' . $paramKey] = $paramValue;
+            $normParams[(strlen($paramKey) && (':' === $paramKey[0]))? $paramKey: ':' . $paramKey] = $paramValue;
         }
 
         return $normParams;

@@ -53,7 +53,7 @@
 						
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage('post_image', $_FILES['post_image']['name']);	
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);	
 							DB::getInstance()->insert(
 								'images',
 							[
@@ -64,7 +64,7 @@
 							]);
 						
 						} else {
-							$imageName = "image.jpg";
+							$imageName = "img-image-generic.png";
 						}
 						
 						// IMPORTANT: check for any images in the post body, if found insert.
@@ -167,7 +167,7 @@
 				  </div>
 				  
 				  <div class="mb-3">
-					<label for="post_image" class="form-label"><strong>Image:</strong></label>
+					<label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
 					<input class="form-control" type="file" id="post_image" name="post_image">
 				  </div>
 				  

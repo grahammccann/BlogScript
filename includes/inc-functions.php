@@ -85,6 +85,21 @@ function getCategoryname($categoryId) {
 	}	
 }
 
+function getFeaturedImageToUse($imageName) {
+	try {
+		$fullUrl = "";
+        if ($imageName == "img-post-generic.png") {
+	        $fullUrl = urlFull() . "images/img-post-generic.png";
+		} else {
+		    $image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_image`='{$imageName}'");
+	        $fullUrl = urlFull() . "uploads/" . $image['post_image'];			
+		}
+		return $fullUrl;
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}		
+}
+
 function getGenericTitle($page, $postId) {
 	try {	
 		$replace = array("/", ".php");	
@@ -140,6 +155,19 @@ function getHeaderImage() {
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}	
+}
+
+function getImageAltText($imageName) {	
+	try {
+		if ($imageName == "img-post-generic.png") {
+			return "Generic blog post alt text";
+		} else {
+		    $imageAltText = DB::getInstance()->selectValues("SELECT `image_alt_text` FROM `images` WHERE `image_name`='{$imageName}'");
+		    return $imageAltText['image_alt_text'];			
+		}
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}
 }
 
 function getLoggedInUserId($sessionUsername) {
@@ -242,7 +270,7 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		$ext = strtolower(pathinfo($source)['extension']);
 
 		if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
-		throw new Exception('Invalid image file type');
+		    throw new Exception('Invalid image file type');
 		}
 
 		if (!file_exists($source)) {
@@ -254,11 +282,11 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		$height     = $dimensions[1];
 
 		if (is_array($size)) {
-		$new_width  = $size[0];
-		$new_height = $size[1];
+			$new_width  = $size[0];
+			$new_height = $size[1];
 		} else {
-		$new_width  = ceil(($size/100) * $width);
-		$new_height = ceil(($size/100) * $height);
+			$new_width  = ceil(($size/100) * $width);
+			$new_height = ceil(($size/100) * $height);
 		}
 
 		$fnCreate = "imagecreatefrom" . ($ext == "jpg" ? "jpeg" : $ext);
@@ -268,17 +296,17 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		$resized  = imagecreatetruecolor($new_width, $new_height); 
 
 		if ($ext == "png" || $ext == "gif") {
-		imagealphablending($resized, false);
-		imagesavealpha($resized, true);
-		imagefilledrectangle($resized, 0, 0, $new_width, $new_height, imagecolorallocatealpha($resized, 255, 255, 255, 127));
+			imagealphablending($resized, false);
+			imagesavealpha($resized, true);
+			imagefilledrectangle($resized, 0, 0, $new_width, $new_height, imagecolorallocatealpha($resized, 255, 255, 255, 127));
 		}
 
 		imagecopyresampled($resized, $original, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
 		if (is_numeric($quality)) {
-		$fnOutput($resized, $destination, $quality);
+		    $fnOutput($resized, $destination, $quality);
 		} else {
-		$fnOutput($resized, $destination);
+		    $fnOutput($resized, $destination);
 		}
 
 		imagedestroy($original);
@@ -483,7 +511,7 @@ function uploadImage($imageName, $imageTemp) {
 				$imagePath = "uploads/" . $imageNameFinal;
 				if (move_uploaded_file($imageTemp, $imagePath)) {
 					if (file_exists($imagePath)) {
-						stdmsg("...");
+						stdmsg("The <strong>image</strong> file already exists.");
 					}			
 				}
 			}
