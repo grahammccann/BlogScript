@@ -107,7 +107,7 @@
 		
 		<div class="col-md-3">
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-cog" style="color:red"></i> Welcome!</div>
+			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
 			  <ul class="list-group list-group-flush">		  
 				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
 			  </ul>
@@ -123,7 +123,7 @@
 				<?php $categories = DB::getInstance()->select("SELECT * FROM `categories`"); ?>
 				
 			    <?php foreach($categories as $category) { ?>
-				    <li class="list-group-item"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= $category['category_name']; ?></a></li>				
+				    <li class="list-group-item"><i class="fa-sharp fa-solid fa-caret-right"></i> <a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= $category['category_name']; ?></a></li>				
 				<?php } ?>	
 				
 			  </ul>

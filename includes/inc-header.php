@@ -12,7 +12,7 @@
 	<link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
     <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?= urlFull(); ?>assets/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
 	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
   </head>
 <body> 
