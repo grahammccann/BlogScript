@@ -35,7 +35,8 @@
 		$total = DB::getInstance()->selectValue("SELECT count(*) FROM `posts` WHERE `post_title` LIKE '%{$_GET['s']}%'");
 		
 		if (!count($posts)) {
-			stderr('There is <strong>no</strong> results for that keyword.');
+			stderr('There are <strong>no</strong> results for that keyword.');
+			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 			
 		} else {
 			stdmsg("Found you <strong>{$total}</strong> post(s) for the search <strong>{$_GET['s']}</strong>.");	
 		}
@@ -76,13 +77,25 @@
 		</div>
 		
 		<div class="col-md-3">
+		
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-cog"></i> ...</div>
+			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
 			  <ul class="list-group list-group-flush">		  
-				<li class="list-group-item">...</li>		
+				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
 			  </ul>
 			  <div class="card-footer">&nbsp;</div>
 			</div>	
+			
+			<?php if (getValue("homepage_show_categories")) { ?>
+			
+            <?php
+			
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+			
+			?>
+			
+			<?php } ?>	
+			
 		</div>
 		
 	</div>

@@ -62,6 +62,7 @@
 				<?php	  			  
 
 					echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
+	                echo "<p class=\"text-center\"><img src='" . getFeaturedImageToUse($sticky[0]['post_image']) . "' alt='" . getImageAltText($sticky[0]['post_image']) . "'></p>";
 					echo str_replace("\n\r", "<br /><br />", $sticky[0]['post_body']);
 				
 				?>
@@ -74,7 +75,7 @@
 			
 			<?php } ?>	
 		
-			<?php
+			<?php 
 			
 			$count = 0;
 			foreach($posts as $post) {	
@@ -87,11 +88,7 @@
 		
 				<?php	  			  
 
-					$count++;
-					
-					echo "<h1>" . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
-					echo "<p class=\"text-center\"><img src='" . getFeaturedImageToUse($post['post_image']) . "' alt='" . getImageAltText($post['post_image']) . "'></p>";
-					echo str_replace("\n\r", "<br /><br />", $post['post_body']);
+                    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
 				
 				?>
 				
@@ -106,6 +103,7 @@
 		</div>
 		
 		<div class="col-md-3">
+		
 			<div class="card">
 			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
 			  <ul class="list-group list-group-flush">		  
@@ -116,19 +114,11 @@
 			
 			<?php if (getValue("homepage_show_categories")) { ?>
 			
-			<div class="card mt-3">
-			  <div class="card-header"><i class="fas fa-list-ol" style="color:green"></i> Categories</div>
-			  <ul class="list-group list-group-flush">
-			  
-				<?php $categories = DB::getInstance()->select("SELECT * FROM `categories`"); ?>
-				
-			    <?php foreach($categories as $category) { ?>
-				    <li class="list-group-item"><i class="fa-sharp fa-solid fa-caret-right"></i> <a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= $category['category_name']; ?></a></li>				
-				<?php } ?>	
-				
-			  </ul>
-			  <div class="card-footer">&nbsp;</div>
-			</div>	
+            <?php
+			
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+			
+			?>
 			
 			<?php } ?>	
 			

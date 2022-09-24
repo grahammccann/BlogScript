@@ -70,6 +70,7 @@
 	?>
 	
 	<div class="row">
+	
 		<div class="col-md-9">
 		
 			<?php
@@ -85,9 +86,7 @@
 		
 				<?php	  			  
 
-					$count++;
-					echo "<h1>" . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
-					echo "<p>" . str_replace("\n\r", "<br /><br />", $post['post_body']) ."</p>";
+                    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
 				
 				?>
 				
@@ -102,8 +101,9 @@
 		</div>
 		
 		<div class="col-md-3">
+		
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-cog"></i> Welcome!</div>
+			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
 			  <ul class="list-group list-group-flush">		  
 				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
 			  </ul>
@@ -112,22 +112,15 @@
 			
 			<?php if (getValue("homepage_show_categories")) { ?>
 			
-			<div class="card mt-3">
-			  <div class="card-header"><i class="fas fa-list-ol" style="color:green"></i> Categories</div>
-			  <ul class="list-group list-group-flush">
-			  
-				<?php $categories = DB::getInstance()->select("SELECT * FROM `categories`"); ?>
-				
-			    <?php foreach($categories as $category) { ?>
-				    <li class="list-group-item"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= $category['category_name']; ?></a></li>				
-				<?php } ?>	
-				
-			  </ul>
-			  <div class="card-footer">&nbsp;</div>
-			</div>	
+            <?php
+			
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+			
+			?>
 			
 			<?php } ?>			
 		</div>
+		
 	</div>
 	
 </main>
