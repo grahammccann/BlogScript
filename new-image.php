@@ -63,7 +63,8 @@
                             $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);
                             if (!empty($imageName)) {
 								
-								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [250, 250], 100);
+								// Quality for .png = 0 - 9 9 is the worst.
+								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [150, 100], 0);
 								
 								$i = DB::getInstance()->insert(
 									'images',
@@ -98,7 +99,7 @@
 				  
 					<div class="form-check form-switch">
 					  <input class="form-check-input" type="checkbox" id="post_image_header" name="post_image_header">
-					  <label class="form-check-label" for="flexSwitchCheckChecked"><small>Use this as a header image. no bigger than <strong>250</strong> width x <strong>150</strong> height.</small></label>
+					  <label class="form-check-label" for="flexSwitchCheckChecked"><small>Use this as a header image. will be resized to <strong>150</strong> width x <strong>150</strong> height.</small></label>
 					</div>
 					
 					<hr />

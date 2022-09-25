@@ -270,11 +270,11 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		$ext = strtolower(pathinfo($source)['extension']);
 
 		if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
-		    throw new Exception('Invalid image file type');
+		    //throw new Exception('Invalid image file type');
 		}
 
 		if (!file_exists($source)) {
-		throw new Exception('Source image file not found');
+		    //throw new Exception('Source image file not found');
 		}
 
 		$dimensions = getimagesize($source);
