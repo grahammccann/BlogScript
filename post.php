@@ -36,7 +36,7 @@
 			  <div class="card-body">
 				<h1><?= $post['post_title']; ?></h1>
 				<p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= getImageAltText($post['post_image']); ?>"></p>
-				<?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?>
+				<p class="post-content"><?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?></p>
 			  </div>
 			  <div class="card-footer text-muted"><small><i class="fas fa-pencil-alt"></i> Updated on: <strong><?= date("F j, Y", strtotime($post['post_date_updated'])); ?></strong> <span class="float-end"><i class="fas fa-eye"></i> <?= $post['post_views']; ?></span></small></div>
 			</div>
