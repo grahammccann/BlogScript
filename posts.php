@@ -59,6 +59,7 @@
 				  <thead>
 					<tr>
 					  <th>Title</th>
+					  <th>Sticky</th>
 					  <th>Added</th>
 					  <th><i class="fas fa-eye"></i></th>
 					  <th>&nbsp;</th>
@@ -68,6 +69,7 @@
 				  <tfoot>
 					<tr>
 					  <th>Title</th>
+					  <th>Sticky</th>
 					  <th>Added</th>
 					  <th><i class="fas fa-eye"></i></th>
 					  <th>&nbsp;</th>
@@ -79,6 +81,7 @@
 						
 							<tr>
 								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?></td>
+								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>
 								<td><?= $post['post_views']; ?></td>
 								<td class="text-center"><a href="edit-post.php?postId=<?= $post['post_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>

@@ -15,7 +15,7 @@ function checkForAndReplaceAnyImages($postBody) {
 	try {	
 	    $finalSource = "";	
 	    $matchCount  = preg_match_all("/IMID(.*)/", $postBody, $matches, PREG_SET_ORDER); 
-	    print "<pre>"; print_r($matches); print "</pre>";
+	    //print "<pre>"; print_r($matches); print "</pre>";
 		//print "count -> " . $matchCount;
 		if ($matchCount > 0) {
 			foreach ($matches as $match) {

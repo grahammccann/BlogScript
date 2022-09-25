@@ -19,7 +19,7 @@
 		<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 		  <ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?= urlFull(); ?>"><i class="fas fa-home"></i></a></li>
-			<li class="breadcrumb-item" aria-current="page"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $post['post_category_id']; ?>"><?= getPostersCategory($post['post_category_id']); ?></a></li>
+			<li class="breadcrumb-item" aria-current="page"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none"><?= getPostersCategory($post['post_category_id']); ?></a></li>
 			<li class="breadcrumb-item active" aria-current="page"><?= $post['post_title']; ?></li>
 		  </ol>
 		</nav>
