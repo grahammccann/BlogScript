@@ -76,7 +76,7 @@
 						<?php foreach ($pages as $page) { ?>
 						
 							<tr>
-								<td><span class="text-success"><?= $page['page_name']; ?></span></td>
+								<td><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="text-decoration-none"><?= $page['page_name']; ?></a></td>
 								<td><?= date("m.d.y", strtotime($page['page_date'])); ?></td>
 								<td class="text-center"><a href="edit-page.php?pageId=<?= $page['page_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="pages.php?delete=1&amp;pageId=<?= $page['page_id']; ?>" onClick="return confirm('Delete the page?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>

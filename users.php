@@ -78,7 +78,7 @@
 				  <tbody>	  
 						<?php foreach ($members as $member) { ?>					
 							<tr>
-								<td><?= $member['member_email']; ?></td>
+								<td><a href="mailto:<?= $member['member_email']; ?>" class="text-decoration-none" target="_blank"><?= $member['member_email']; ?></span></td>
 								<td class="text-center"><?= $member['member_is_admin'] == "yes" ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($member['member_date'])); ?></td>
 								<td class="text-center"><a href="edit-user.php?userId=<?= $member['member_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
