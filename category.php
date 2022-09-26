@@ -79,7 +79,7 @@
 			?>
 		
 			<div class="card">
-			 <div class="card-header"><i class="fas fa-list-ol"></i> <?= getPostersCategory($_GET['categoryId']); ?></div>
+			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
 			  <div class="card-body">	
 		
 				<?php	  			  
@@ -89,10 +89,10 @@
 				?>
 				
 			  </div>
-			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "&nbsp;"; ?></div>
+			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
 			</div>
 			
-
+			&nbsp;
 			
 			<?php } ?>	
 			

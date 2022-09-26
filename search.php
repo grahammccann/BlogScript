@@ -57,8 +57,9 @@
 	<div class="row">
 	
 		<div class="col-md-9">
+		
 			<div class="card">
-			 <div class="card-header"><i class="fas fa-pencil-alt"></i> POSTS</div>
+			 <div class="card-header bg-success text-white"><i class="fa-solid fa-magnifying-glass"></i> RESULT(S) ...</div>
 			  <div class="card-body">			  			  
 				<?php
 				
@@ -66,6 +67,7 @@
 				foreach($posts as $post) {
 					$count++;
 					echo "<h1>" . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
+					echo "<p class=\"text-center\"><img src=\"" . getFeaturedImageToUse($post['post_image']) . "\" alt=\"" . $post['post_image_alt_text'] . "\"></p>";
 					echo "<p>" . str_replace("\n\r", "<br /><br />", $post['post_body']) ."</p>";
 					echo ($count == $max) ? "" : "<hr />";
 				}
@@ -74,27 +76,22 @@
 			  </div>
 			  <div class="card-footer mt-3"><?= pagination($page, $total, $max, $pagination); ?></div>
 			</div>
+			
+			&nbsp;
+			
 		</div>
 		
 		<div class="col-md-3">
 		
-			<div class="card">
-			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
-			  <ul class="list-group list-group-flush">		  
-				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
-			  </ul>
-			  <div class="card-footer">&nbsp;</div>
-			</div>	
+			<?php 
 			
-			<?php if (getValue("homepage_show_categories")) { ?>
-			
-            <?php
-			
+			if (getValue("homepage_show_categories")) { 
+						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+				
+			}
 			
-			?>
-			
-			<?php } ?>	
+			?>	
 			
 		</div>
 		

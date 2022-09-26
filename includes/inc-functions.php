@@ -163,7 +163,7 @@ function getHeaderImage() {
 	}	
 }
 
-function getImageAltText($imageName) {	
+/* function getImageAltText($imageName) {	
 	try {
 		if ($imageName == "img-post-generic.png") {
 			return "Generic blog post alt text";
@@ -174,7 +174,7 @@ function getImageAltText($imageName) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
-}
+} */
 
 function getLoggedInUserId($sessionUsername) {
 	try {

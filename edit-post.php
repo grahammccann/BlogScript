@@ -74,7 +74,8 @@
 								'post_id',
 								$_POST['updateId'],
 							[
-								'post_image' => $imageName					
+								'post_image' => $imageName,
+								'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "Generic blog post alt text" : $_POST['post_image_alt_text']
 							]);
 						
 						} 

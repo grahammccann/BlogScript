@@ -82,6 +82,7 @@
 							'post_seo_title' => $_POST['post_seo_title'],
 							'post_seo_description' => $_POST['post_seo_description'],
 							'post_image' => $imageName,
+							'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "Generic blog post alt text" : $_POST['post_image_alt_text'],
 							'post_status' => $_POST['post_status'],
 							'post_date' => date('Y-m-d H:i:s')
 						]);

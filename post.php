@@ -36,7 +36,7 @@
 			  <div class="card-body">
 				<h1><?= $post['post_title']; ?></h1>
 				<?php if (!empty($post['post_image'])) { ?>
-				    <p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= getImageAltText($post['post_image']); ?>"></p>
+				    <p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= $post['post_image_alt_text']; ?>"></p>
 				<?php } ?>
 				<div id="post-content"><?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?></div>
 			  </div>
@@ -46,7 +46,15 @@
 		
 		<div class="col-md-3">
 
-
+			<?php 
+			
+			if (getValue("homepage_show_categories")) { 
+						
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+				
+			}
+			
+			?>	
 			
 		</div>
 	
