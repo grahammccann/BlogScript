@@ -60,7 +60,7 @@
 							$postBody = strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2>');						
 						} else {	
 							// IMPORTANT: check for any images in the post body, if found insert.
-							$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2>'));						
+							$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong>'));						
 						}
 						
 						$u = DB::getInstance()->update(

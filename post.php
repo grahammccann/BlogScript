@@ -35,7 +35,9 @@
 			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
 			  <div class="card-body">
 				<h1><?= $post['post_title']; ?></h1>
-				<p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= getImageAltText($post['post_image']); ?>"></p>
+				<?php if (!empty($post['post_image'])) { ?>
+				    <p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= getImageAltText($post['post_image']); ?>"></p>
+				<?php } ?>
 				<p class="post-content"><?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?></p>
 			  </div>
 			  <div class="card-footer text-muted"><small><i class="fas fa-pencil-alt"></i> Updated on: <strong><?= date("F j, Y", strtotime($post['post_date_updated'])); ?></strong> <span class="float-end"><i class="fas fa-eye"></i> <?= $post['post_views']; ?></span></small></div>
@@ -43,23 +45,17 @@
 		</div>
 		
 		<div class="col-md-3">
-			<div class="card">
-			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
-			  <ul class="list-group list-group-flush">		  
-				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
-			  </ul>
-			  <div class="card-footer">&nbsp;</div>
-			</div>	
+
+			<?php 
 			
-			<?php if (getValue("homepage_show_categories")) { ?>
-			
-            <?php
-			
+			if (getValue("homepage_show_categories")) { 
+						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+				
+			}
 			
 			?>	
 			
-			<?php } ?>			
 		</div>
 	
 	</div>

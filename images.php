@@ -60,7 +60,7 @@
 				  <thead>
 					<tr>
 					  <th>Image</th>
-					  <th>ALT</th>
+					  <th>ALT Text</th>
 					  <th>Code</th>
 					  <th>&nbsp;</th>
 					</tr>
@@ -68,7 +68,7 @@
 				  <tfoot>
 					<tr>
 					  <th>Image</th>
-					  <th>ALT</th>
+					  <th>ALT Text</th>
 					  <th>Code</th>
 					  <th>&nbsp;</th>
 					</tr>

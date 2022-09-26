@@ -6,14 +6,12 @@
 
 <main>
 	
-	<?php //$posts = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_category_id`='{$_GET['categoryId']}' AND `post_status`='published' ORDER BY `post_date` ASC"); ?>
-
 	<div class="card">
 	  <div class="card-body">
 		<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
 		  <ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="<?= urlFull(); ?>" class="text-decoration-none"><i class="fas fa-home"></i></a></li>
-			<li class="breadcrumb-item" aria-current="page"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $_GET['categoryId']; ?>"><?= getPostersCategory($_GET['categoryId']); ?></a></li>
+			<li class="breadcrumb-item" aria-current="page"><a href="<?= urlFull(); ?>category.php?categoryId=<?= $_GET['categoryId']; ?>" class="text-decoration-none"><?= getPostersCategory($_GET['categoryId']); ?></a></li>
 		  </ol>
 		</nav>
 	  </div>
@@ -51,7 +49,7 @@
 		$total = DB::getInstance()->selectValue('SELECT count(*) FROM `posts`');
 		
 		if (!count($posts)) {
-			stderr('There is <strong>no</strong> posts made in this category yet!');
+			stderr('There are <strong>no</strong> posts made in this category yet!');
 			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
 			exit;
 		}	
@@ -94,31 +92,24 @@
 			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "&nbsp;"; ?></div>
 			</div>
 			
-			&nbsp;
+
 			
 			<?php } ?>	
 			
 		</div>
 		
 		<div class="col-md-3">
-		
-			<div class="card">
-			  <div class="card-header"><i class="fa-sharp fa-solid fa-user-tie" style="color:red"></i> Welcome!</div>
-			  <ul class="list-group list-group-flush">		  
-				<li class="list-group-item"><?= getValue("homepage_about"); ?></li>		
-			  </ul>
-			  <div class="card-footer">&nbsp;</div>
-			</div>	
 			
-			<?php if (getValue("homepage_show_categories")) { ?>
+			<?php 
 			
-            <?php
-			
+			if (getValue("homepage_show_categories")) { 
+						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+				
+			}
 			
-			?>
+			?>	
 			
-			<?php } ?>			
 		</div>
 		
 	</div>

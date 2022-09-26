@@ -64,11 +64,11 @@
 							]);
 						
 						} else {
-							$imageName = "img-image-generic.png";
+							$imageName = "img-post-generic.png";
 						}
 						
 						// IMPORTANT: check for any images in the post body, if found insert.
-						$postBody = checkForAndReplaceAnyImages(htmlspecialchars(strip_tags(nl2br($_POST['post_body']))));
+						$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong>'));	
 						
 						DB::getInstance()->insert(
 							'posts',
