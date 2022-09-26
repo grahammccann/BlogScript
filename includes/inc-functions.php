@@ -103,11 +103,14 @@ function getFeaturedImageToUse($imageName) {
 function getGenericTitle($page, $postId) {
 	try {	
 		$replace = array("/", ".php");	
-		if ($postId == false && $page != "/page.php") {
+		if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
 		    $title = urlFull() . " | " . ucwords(str_replace($replace, "", $page));	
 		} else if ($page == "/post.php") {
 		    $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
 		    $title = $post['post_seo_title'];
+		} else if ($page == "/category.php") {
+		    $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
+		    $title = urlFull() . " | " . ucwords($category['category_name']);
 		} else if ($page == "/page.php") {
 			$slug = explode("=", $_SERVER['REQUEST_URI']);
 		    $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");
@@ -124,11 +127,14 @@ function getGenericTitle($page, $postId) {
 function getGenericDescription($page, $postId) {
 	try {
 		$replace = array("/", ".php");
-		if ($postId == false && $page != "/page.php") {
+		if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
 			$description = urlFull() . " | " . ucwords(str_replace($replace, "", $page));
 		} else if ($page == "/post.php") {
 		    $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
 		    $description = $post['post_seo_description'];	
+		} else if ($page == "/category.php") {
+		    $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
+		    $description = urlFull() . " | " . ucwords($category['category_name']);
 		} else if ($page == "/page.php") {
 			$slug = explode("=", $_SERVER['REQUEST_URI']);
 		    $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");

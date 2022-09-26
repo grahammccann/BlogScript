@@ -39,10 +39,11 @@
 					
                     if ($_POST['post_sticky']) {
 
-						$sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1'");				
-						
+						$sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1'");									
 						if (count($sticky) > 0) {
-							$errors[] = 'A <strong>sticky</strong> post is already in use un-sticky that one first.';
+							if ($_POST['updateId'] != $sticky[0]['post_id']) {
+								$errors[] = 'A <strong>sticky</strong> post is already in use un-sticky that one first.';
+							}
 						}					
 				
 					}					
@@ -54,7 +55,30 @@
 						}
 						
 					} else {
+	
+						if (!empty($_FILES['post_image']['name'])) {
+							
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);	
+							
+							$i = DB::getInstance()->insert(
+								'images',
+							[
+								'image_name' => $imageName,
+								'image_alt_text' => $_POST['post_image_alt_text'],
+								'image_is_header' => "no",
+								'image_date' => date('Y-m-d H:i:s')
+							]);
+							
+							$u = DB::getInstance()->update(
+								'posts',
+								'post_id',
+								$_POST['updateId'],
+							[
+								'post_image' => $imageName					
+							]);
 						
+						} 
+	
 						$postBody = "";
 						if (strpos($postBody, 'IMID') !== false) {
 							$postBody = strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2>');						
@@ -93,106 +117,115 @@
 				
 				?>
 				
-				<form action="edit-post.php?postId=<?= $_GET['postId']; ?>" method="post">
+				<form action="edit-post.php?postId=<?= $_GET['postId']; ?>" method="post" enctype="multipart/form-data">
+
+					<div class="mb-3">
+						<label for="post_image_tags" class="form-label"><strong>Quick Image:</strong></label>
+						<select id="post_image_tags" name="post_image_tags" class="form-select">
+						  <option value='-- SELECT --'>-- SELECT --</option>
+						  <?php 
+							  $images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='no'");               
+							  foreach($images as $image) {
+								  echo "<option value='IMID{$image['image_id']}'>IMID{$image['image_id']} - {$image['image_alt_text']}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_title" class="form-label"><strong>Title:</strong></label>
+						<input type="text" class="form-control" id="post_title" name="post_title" value="<?= $post['post_title']; ?>" required>
+					</div>
 				
-				  <div class="mb-3">
-					<label for="post_quick_tags" class="form-label"><strong>Quick Tags:</strong></label>
-					<select id="post_quick_tags" name="post_quick_tags" class="form-select">
-					  <option value='-- SELECT --'>-- SELECT --</option>
-					  <?php 
-						  $quickTags = array("<a href=\"URL\">ANCHOR</a>", 
-						                     "<strong>TEXT</strong>",
-											 "<h1>HEADER1</h1>");
-						  foreach($quickTags as $value) {
-							  echo "<option value='" . htmlspecialchars($value) . "'>" . htmlspecialchars($value) . "</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
+					<div class="mb-3">
+						<label for="post_quick_tags" class="form-label"><strong>Quick Tags:</strong></label>
+						<select id="post_quick_tags" name="post_quick_tags" class="form-select">
+						  <option value='-- SELECT --'>-- SELECT --</option>
+						  <?php 
+							  $quickTags = array("<a href=\"\" class=\"text-decoration-none\"></a>", "<strong></strong>", "<h1></h1>", "<h2></h2>");
+							  foreach($quickTags as $value) {
+								  echo "<option value='" . htmlspecialchars($value) . "'>" . htmlspecialchars($value) . "</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_body" class="form-label"><strong>Body:</strong></label>
+						<textarea class="form-control" id="post_body" name="post_body" rows="15" required><?= $post['post_body']; ?></textarea>
+					</div>
+
+					<div class="mb-3">
+							<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
+							<input type="text" class="form-control" id="post_seo_title" name="post_seo_title" value="<?= $post['post_seo_title']; ?>" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
+						<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required><?= $post['post_seo_description']; ?></textarea>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_category" class="form-label"><strong>Category:</strong></label>
+						<select id="post_category" name="post_category" class="form-select" required>
+							<?php 					  
+								$categories = DB::getInstance()->select("SELECT * FROM `categories`");
+								foreach($categories as $category) {
+									echo "<option value='{$category['category_id']}'";
+									if ($category['category_id'] == $post['post_category_id']) { 
+										echo " selected"; 
+									} 
+									echo ">{$category['category_name']}</option>\n";
+								} 
+							?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_status" class="form-label"><strong>Status:</strong></label>
+						<select id="post_status" name="post_status" class="form-select" required>
+							<?php 
+								$status = array("published" => "Published", "draft" => "Draft", "archived" => "Archived");
+								foreach($status as $key => $value) {
+									echo "<option value='{$key}'";
+									if ($key == $post['post_status']) { 
+										echo " selected"; 
+									} 						  
+									echo ">{$value}</option>\n";
+								} 
+							?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_sticky" class="form-label"><strong>Sticky:</strong></label>
+						<select id="post_sticky" name="post_sticky" class="form-select" required>
+						  <?php 
+							  $sticky = array("0" => "No", "1" => "Yes");
+							  foreach($sticky  as $key => $value) {
+								  echo "<option value='{$key}' ";
+								  if ($key == $post['post_sticky']) { 
+									  echo " selected"; 
+								  } 							  										  
+								  echo ">{$value}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
 				  
-				  <div class="mb-3">
-					<label for="post_image_tags" class="form-label"><strong>Quick Image:</strong></label>
-					<select id="post_image_tags" name="post_image_tags" class="form-select">
-					  <option value='-- SELECT --'>-- SELECT --</option>
-					  <?php 
-                          $images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='no'");               
-						  foreach($images as $image) {
-							  echo "<option value='IMID{$image['image_id']}'>IMID{$image['image_id']} - {$image['image_alt_text']}</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
-				 
-				  <div class="mb-3">
-					<label for="post_title" class="form-label"><strong>Title:</strong></label>
-					<input type="text" class="form-control" id="post_title" name="post_title" value="<?= $post['post_title']; ?>" required>
-				  </div>
+
+					<div class="mb-3">
+					    <label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
+					    <input class="form-control" type="file" id="post_image" name="post_image">
+					</div>
+
+					<div class="mb-3">
+					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text">
+					</div>
 				  
-				  <div class="mb-3">
-					<label for="post_body" class="form-label"><strong>Body:</strong></label>
-					<textarea class="form-control" id="post_body" name="post_body" rows="15" required><?= $post['post_body']; ?></textarea>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
-					<input type="text" class="form-control" id="post_seo_title" name="post_seo_title" value="<?= $post['post_seo_title']; ?>" required>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
-					<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required><?= $post['post_seo_description']; ?></textarea>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_category" class="form-label"><strong>Category:</strong></label>
-					<select id="post_category" name="post_category" class="form-select" required>
-					    <?php 					  
-					        $categories = DB::getInstance()->select("SELECT * FROM `categories`");
-					        foreach($categories as $category) {
-					            echo "<option value='{$category['category_id']}'";
-						        if ($category['category_id'] == $post['post_category_id']) { 
-						            echo " selected"; 
-						        } 
-						        echo ">{$category['category_name']}</option>\n";
-                            } 
-					    ?>
-					</select>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_status" class="form-label"><strong>Status:</strong></label>
-					<select id="post_status" name="post_status" class="form-select" required>
-					    <?php 
-					        $status = array("published" => "Published", "draft" => "Draft", "archived" => "Archived");
-					        foreach($status as $key => $value) {
-					            echo "<option value='{$key}'";
-						        if ($key == $post['post_status']) { 
-						            echo " selected"; 
-						        } 						  
-						        echo ">{$value}</option>\n";
-                            } 
-					    ?>
-					</select>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_sticky" class="form-label"><strong>Sticky:</strong></label>
-					<select id="post_sticky" name="post_sticky" class="form-select" required>
-					  <?php 
-						  $sticky = array("0" => "No", "1" => "Yes");
-						  foreach($sticky  as $key => $value) {
-							  echo "<option value='{$key}' ";
-						      if ($key == $post['post_sticky']) { 
-						          echo " selected"; 
-						      } 							  										  
-							  echo ">{$value}</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
-				  
-				  <input type="hidden" name="updateId" value="<?= $_GET['postId']; ?>">	
-				  <button type="submit" name="submitEditPost" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
+					<input type="hidden" name="updateId" value="<?= $_GET['postId']; ?>">	
+					<button type="submit" name="submitEditPost" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
 				
 				</form>               
 				

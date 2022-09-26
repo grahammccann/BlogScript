@@ -29,7 +29,8 @@
 		<div class="col-md-9">
 			<div class="card">
 			  <div class="card-header"><i class="fas fa-plus"></i> New Post</div>
-                <div class="card-body">
+                
+				<div class="card-body">
 				
 				 <?php
 				 
@@ -67,8 +68,9 @@
 							$imageName = "img-post-generic.png";
 						}
 						
-						// IMPORTANT: check for any images in the post body, if found insert.
-						$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong>'));	
+						// IMPORTANT: check for any images in the post body, if found insert also when stripping tags: strip_tags
+						// do not strip the ones specified.
+						$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong><ul><ol><li>'));	
 						
 						DB::getInstance()->insert(
 							'posts',
@@ -92,95 +94,94 @@
 				 
 				 ?>
 				
-				 <form action="new-post.php" method="post" enctype="multipart/form-data">
-			  
-				  <div class="mb-3">
-					<label for="post_quick_tags" class="form-label"><strong>Quick Tags:</strong></label>
-					<select id="post_quick_tags" name="post_quick_tags" class="form-select">
-					  <option value='-- SELECT --'>-- SELECT --</option>
-					  <?php 
-						  $quickTags = array("<a href=\"URL\" class=\"text-decoration-none\">ANCHOR</a>", 
-						                     "<strong>TEXT</strong>",
-											 "<h1>HEADER1</h1>");
-						  foreach($quickTags as $value) {
-							  echo "<option value='" . htmlspecialchars($value) . "'>" . htmlspecialchars($value) . "</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
+				<form action="new-post.php" method="post" enctype="multipart/form-data">
 				  
-				  <div class="mb-3">
-					<label for="post_image_tags" class="form-label"><strong>Quick Image:</strong></label>
-					<select id="post_image_tags" name="post_image_tags" class="form-select">
-					  <option value='-- SELECT --'>-- SELECT --</option>
-					  <?php 
-                          $images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='no'");               
-						  foreach($images as $image) {
-							  echo "<option value='IMID{$image['image_id']}'>IMID{$image['image_id']} - {$image['image_alt_text']}</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
-				 
-				  <div class="mb-3">
-					<label for="post_title" class="form-label"><strong>Title:</strong></label>
-					<input type="text" class="form-control" id="post_title" name="post_title" required>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_body" class="form-label"><strong>Body:</strong></label>
-					<textarea class="form-control" id="post_body" name="post_body" rows="15" required></textarea>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
-					<input type="text" class="form-control" id="post_seo_title" name="post_seo_title" required>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
-					<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required></textarea>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_category" class="form-label"><strong>Category:</strong></label>
-					<select id="post_category" name="post_category" class="form-select" required>
-					  <?php 
-						  $categories = DB::getInstance()->select("SELECT * FROM `categories`");
-						  foreach($categories as $category) {
-							  echo "<option value='{$category['category_id']}'>{$category['category_name']}</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_status" class="form-label"><strong>Status:</strong></label>
-					<select id="post_status" name="post_status" class="form-select" required>
-					  <?php 
-						  $status = array("published" => "Published", "draft" => "Draft", "archived" => "Archived");
-						  foreach($status as $key => $value) {
-							  echo "<option value='{$key}'>{$value}</option>";
-						  } 
-					  ?>
-					</select>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
-					<input class="form-control" type="file" id="post_image" name="post_image">
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Image ALT Text:</span></strong></label>
-					<input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text">
-				  </div>
-				  
-				  <button type="submit" name="submitPost" class="btn btn-success float-end"><i class="fas fa-plus"></i> New Post</button>
+					<div class="mb-3">
+						<label for="post_image_tags" class="form-label"><strong>Quick Image:</strong></label>
+						<select id="post_image_tags" name="post_image_tags" class="form-select">
+						  <option value='-- SELECT --'>-- SELECT --</option>
+						  <?php 
+							  $images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='no'");               
+							  foreach($images as $image) {
+								  echo "<option value='IMID{$image['image_id']}'>IMID{$image['image_id']} - {$image['image_alt_text']}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_title" class="form-label"><strong>Title:</strong></label>
+						<input type="text" class="form-control" id="post_title" name="post_title" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_quick_tags" class="form-label"><strong>Quick Tags:</strong></label>
+						<select id="post_quick_tags" name="post_quick_tags" class="form-select">
+						  <option value='-- SELECT --'>-- SELECT --</option>
+						  <?php 
+							  $quickTags = array("<a href=\"\" class=\"text-decoration-none\"></a>", "<strong></strong>", "<h1></h1>", "<h2></h2>");
+							  foreach($quickTags as $value) {
+								  echo "<option value='" . htmlspecialchars($value) . "'>" . htmlspecialchars($value) . "</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_body" class="form-label"><strong>Body:</strong></label>
+						<textarea class="form-control" id="post_body" name="post_body" rows="15" required></textarea>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
+						<input type="text" class="form-control" id="post_seo_title" name="post_seo_title" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
+						<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required></textarea>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_category" class="form-label"><strong>Category:</strong></label>
+						<select id="post_category" name="post_category" class="form-select" required>
+						  <?php 
+							  $categories = DB::getInstance()->select("SELECT * FROM `categories`");
+							  foreach($categories as $category) {
+								  echo "<option value='{$category['category_id']}'>{$category['category_name']}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="post_status" class="form-label"><strong>Status:</strong></label>
+						<select id="post_status" name="post_status" class="form-select" required>
+						  <?php 
+							  $status = array("published" => "Published", "draft" => "Draft", "archived" => "Archived");
+							  foreach($status as $key => $value) {
+								  echo "<option value='{$key}'>{$value}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+
+					<div class="mb-3">
+					    <label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
+					    <input class="form-control" type="file" id="post_image" name="post_image">
+					</div>
+
+					<div class="mb-3">
+					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text">
+					</div>
+
+					<button type="submit" name="submitPost" class="btn btn-success float-end"><i class="fas fa-plus"></i> New Post</button>
 				
 				</form>               
 				
                 </div>
+				
 			</div>	
 		</div>
 	</div>

@@ -56,7 +56,7 @@
 						[
 						    'page_slug' => empty($_POST['page_slug']) ? strtolower(str_replace(' ', '-', $_POST['page_name'])) : $_POST['page_slug'],
 						    'page_name' => $_POST['page_name'],
-						    'page_body' => $_POST['page_body'],
+						    'page_body' => nl2br($_POST['page_body']),
 							'page_date' => date('Y-m-d H:i:s')
 						]);
 						

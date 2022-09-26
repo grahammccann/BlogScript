@@ -38,7 +38,7 @@
 				<?php if (!empty($post['post_image'])) { ?>
 				    <p class="text-center"><img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= getImageAltText($post['post_image']); ?>"></p>
 				<?php } ?>
-				<p class="post-content"><?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?></p>
+				<div id="post-content"><?= str_replace("\n\r", "<br /><br />", $post['post_body']); ?></div>
 			  </div>
 			  <div class="card-footer text-muted"><small><i class="fas fa-pencil-alt"></i> Updated on: <strong><?= date("F j, Y", strtotime($post['post_date_updated'])); ?></strong> <span class="float-end"><i class="fas fa-eye"></i> <?= $post['post_views']; ?></span></small></div>
 			</div>
@@ -46,15 +46,7 @@
 		
 		<div class="col-md-3">
 
-			<?php 
-			
-			if (getValue("homepage_show_categories")) { 
-						
-			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
-				
-			}
-			
-			?>	
+
 			
 		</div>
 	

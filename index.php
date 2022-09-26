@@ -62,9 +62,7 @@
 				<?php	  			  
 
 					echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
-					if (!empty($post['post_image'])) { 
-	                    echo "<p class=\"text-center\"><img src='" . getFeaturedImageToUse($sticky[0]['post_image']) . "' alt='" . getImageAltText($sticky[0]['post_image']) . "'></p>";
-					}
+	                echo "<p class=\"text-center\"><img src='" . getFeaturedImageToUse($sticky[0]['post_image']) . "' alt='" . getImageAltText($sticky[0]['post_image']) . "'></p>";
 					echo str_replace("\n\r", "<br /><br />", $sticky[0]['post_body']);
 				
 				?>
