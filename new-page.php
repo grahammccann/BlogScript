@@ -97,7 +97,7 @@
 
 					<div class="mb-3">
 						<label for="page_body" class="form-label"><strong>Body:</strong></label>
-						<textarea class="form-control" id="summernote" name="page_body" rows="8" required></textarea>
+						<textarea class="form-control" id="summernote" name="page_body" rows="8"></textarea>
 					</div>
 
 					<button type="submit" name="submitPage" class="btn btn-success float-end"><i class="fas fa-plus"></i> New Page</button>

@@ -16,7 +16,7 @@
 
 	<h1 class="text-center"><?= $page['page_name']; ?></h1>
 	
-	<p><?= str_replace("\n\r", "<br /><br />", $page['page_body']); ?></p>
+	<p><?= $page['page_body']; ?></p>
 	
 </main>
 

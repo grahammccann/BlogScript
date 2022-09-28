@@ -63,7 +63,7 @@
 
 					echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
 	                echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" .getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
-					echo str_replace("\n\r", "<br><br>", $sticky[0]['post_body']);
+					echo $sticky[0]['post_body'];
 				
 				?>
 				

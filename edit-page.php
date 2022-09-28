@@ -56,7 +56,7 @@
 						[
 						    'page_slug' => $_POST['page_slug'],
 						    'page_name' => $_POST['page_name'],
-						    'page_body' => nl2br($_POST['page_body'])					
+						    'page_body' => $_POST['page_body']					
 						]);
 						
 						stdmsg("Your <strong>page</strong> has been <strong>updated</strong>.");
@@ -98,7 +98,7 @@
 
 					<div class="mb-3">
 						<label for="page_body" class="form-label"><strong>Body:</strong></label>
-						<textarea class="form-control" id="summernote" name="page_body" rows="8" required<?= $page['page_body']; ?></textarea>
+						<textarea class="form-control" id="summernote" name="page_body" rows="8"><?= $page['page_body']; ?></textarea>
 					</div>
 				  
 					<input type="hidden" name="updateId" value="<?= $_GET['pageId']; ?>">	
