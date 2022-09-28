@@ -21,13 +21,17 @@
 	?>
 
 	<div class="row">
+	
 		<div class="col-md-3">
+		
 			<div class="card">
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>
+		
 		</div>
 		
 		<div class="col-md-9">
+		
 			<div class="card">
 			  <div class="card-header"><i class="fas fa-upload"></i> Update User</div>
                 <div class="card-body">
@@ -121,6 +125,7 @@
 				<div class="card-footer">&nbsp;</div>
 			</div>	
 		</div>
+		
 	</div>
 
 </main>

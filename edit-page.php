@@ -20,13 +20,17 @@
 	?>
 
 	<div class="row">
+	
 		<div class="col-md-3">
+		
 			<div class="card">
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>
+		
 		</div>
 		
 		<div class="col-md-9">
+		
 			<div class="card">
 			  <div class="card-header"><i class="fas fa-upload"></i> Update Post</div>
                 <div class="card-body">
@@ -71,23 +75,34 @@
 				
   				<form action="edit-page.php?pageId=<?= $_GET['pageId']; ?>" method="post">
 				 
-				  <div class="mb-3">
-					<label for="page_name" class="form-label"><strong>Name:</strong></label>
-					<input type="text" class="form-control" id="page_name" name="page_name" value="<?= $page['page_name']; ?>" required>
-				  </div>
+					<div class="mb-3">
+						<label for="page_name" class="form-label"><strong>Name:</strong></label>
+						<input type="text" class="form-control" id="page_name" name="page_name" value="<?= $page['page_name']; ?>" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="page_slug" class="form-label"><strong>Slug:</strong></label>
+						<input type="text" class="form-control" id="page_slug" name="page_slug" value="<?= $page['page_slug']; ?>" required>
+					</div>
 				  
-				  <div class="mb-3">
-					<label for="page_slug" class="form-label"><strong>Slug:</strong></label>
-					<input type="text" class="form-control" id="page_slug" name="page_slug" value="<?= $page['page_slug']; ?>" required>
-				  </div>
+					<script>
+					$(document).ready(function() {
+						$('#summernote').summernote({
+						  height: 300,                 // set editor height
+						  minHeight: null,             // set minimum height of editor
+						  maxHeight: null,             // set maximum height of editor
+						  focus: true                  // set focus to editable area after initializing summernote
+						});
+					});
+					</script>
+
+					<div class="mb-3">
+						<label for="page_body" class="form-label"><strong>Body:</strong></label>
+						<textarea class="form-control" id="summernote" name="page_body" rows="8" required<?= $page['page_body']; ?></textarea>
+					</div>
 				  
-				  <div class="mb-3">
-					<label for="page_body" class="form-label"><strong>Body:</strong></label>
-					<textarea class="form-control" id="page_body" name="page_body" rows="8" required><?= $page['page_body']; ?></textarea>
-				  </div>
-				  
-				  <input type="hidden" name="updateId" value="<?= $_GET['pageId']; ?>">	
-				  <button type="submit" name="submitEditPage" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
+					<input type="hidden" name="updateId" value="<?= $_GET['pageId']; ?>">	
+					<button type="submit" name="submitEditPage" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
 				
 				</form>            
 				
@@ -95,6 +110,7 @@
 				<div class="card-footer">&nbsp;</div>
 			</div>	
 		</div>
+		
 	</div>
 
 </main>

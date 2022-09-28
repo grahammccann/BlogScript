@@ -1,4 +1,4 @@
-	<div class="card">
+	<div class="card mb-3">
 	  <div class="card-header"><i class="fas fa-list-ol" style="color:green"></i> Categories</div>
 	  <ul class="list-group list-group-flush">
 	  

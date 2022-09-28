@@ -21,7 +21,7 @@
 
 	<div class="row">
 	
-		<div class="col-md-3" style="padding-bottom: 15px;">
+		<div class="col-md-3">
 			<div class="card">
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>

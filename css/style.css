@@ -10,3 +10,11 @@
 .btn:focus{
     box-shadow: none!important;
 }
+
+.card{
+    margin-bottom: 20px;
+}
+
+.note-btn.dropdown-toggle:after {
+    content: none;
+}

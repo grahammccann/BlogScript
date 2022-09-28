@@ -66,18 +66,16 @@
 				$count = 0;
 				foreach($posts as $post) {
 					$count++;
-					echo "<h1>" . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
-					echo "<p class=\"text-center\"><img src=\"" . getFeaturedImageToUse($post['post_image']) . "\" alt=\"" . $post['post_image_alt_text'] . "\"></p>";
-					echo "<p>" . str_replace("\n\r", "<br /><br />", $post['post_body']) ."</p>";
-					echo ($count == $max) ? "" : "<hr />";
+					echo "<h1><i class=\"fa-solid fa-hand-point-right\"></i> " . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
+					echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" . getFeaturedImageToUse($post['post_image']) . "\" alt=\"" . $post['post_image_alt_text'] . "\"></p>";
+					echo "<p>" . str_replace("\n\r", "<br><br>", $post['post_body']) ."</p>";
+					echo ($count == $max) ? "" : "<hr>";
 				}
 				
 				?>
 			  </div>
 			  <div class="card-footer mt-3"><?= pagination($page, $total, $max, $pagination); ?></div>
 			</div>
-			
-			&nbsp;
 			
 		</div>
 		

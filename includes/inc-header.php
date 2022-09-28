@@ -1,7 +1,7 @@
 <?php
     if (isset($_GET['postId'])) { $thePostId = $_GET['postId']; } else { $thePostId = 0; }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -11,9 +11,11 @@
     <link href="<?= urlFull(); ?>favicon.ico" rel="icon">
 	<link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
-    <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
     <link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
 	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
   </head>
 <body> 
 
@@ -31,7 +33,7 @@
 			<a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>"></a>	
 			
 			<ul class="nav nav-pills nav-fill ms-auto">   
-				<li class="nav-item"><a href="<?= urlFull(); ?>index.php" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
+				<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
 				
 				<?php $pages = DB::getInstance()->select("SELECT * FROM `pages`"); ?>
 				<?php foreach($pages as $page) { ?>

@@ -163,18 +163,20 @@ function getHeaderImage() {
 	}	
 }
 
-/* function getImageAltText($imageName) {	
+function getImageAltText($imageName) {	
 	try {
+		$image = "";
 		if ($imageName == "img-post-generic.png") {
-			return "Generic blog post alt text";
+			$image = "generic blog post alt text";
 		} else {
 		    $imageAltText = DB::getInstance()->selectValues("SELECT `image_alt_text` FROM `images` WHERE `image_name`='{$imageName}'");
-		    return $imageAltText['image_alt_text'];			
+		    $image = $imageAltText['image_alt_text'];			
 		}
+		return $image;
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
-} */
+}
 
 function getLoggedInUserId($sessionUsername) {
 	try {
