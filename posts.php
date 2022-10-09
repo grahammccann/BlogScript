@@ -38,6 +38,7 @@
 
 					try {
 						
+						$images = deleteAnyImages($_GET['postId']);
 						$delete = DB::getInstance()->remove('posts', 'post_id', $_GET['postId']);
 						if ($delete == null) {
 							stdmsg("The <strong>post</strong> has been <strong>deleted</strong>.");
@@ -58,6 +59,7 @@
 				<table class="table table-striped" id="postTable" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
+					  <th>ID</th>
 					  <th>Title</th>
 					  <th>Sticky</th>
 					  <th>Added</th>
@@ -68,6 +70,7 @@
 				  </thead>
 				  <tfoot>
 					<tr>
+					  <th>ID</th>
 					  <th>Title</th>
 					  <th>Sticky</th>
 					  <th>Added</th>
@@ -80,6 +83,7 @@
 						<?php foreach ($posts as $post) { ?>
 						
 							<tr>
+						    	<td><?= $post['post_id']; ?></td>
 								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?></td>
 								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>

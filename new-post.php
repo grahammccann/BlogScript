@@ -76,7 +76,7 @@
 						// do not strip the ones specified.
 						//$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong><ul><ol><li>'));	
 						
-						DB::getInstance()->insert(
+						$i = DB::getInstance()->insert(
 							'posts',
 						[
 						    'post_category_id' => $_POST['post_category'],

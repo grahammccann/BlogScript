@@ -89,7 +89,7 @@
 				?>
 				
 			  </div>
-			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
+			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max, $pagination) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
 			</div>
 			
 			<?php } ?>	

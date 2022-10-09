@@ -29,7 +29,7 @@
 		
 		<div class="col-md-9">
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-pencil-alt"></i> Pages <span class="badge bg-success float-end"><a href="new-page.php" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create a new page">New Page</a></span></div>
+			  <div class="card-header"><i class="fas fa-file-word"></i> Pages <span class="badge bg-success float-end"><a href="new-page.php" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create a new page">New Page</a></span></div>
                 <div class="card-body">
 				
 				<?php

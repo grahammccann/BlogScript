@@ -19,7 +19,7 @@
 			SELECT  *
 			FROM    `posts`
 			WHERE   `post_status`='published'
-			and     `post_sticky`='0'
+			AND     `post_sticky`='0'
 			ORDER   BY `post_date` DESC
 			LIMIT   :from, :max_results",
 		[
@@ -49,7 +49,7 @@
 		
 			<?php
 			
-            $sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1'");
+            $sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1' LIMIT 1");
 			
 			if (count($sticky) > 0) {
 			

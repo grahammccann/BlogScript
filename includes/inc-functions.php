@@ -67,9 +67,18 @@ function createSitemap() {
     }	
 }
 
+function deleteAnyImages($postId) {
+	try {
+		$image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_id`='{$postId}'");
+		@unlink("uploads/" . $image['post_image']);
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}		
+}
+
 function doTableCount($table) {
 	try {
-	    $c   = DB::getInstance()->selectAll($table);
+	    $c = DB::getInstance()->selectAll($table);
 	    return count($c);	
 	} catch(Exception $e) {
         echo $e->getMessage();		
@@ -205,6 +214,31 @@ function getPostersCategory($categoryId) {
 	}
 }
 
+function getSourceUrls($sourceUrls) {
+	try {
+        echo "<hr><h1>Sources</h1>";
+		foreach (json_decode($sourceUrls) as $value) { 
+		    echo "<ul><li><a href=\"{$value}\" class=\"text-decoration-none\" target=\"_blank\">{$value}</a></li></ul>";
+		}
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
+function getSourceVideos($sourceUrls) {
+	try {
+	echo "<hr><h1>Videos</h1>";
+		foreach (json_decode($sourceUrls) as $value) { 
+		    if (startsWith($value, "https://www.youtube.com/")) { ?>
+                <span class="d-flex justify-content-center align-items-center"><iframe width="560" height="315" src="<?= getYoutubeEmbedUrl($value); ?>" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></span>
+			    <br>
+			<?php } 
+		}
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
 function getUsersDetails($member) {
 	try {
         return DB::getInstance()->selectOneByField('members', 'member_username', $member);
@@ -220,6 +254,21 @@ function getValue($optionValue) {
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
+}
+
+function getYoutubeEmbedUrl($url)
+{
+     $shortUrlRegex = '/youtu.be\/([a-zA-Z0-9_-]+)\??/i';
+     $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))([a-zA-Z0-9_-]+)/i';
+
+    if (preg_match($longUrlRegex, $url, $matches)) {
+        $youtube_id = $matches[count($matches) - 1];
+    }
+
+    if (preg_match($shortUrlRegex, $url, $matches)) {
+        $youtube_id = $matches[count($matches) - 1];
+    }
+    return 'https://www.youtube.com/embed/' . $youtube_id ;
 }
 
 function pagination($page, $totalResults, $maxResults, $params = array())
@@ -488,6 +537,11 @@ function seoFriendlyUrls($postName, $postId) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
+}
+
+function startsWith($haystack, $needle) {
+     $length = strlen($needle);
+     return substr($haystack, 0, $length) === $needle;
 }
 
 function updatePostViews($postId) {
