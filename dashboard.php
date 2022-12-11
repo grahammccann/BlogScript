@@ -32,7 +32,7 @@
 		<div class="col-md-9">		
 		
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-cog"></i> Dashboard <span class="badge bg-success float-end"><a href="dashboard.php?sitemap=1" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an xml sitemap">Generate XML Sitemap</a></span></div>
+			  <div class="card-header"><i class="fas fa-cog"></i> Dashboard <span class="badge bg-success float-end"><a href="dashboard.php?robots=1" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Robots .txt File">Generate Robots .txt File</a>&nbsp;|&nbsp;<a href="dashboard.php?sitemap=1" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an xml sitemap">Generate XML Sitemap</a></span></div>
 			   <div class="card-body">
 			   
 			    <?php
@@ -45,6 +45,18 @@
 					} else {
 						createSitemap();
 						stdmsg('Sitemap <strong>created</strong>.');
+					}
+					
+				}
+				
+				if (isset($_GET['robots'])) {
+					
+					if (file_exists("robots.txt")) {
+						createRobotsFile();
+						stdmsg('Robots file <strong>updated</strong>.');
+					} else {
+						createRobotsFile();
+						stdmsg('Robots file <strong>created</strong>.');
 					}
 					
 				}

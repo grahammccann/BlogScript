@@ -67,6 +67,26 @@ function createSitemap() {
     }	
 }
 
+function createRobotsFile() {
+	try
+	{
+		/* User-agent: * 
+		Disallow:
+		Disallow: images/
+		Disallow: includes/
+		Disallow: uploads/
+		Sitemap: https://www.topricecookers.org/sitemap.xml */
+		$robots = fopen("robots.txt", "a") or die("Unable to open file!");
+        $lines = array("User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml");	
+        foreach($line as $lines) {
+			fwrite($robots, "\n". $line);
+		}	
+		fclose($robots);
+    } catch (Exception $e) {
+        stderr($e->getMessage());
+    }	
+}
+
 function deleteAnyImages($postId) {
 	try {
 		$image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_id`='{$postId}'");
@@ -232,7 +252,9 @@ function getSourceVideos($sourceUrls) {
 		    if (startsWith($value, "https://www.youtube.com/")) { ?>
                 <span class="d-flex justify-content-center align-items-center"><iframe width="560" height="315" src="<?= getYoutubeEmbedUrl($value); ?>" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></span>
 			    <br>
-			<?php } 
+			<?php 
+			    break; // Break after we find 1 video, or Google gives us shit with indexing lol
+			} 
 		}
 	} catch(Exception $e) {
         echo $e->getMessage();

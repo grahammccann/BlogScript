@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 23, 2022 at 10:25 PM
--- Server version: 5.7.37-0ubuntu0.18.04.1
--- PHP Version: 7.2.24-0ubuntu0.18.04.11
+-- Generation Time: Nov 06, 2022 at 12:04 PM
+-- Server version: 5.7.39-0ubuntu0.18.04.2
+-- PHP Version: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `admin_topricecookers.org`
+-- Database: `admin_site.com`
 --
 
 -- --------------------------------------------------------
@@ -62,6 +62,13 @@ CREATE TABLE `members` (
   `member_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `members`
+--
+
+INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
+(2, 'graham23s', 'Milkybar12022', '0717ee60b139f9fee9210f454b48935c', 'graham23s@hotmail.com', 'yes', '2022-09-20 18:29:52');
+
 -- --------------------------------------------------------
 
 --
@@ -81,17 +88,18 @@ CREATE TABLE `options` (
 --
 
 INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_description`, `option_date`) VALUES
-(1, 'homepage_title', 'https://www.topricecookers.org/ | Top Rice Cookers', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
-(2, 'homepage_description', 'Finding the perfect rice cooker takes time let us review the best and the worst to see ...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
-(3, 'homepage_pagination', '10', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
+(1, 'homepage_title', 'https://www.site.com/ | Best Rice Cooker', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
+(2, 'homepage_description', 'Finding the best rice cooker takes time let us review the best and the worst to see ...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
+(3, 'homepage_pagination', '2', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
 (4, 'homepage_show_categories', '1', 'This will show the categories. (true or false)', '2021-10-23 20:40:35'),
-(5, 'homepage_about', 'We have a passion for selling whatever we are selling in this niche!', 'This is a description on what your blog is about.', '2021-10-23 20:55:27'),
+(5, 'homepage_about', 'We know a good rice cooker when we see one!', 'This is a description on what your blog is about.', '2021-10-23 20:55:27'),
 (6, 'homepage_hide_login_link', '1', 'This will show the admin login link on the main page footer. (true or false)', '2021-10-29 20:22:40'),
-(7, 'footer_amazon_disclosure_text', '<strong>topricecookers.org</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This is the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
-(8, 'footer_twitter', 'https://www.twitter.com/', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
+(7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This is the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
+(8, 'footer_twitter', 'https://twitter.com', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
 (9, 'footer_meta', 'https://www.facebook.com/', 'This sets your meta (aka facebook) account on the footer.', '2021-10-31 09:06:06'),
 (10, 'footer_instagram', 'https://www.instagram.com/', 'This sets your instagram account on the footer.', '2021-10-31 09:23:11'),
-(11, 'site_admin_email', 'contact@topricecookers.org', 'This is the main email associated with your site.', '2022-09-20 20:54:07');
+(11, 'site_admin_email', 'contact@site.com', 'This is the main email associated with your site.', '2022-09-20 20:54:07'),
+(12, 'ads_post_top', '...', 'This sets the ad code at the top of the post page.', '2022-10-09 15:24:42');
 
 -- --------------------------------------------------------
 
@@ -122,10 +130,12 @@ CREATE TABLE `posts` (
   `post_seo_title` longtext NOT NULL,
   `post_seo_description` longtext NOT NULL,
   `post_image` varchar(100) NOT NULL,
+  `post_image_alt_text` varchar(100) NOT NULL,
   `post_status` enum('published','draft','archived') NOT NULL,
   `post_date_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `post_views` bigint(20) NOT NULL DEFAULT '0',
   `post_sticky` enum('0','1') NOT NULL,
+  `post_source_url` longtext NOT NULL,
   `post_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -177,12 +187,12 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `category_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT for table `members`
 --
@@ -192,17 +202,17 @@ ALTER TABLE `members`
 -- AUTO_INCREMENT for table `options`
 --
 ALTER TABLE `options`
-  MODIFY `option_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `option_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `page_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `page_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=477;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

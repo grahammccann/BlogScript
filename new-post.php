@@ -88,6 +88,7 @@
 							'post_image' => $imageName,
 							'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "generic alt text" : $_POST['post_image_alt_text'],
 							'post_status' => $_POST['post_status'],
+							'post_source_url' => urlFull(),
 							'post_date' => date('Y-m-d H:i:s')
 						]);
 						
