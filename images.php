@@ -61,7 +61,6 @@
 					<tr>
 					  <th>Image</th>
 					  <th>ALT Text</th>
-					  <th>Code</th>
 					  <th>&nbsp;</th>
 					</tr>
 				  </thead>
@@ -69,7 +68,6 @@
 					<tr>
 					  <th>Image</th>
 					  <th>ALT Text</th>
-					  <th>Code</th>
 					  <th>&nbsp;</th>
 					</tr>
 				  </tfoot>
@@ -78,7 +76,6 @@
 							<tr>
 								<td class="text-center"><img src="<?= urlFull(); ?>uploads/<?= $image['image_name']; ?>" class="img-thumbnail" alt="<?= $image['image_alt_text']; ?>"></td>
 								<td><?= $image['image_alt_text']; ?></td>
-								<td class="text-center">IMID<?= $image['image_id']; ?></td>
 								<td class="text-center"><a href="images.php?delete=1&amp;imageName=<?= $image['image_name']; ?>" onClick="return confirm('Delete the image?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
 							</tr>				
 						<?php } ?>	

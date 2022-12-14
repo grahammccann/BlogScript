@@ -125,19 +125,6 @@
 				<form action="edit-post.php?postId=<?= $_GET['postId']; ?>" method="post" enctype="multipart/form-data">
 
 					<div class="mb-3">
-						<label for="post_image_tags" class="form-label"><strong>Quick Image:</strong></label>
-						<select id="post_image_tags" name="post_image_tags" class="form-select">
-						  <option value='-- SELECT --'>-- SELECT --</option>
-						  <?php 
-							  $images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='no'");               
-							  foreach($images as $image) {
-								  echo "<option value='IMID{$image['image_id']}'>IMID{$image['image_id']} - {$image['image_alt_text']}</option>";
-							  } 
-						  ?>
-						</select>
-					</div>
-
-					<div class="mb-3">
 						<label for="post_title" class="form-label"><strong>Title:</strong></label>
 						<input type="text" class="form-control" id="post_title" name="post_title" value="<?= $post['post_title']; ?>" required>
 					</div>

@@ -78,8 +78,8 @@ function createRobotsFile() {
 		Sitemap: https://www.topricecookers.org/sitemap.xml */
 		$robots = fopen("robots.txt", "a") or die("Unable to open file!");
         $lines = array("User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml");	
-        foreach($line as $lines) {
-			fwrite($robots, "\n". $line);
+        foreach($lines as $line) {
+			fwrite($robots, "\n". trim($line));
 		}	
 		fclose($robots);
     } catch (Exception $e) {

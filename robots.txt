@@ -3,4 +3,4 @@ Disallow:
 Disallow: images/
 Disallow: includes/
 Disallow: uploads/
-Sitemap: https://www.topricecookers.org/sitemap.xml
+Sitemap: https://www.site.com/sitemap.xml

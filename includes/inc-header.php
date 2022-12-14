@@ -48,7 +48,7 @@
 			<ul class="nav navbar-nav ms-auto" style="padding-top: 10px;">
 				<li>		
 					<form class="d-flex" action="<?= urlFull(); ?>search.php" method="get">
-						<input class="form-control me-2" type="search" name="s" placeholder="enter a search term ..." aria-label="Search" required>
+						<input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
 						<button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
 					</form>		
 				</li>           

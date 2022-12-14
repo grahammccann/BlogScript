@@ -86,7 +86,7 @@
 		
 				<?php	  			  
 
-                    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
+					include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
 				
 				?>
 				

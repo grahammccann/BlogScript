@@ -3,6 +3,6 @@
 	define('HOST', 'localhost');
 	define('USER', 'admin_archie');
 	define('PASS', 'PDwSZRTXbw');
-	define('DATA', 'admin_the-fish-guys.com');
+	define('DATA', 'admin_site.com');
 ?>
 
