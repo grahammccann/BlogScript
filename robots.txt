@@ -1,6 +1,0 @@
-User-agent: * 
-Disallow:
-Disallow: images/
-Disallow: includes/
-Disallow: uploads/
-Sitemap: https://www.site.com/sitemap.xml

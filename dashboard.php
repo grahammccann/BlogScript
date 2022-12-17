@@ -52,8 +52,7 @@
 				if (isset($_GET['robots'])) {
 					
 					if (file_exists("robots.txt")) {
-						createRobotsFile();
-						stdmsg('Robots file <strong>updated</strong>.');
+						stderr('Robots file <strong>exists</strong> delete it then rebuild it.');
 					} else {
 						createRobotsFile();
 						stdmsg('Robots file <strong>created</strong>.');
