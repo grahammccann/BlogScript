@@ -70,12 +70,6 @@ function createSitemap() {
 function createRobotsFile() {
 	try
 	{
-		/* User-agent: * 
-		Disallow:
-		Disallow: images/
-		Disallow: includes/
-		Disallow: uploads/
-		Sitemap: https://www.topricecookers.org/sitemap.xml */
 		$robots = fopen("robots.txt", "a") or die("Unable to open file!");
         $lines = array("User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml");
 		
@@ -235,6 +229,15 @@ function getPostersCategory($categoryId) {
 	}
 }
 
+function getPostTitleOnly($postId) {
+	try {
+		$title = DB::getInstance()->selectValues("SELECT `post_title` FROM `posts` WHERE `post_id`='{$postId}'");
+		return $title['post_title'];
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}
+}
+
 function getSourceUrls($sourceUrls) {
 	try {
         echo "<hr><h1>Sources</h1>";
@@ -347,14 +350,15 @@ function pagination($page, $totalResults, $maxResults, $params = array())
 
 function resizeImage($source, $destination, $size, $quality = null) { 
     try {
+		
 		$ext = strtolower(pathinfo($source)['extension']);
 
 		if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
-		    //throw new Exception('Invalid image file type');
+		    return false;
 		}
 
 		if (!file_exists($source)) {
-		    //throw new Exception('Source image file not found');
+		    return false;
 		}
 
 		$dimensions = getimagesize($source);
@@ -391,6 +395,7 @@ function resizeImage($source, $destination, $size, $quality = null) {
 
 		imagedestroy($original);
 		imagedestroy($resized);
+		
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}

@@ -89,7 +89,7 @@
 					
 					<?php foreach($settings as $setting) { ?>
 					  <p><small><span class="text-success"><?= htmlspecialchars($setting['option_description']); ?></span></small></p>
-						<input class="form-control form-control" type="text" name="<?= $setting['option_name']; ?>" value="<?= $setting['option_value']; ?>" />		  
+						<input class="form-control form-control" type="text" name="<?= $setting['option_name']; ?>" value="<?= htmlentities($setting['option_value']); ?>" />		  
 					  <hr />
 					<?php } ?>
 					  
@@ -98,7 +98,6 @@
 				</form>               
 				
                 </div>
-				<div class="card-footer">&nbsp;</div>
 			</div>	
 			
 		</div>

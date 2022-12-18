@@ -83,7 +83,6 @@
 				</table>
 				</div>    							
                 </div>
-				<div class="card-footer">&nbsp;</div>
 			</div>	
 		</div>
 	</div>

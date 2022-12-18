@@ -67,8 +67,7 @@
                             $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);
                             if (!empty($imageName)) {
 								
-								// Quality for .png = 0 - 9 9 is the worst.
-								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100], 0);
+								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);
 								
 								$i = DB::getInstance()->insert(
 									'images',

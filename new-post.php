@@ -72,10 +72,6 @@
 							$imageName = "img-post-generic.png";
 						}
 						
-						// IMPORTANT: check for any images in the post body, if found insert also when stripping tags: strip_tags
-						// do not strip the ones specified.
-						//$postBody = checkForAndReplaceAnyImages(strip_tags(nl2br($_POST['post_body']), '<p><a><div><span><img><h1><h2><h3><strong><ul><ol><li>'));	
-						
 						$i = DB::getInstance()->insert(
 							'posts',
 						[
@@ -110,10 +106,10 @@
 					<script>
 					$(document).ready(function() {
 						$('#summernote').summernote({
-						  height: 300,                 // set editor height
-						  minHeight: null,             // set minimum height of editor
-						  maxHeight: null,             // set maximum height of editor
-						  focus: true                  // set focus to editable area after initializing summernote
+						  height: 300,       // set editor height
+						  minHeight: null,   // set minimum height of editor
+						  maxHeight: null,   // set maximum height of editor
+						  focus: true        // set focus to editable area after initializing summernote
 						});
 					});
                    </script>

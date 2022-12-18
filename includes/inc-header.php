@@ -13,9 +13,10 @@
     <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
     <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
     <link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+	<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
   </head>
 <body> 
 
