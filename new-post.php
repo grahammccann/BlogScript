@@ -133,7 +133,7 @@
 						<label for="post_category" class="form-label"><strong>Category:</strong></label>
 						<select id="post_category" name="post_category" class="form-select" required>
 						  <?php 
-							  $categories = DB::getInstance()->select("SELECT * FROM `categories`");
+							  $categories = DB::getInstance()->select("SELECT * FROM `categories` ORDER BY `category_name` ASC");
 							  foreach($categories as $category) {
 								  echo "<option value='{$category['category_id']}'>{$category['category_name']}</option>";
 							  } 

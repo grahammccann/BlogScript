@@ -91,6 +91,18 @@ function deleteAnyImages($postId) {
 	}		
 }
 
+function doesPostContainAnInternalLink($postBody) {
+	try {
+		if (strpos($postBody, urlFull()) !== false) {
+			return true;
+		} else {
+			return false;
+		}   
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
 function doTableCount($table) {
 	try {
 	    $c = DB::getInstance()->selectAll($table);
@@ -236,6 +248,14 @@ function getPostTitleOnly($postId) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
+}
+
+function getSiteWordCount() {
+	try {
+		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM posts"); 
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
 }
 
 function getSourceUrls($sourceUrls) {

@@ -33,6 +33,7 @@
 		
 			<div class="card">
 			  <div class="card-header"><i class="fas fa-upload"></i> Update Post</div>
+			  
                 <div class="card-body">
 				
 				<?php
@@ -88,10 +89,10 @@
 					<script>
 					$(document).ready(function() {
 						$('#summernote').summernote({
-						  height: 300,                 // set editor height
-						  minHeight: null,             // set minimum height of editor
-						  maxHeight: null,             // set maximum height of editor
-						  focus: true                  // set focus to editable area after initializing summernote
+						  height: 300,       // set editor height
+						  minHeight: null,   // set minimum height of editor
+						  maxHeight: null,   // set maximum height of editor
+						  focus: true        // set focus to editable area after initializing summernote
 						});
 					});
 					</script>

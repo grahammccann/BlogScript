@@ -33,6 +33,7 @@
 		
 			<div class="card">
 			  <div class="card-header"><i class="fas fa-upload"></i> Update Post</div>
+			  
                 <div class="card-body">
 				
 				 <?php
@@ -125,10 +126,10 @@
 					<script>
 					$(document).ready(function() {
 						$('#summernote').summernote({
-						  height: 300,                 // set editor height
-						  minHeight: null,             // set minimum height of editor
-						  maxHeight: null,             // set maximum height of editor
-						  focus: true                  // set focus to editable area after initializing summernote
+						  height: 300,       // set editor height
+						  minHeight: null,   // set minimum height of editor
+						  maxHeight: null,   // set maximum height of editor
+						  focus: true        // set focus to editable area after initializing summernote
 						});
 					});
 					</script>
@@ -152,7 +153,7 @@
 						<label for="post_category" class="form-label"><strong>Category:</strong></label>
 						<select id="post_category" name="post_category" class="form-select" required>
 							<?php 					  
-								$categories = DB::getInstance()->select("SELECT * FROM `categories`");
+								$categories = DB::getInstance()->select("SELECT * FROM `categories` ORDER BY `category_name` ASC");
 								foreach($categories as $category) {
 									echo "<option value='{$category['category_id']}'";
 									if ($category['category_id'] == $post['post_category_id']) { 
