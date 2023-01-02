@@ -16,7 +16,7 @@
 
 	<h1 class="text-center"><?= $page['page_name']; ?></h1>
 	
-	<p><?= $page['page_body']; ?></p>
+	<p><?= htmlspecialchars_decode($page['page_body']); ?></p>
 	
 </main>
 

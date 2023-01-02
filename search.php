@@ -35,8 +35,9 @@
 		$total = DB::getInstance()->selectValue("SELECT count(*) FROM `posts` WHERE `post_title` LIKE '%{$_GET['s']}%'");
 		
 		if (!count($posts)) {
-			stderr('There are <strong>no</strong> results for that keyword.');
-			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 			
+			stderr('Sorry, there are <strong>no</strong> results for that keyword.');	
+			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
+			die();				
 		} else {
 			stdmsg("Found you <strong>{$total}</strong> post(s) for the search <strong>{$_GET['s']}</strong>.");	
 		}

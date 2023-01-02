@@ -88,6 +88,15 @@
 							'post_date' => date('Y-m-d H:i:s')
 						]);
 						
+
+						if (file_exists("sitemap.xml")) {
+							createSitemap();
+							stdmsg('Sitemap <strong>updated</strong>.');
+						} else {
+							createSitemap();
+							stdmsg('Sitemap <strong>created</strong>.');
+						}
+						
 						stdmsg("Your new <strong>post</strong> has been <strong>added</strong>.");
 					
 					}
