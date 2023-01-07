@@ -67,7 +67,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
-(2, 'graham23s', 'Milkybar12022', '0717ee60b139f9fee9210f454b48935c', 'graham23s@hotmail.com', 'yes', '2022-09-20 18:29:52');
+(2, 'admin', 'Milkybar12022', '0717ee60b139f9fee9210f454b48935c', 'graham23s@hotmail.com', 'yes', '2022-09-20 18:29:52');
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_descr
 (8, 'footer_twitter', 'https://twitter.com', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
 (9, 'footer_meta', 'https://www.facebook.com/', 'This sets your meta (aka facebook) account on the footer.', '2021-10-31 09:06:06'),
 (10, 'footer_instagram', 'https://www.instagram.com/', 'This sets your instagram account on the footer.', '2021-10-31 09:23:11'),
-(11, 'site_admin_email', 'contact@the-fish-guys.com', 'This is the main email associated with your site.', '2022-09-20 20:54:07'),
+(11, 'site_admin_email', 'contact@site.com', 'This is the main email associated with your site.', '2022-09-20 20:54:07'),
 (12, 'ads_post_top', '', 'This sets the ad code at the top of the post page.', '2022-10-09 15:24:42'),
 (13, 'category_style_icon', '<i class=\"fa-solid fa-fish\" style=\"color: orange;\"></i>', 'This will display a custom icon next to each category name.', '2022-12-18 09:59:54');
 

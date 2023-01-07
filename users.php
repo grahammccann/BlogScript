@@ -59,6 +59,7 @@
 				<table class="table table-striped" id="userTable" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
+					  <th>ID</th>
 					  <th>Email</th>
 					  <th>Admin</th>
 					  <th>Added</th>
@@ -68,6 +69,7 @@
 				  </thead>
 				  <tfoot>
 					<tr>
+					  <th>ID</th>
 					  <th>Email</th>
 					  <th>Admin</th>
 					  <th>Added</th>
@@ -76,14 +78,17 @@
 					</tr>
 				  </tfoot>
 				  <tbody>	  
-						<?php foreach ($members as $member) { ?>					
+						<?php foreach ($members as $member) { ?>	
+						
 							<tr>
+							    <td><?= $member['member_id']; ?></td>
 								<td><a href="mailto:<?= $member['member_email']; ?>" class="text-decoration-none" target="_blank"><?= $member['member_email']; ?></span></td>
 								<td class="text-center"><?= $member['member_is_admin'] == "yes" ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($member['member_date'])); ?></td>
 								<td class="text-center"><a href="edit-user.php?userId=<?= $member['member_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="users.php?delete=1&amp;userId=<?= $member['member_id']; ?>" onClick="return confirm('Delete the user?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-							</tr>				
+							</tr>	
+							
 						<?php } ?>	
 				  </tbody>	  
 				</table>

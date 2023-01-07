@@ -58,6 +58,7 @@
 				<table class="table table-striped" id="postTable" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
+					  <th>ID</th>
 					  <th>Name</th>
 					  <th>Added</th>
 					  <th>&nbsp;</th>
@@ -66,6 +67,7 @@
 				  </thead>
 				  <tfoot>
 					<tr>
+					  <th>ID</th>
 					  <th>Name</th>
 					  <th>Added</th>
 					  <th>&nbsp;</th>
@@ -76,11 +78,13 @@
 						<?php foreach ($pages as $page) { ?>
 						
 							<tr>
+							    <td><?= $page['page_id']; ?></td>
 								<td><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="text-decoration-none"><?= $page['page_name']; ?></a></td>
 								<td><?= date("m.d.y", strtotime($page['page_date'])); ?></td>
 								<td class="text-center"><a href="edit-page.php?pageId=<?= $page['page_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="pages.php?delete=1&amp;pageId=<?= $page['page_id']; ?>" onClick="return confirm('Delete the page?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-							</tr>				
+							</tr>	
+							
 						<?php } ?>	
 				  </tbody>	  
 				</table>

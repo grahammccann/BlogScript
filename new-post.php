@@ -58,7 +58,7 @@
 						
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);	
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name']);	
 							DB::getInstance()->insert(
 								'images',
 							[

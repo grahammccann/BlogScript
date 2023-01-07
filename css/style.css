@@ -18,3 +18,8 @@
 .note-btn.dropdown-toggle:after {
     content: none;
 }
+
+@media only screen and (max-width: 575px) {
+.nav{
+    display: block;
+}

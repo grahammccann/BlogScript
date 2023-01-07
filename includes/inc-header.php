@@ -31,7 +31,7 @@
         <!-- mobile -->
 		<div class="collapse navbar-collapse w-100 justify-content-center" id="collapsibleNavbar">
 	  
-			<a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>"></a>	
+			<a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d- d-block d-sm-inline-block mw-100 mx-auto"></a>	
 			
 			<ul class="nav nav-pills nav-fill ms-auto">   
 				<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>

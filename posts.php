@@ -93,8 +93,9 @@
 								<td><?= (doesPostContainAnInternalLink($post['post_body']) == true) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td class="text-center"><a href="edit-post.php?postId=<?= $post['post_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="posts.php?delete=1&amp;postId=<?= $post['post_id']; ?>" onClick="return confirm('Delete the post?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-							</tr>				
-						<?php } ?>	
+							</tr>	
+							
+						<?php } ?>							
 				  </tbody>	  
 				</table>
 				</div>    								

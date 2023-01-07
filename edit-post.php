@@ -63,7 +63,7 @@
 	
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);	
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name']);	
 							
 							$i = DB::getInstance()->insert(
 								'images',
@@ -101,6 +101,14 @@
 							'post_date_updated' => date('Y-m-d H:i:s'),
 							'post_sticky' => $_POST['post_sticky']						
 						]);
+						
+						if (file_exists("sitemap.xml")) {
+							createSitemap();
+							stdmsg('Sitemap <strong>updated</strong>.');
+						} else {
+							createSitemap();
+							stdmsg('Sitemap <strong>created</strong>.');
+						}
 						
 						stdmsg("Your <strong>post</strong> has been <strong>updated</strong>.");
 					

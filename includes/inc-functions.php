@@ -145,6 +145,9 @@ function getGenericTitle($page, $postId) {
 		    $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
 		    $title = $post['post_seo_title'];
 		} else if ($page == "/category.php") {
+			if (isset($_GET['page'])) {
+				echo $_GET['page'];
+			}
 		    $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
 		    $title = urlFull() . " | " . ucwords($category['category_name']);
 		} else if ($page == "/page.php") {

@@ -58,6 +58,7 @@
 				<table class="table table-striped" id="categoryTable" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
+					  <th>ID</th>
 					  <th>Name</th>
 					  <th>Added</th>
 					  <th>&nbsp;</th>
@@ -66,6 +67,7 @@
 				  </thead>
 				  <tfoot>
 					<tr>
+					  <th>ID</th>
 					  <th>Name</th>
 					  <th>Added</th>
 					  <th>&nbsp;</th>
@@ -73,13 +75,16 @@
 					</tr>
 				  </tfoot>
 				  <tbody>	  
-						<?php foreach ($categories as $category) { ?>					
+						<?php foreach ($categories as $category) { ?>	
+						
 							<tr>
+							    <td><?= $category['category_id']; ?></td>
 								<td><a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= getPostersCategory($category['category_id']); ?></a></td>
 								<td><?= date("m.d.y", strtotime($category['category_date'])); ?></td>
 								<td class="text-center"><a href="edit-category.php?categoryId=<?= $category['category_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="categories.php?delete=1&amp;categoryId=<?= $category['category_id']; ?>" onClick="return confirm('Delete the category?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-							</tr>				
+							</tr>	
+							
 						<?php } ?>	
 				  </tbody>	  
 				</table>
