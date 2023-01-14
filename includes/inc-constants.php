@@ -1,8 +1,8 @@
 <?php	
 	define('DRIVER', 'mysql');
 	define('HOST', 'localhost');
-	define('USER', 'admin_archie');
-	define('PASS', 'PDwSZRTXbw');
+	define('USER', 'admin_...');
+	define('PASS', '...');
 	define('DATA', 'admin_site.com');
 ?>
 

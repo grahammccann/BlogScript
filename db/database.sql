@@ -67,7 +67,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
-(2, 'admin', 'Milkybar12022', '0717ee60b139f9fee9210f454b48935c', 'graham23s@hotmail.com', 'yes', '2022-09-20 18:29:52');
+(2, 'admin', '...', '0717ee60b139f9fee9210f454b48935c', 'contact@site.com', 'yes', '2022-09-20 18:29:52');
 
 -- --------------------------------------------------------
 
@@ -88,13 +88,13 @@ CREATE TABLE `options` (
 --
 
 INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_description`, `option_date`) VALUES
-(1, 'homepage_title', 'The Fish Guys | Helping Keep Your Fish Friends Happy & Healthy!', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
-(2, 'homepage_description', 'We are dedicated to helping fellow fish enthusiasts care for their pet fish indoors and outdoors ...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
+(1, 'homepage_title', '...', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
+(2, 'homepage_description', '...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
 (3, 'homepage_pagination', '10', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
 (4, 'homepage_show_categories', '1', 'This will show the categories. (true or false)', '2021-10-23 20:40:35'),
-(5, 'homepage_about', 'We are dedicated to helping fellow fish enthusiasts care for their pet fish indoor and outdoor ...', 'This is a description on what your blog is about.', '2021-10-23 20:55:27'),
+(5, 'homepage_about', '...', 'This is a description on what your blog is about.', '2021-10-23 20:55:27'),
 (6, 'homepage_hide_login_link', '1', 'This will show the admin login link on the main page footer. (true or false)', '2021-10-29 20:22:40'),
-(7, 'footer_amazon_disclosure_text', '<strong>the-fish-guys.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This is the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
+(7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This is the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
 (8, 'footer_twitter', 'https://twitter.com', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
 (9, 'footer_meta', 'https://www.facebook.com/', 'This sets your meta (aka facebook) account on the footer.', '2021-10-31 09:06:06'),
 (10, 'footer_instagram', 'https://www.instagram.com/', 'This sets your instagram account on the footer.', '2021-10-31 09:23:11'),
