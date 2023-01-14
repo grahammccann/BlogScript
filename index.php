@@ -44,7 +44,8 @@
 	?>
 	
 	<div class="row">	
-	
+	 
+	    <!-- posts -->
 		<div class="col-md-9">
 		
 			<?php
@@ -55,21 +56,21 @@
 			
 			?>
 		
-			<div class="card">
-			 <div class="card-header bg-success text-white"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($sticky[0]['post_date'])); ?></strong> by <strong><?= getPostersUsername($sticky[0]['post_member_id']); ?></strong>.</small><span class="float-end"><span class="badge bg-danger"><i class="fa-solid fa-note-sticky"></i></span></span></div>
-			  <div class="card-body">	
-		
-				<?php	  			  
+				<div class="card">
+				 <div class="card-header bg-success text-white"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($sticky[0]['post_date'])); ?></strong> by <strong><?= getPostersUsername($sticky[0]['post_member_id']); ?></strong>.</small><span class="float-end"><span class="badge bg-danger"><i class="fa-solid fa-note-sticky"></i></span></span></div>
+				  <div class="card-body">	
+			
+					<?php	  			  
 
-					echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
-	                echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" .getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
-					echo $sticky[0]['post_body'];
-				
-				?>
-				
-			  </div>
-			  <div class="card-footer mt-3 bg-success text-white"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $sticky[0]['post_views']; ?></span></small></div>
-			</div>
+						echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
+						echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" .getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
+						echo $sticky[0]['post_body'];
+					
+					?>
+					
+				  </div>
+				  <div class="card-footer mt-3 bg-success text-white"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $sticky[0]['post_views']; ?></span></small></div>
+				</div>
 			
 			<?php } ?>	
 		
@@ -80,24 +81,21 @@
 			
 			?>
 		
-			<div class="card">
-			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
-			  <div class="card-body">	
-		
-				<?php	  			  
-
-					include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
-				
-				?>
-				
-			  </div>
-			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
-			</div>
+				<div class="card">
+				 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
+				  <div class="card-body">	
+			
+					<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php"); ?>
+					
+				  </div>
+				  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
+				</div>
 			
 			<?php } ?>				
 			
 		</div>
 		
+		<!-- categories -->
 		<div class="col-md-3">
 			
 			<?php 

@@ -41,12 +41,6 @@
 				 $errors = [];
 				 
 				 if (isset($_POST['submitEditUser'])) {
-					 
-					$dupe = DB::getInstance()->selectOneByField('members', 'member_email', $_POST['user_email']);
-					
-					if (!empty($dupe)) {
-			            $errors[] = 'That <strong>email</strong> is already in use please choose another.';
-		            }
 					
 					if (!empty($errors) > 0) {
 						

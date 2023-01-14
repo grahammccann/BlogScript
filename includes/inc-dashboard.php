@@ -5,6 +5,6 @@
 		<li class="list-group-item"><i class="fas fa-file-word"></i> <a href="pages.php" class="text-decoration-none">&nbsp;Pages</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("pages"); ?></span></li>			
 		<li class="list-group-item"><i class="fas fa-pencil-alt"></i> <a href="posts.php" class="text-decoration-none">Posts</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("posts"); ?></span></li>			
 		<li class="list-group-item"><i class="fas fa-users"></i> <a href="users.php" class="text-decoration-none">Users</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("members"); ?></span></li>				
-	    <li class="list-group-item list-group-item-light"><i class="fas fa-sort-numeric-down"></i> <small>Word Count:</small> <span class="badge rounded-pill bg-success float-end"><?= getSiteWordCount(); ?></span></li>
+	    <li class="list-group-item list-group-item-light"><i class="fas fa-sort-numeric-down"></i> <small>Word Count:</small> <span class="badge rounded-pill bg-success float-end"><?= !empty(getSiteWordCount()) ? getSiteWordCount() : "0"; ?></span></li>
 	</ul>
 	

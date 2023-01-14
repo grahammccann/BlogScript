@@ -63,7 +63,7 @@
 								'images',
 							[
 								'image_name' => $imageName,
-								'image_alt_text' => $_POST['post_image_alt_text'],
+								'image_alt_text' => strtolower($_POST['post_image_alt_text']),
 								'image_is_header' => "no",
 								'image_date' => date('Y-m-d H:i:s')
 							]);
@@ -82,7 +82,7 @@
 							'post_seo_title' => $_POST['post_seo_title'],
 							'post_seo_description' => $_POST['post_seo_description'],
 							'post_image' => $imageName,
-							'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "generic alt text" : $_POST['post_image_alt_text'],
+							'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "generic alt text" : strtolower($_POST['post_image_alt_text']),
 							'post_status' => $_POST['post_status'],
 							'post_source_url' => urlFull(),
 							'post_date' => date('Y-m-d H:i:s')

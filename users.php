@@ -60,6 +60,7 @@
 				  <thead>
 					<tr>
 					  <th>ID</th>
+					  <th>Name</th>
 					  <th>Email</th>
 					  <th>Admin</th>
 					  <th>Added</th>
@@ -70,6 +71,7 @@
 				  <tfoot>
 					<tr>
 					  <th>ID</th>
+					  <th>Name</th>
 					  <th>Email</th>
 					  <th>Admin</th>
 					  <th>Added</th>
@@ -82,6 +84,7 @@
 						
 							<tr>
 							    <td><?= $member['member_id']; ?></td>
+								<td><?= $member['member_username']; ?></td>
 								<td><a href="mailto:<?= $member['member_email']; ?>" class="text-decoration-none" target="_blank"><?= $member['member_email']; ?></span></td>
 								<td class="text-center"><?= $member['member_is_admin'] == "yes" ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($member['member_date'])); ?></td>

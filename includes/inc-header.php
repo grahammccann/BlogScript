@@ -20,7 +20,7 @@
   </head>
 <body> 
 
-<nav class="navbar navbar-expand-lg border-bottom navbar-white bg-white padding-bottom" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-light bg-light padding-bottom border-bottom " id="mainNav">
 	
 	<div class="container-fluid">       
 		

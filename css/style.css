@@ -11,7 +11,7 @@
     box-shadow: none!important;
 }
 
-.card{
+.card {
     margin-bottom: 20px;
 }
 
@@ -20,6 +20,30 @@
 }
 
 @media only screen and (max-width: 575px) {
-.nav{
+.nav {
     display: block;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+.navbar-brand {
+    margin-bottom: 15px;
+  }
+}
+.nav-fill .nav-item {
+    font-weight : 500;
+}
+
+
+.nav.navbar-nav.ms-auto {
+    display: flex;
+    margin: auto;
+}
+
+
+.navbar-brand {
+	display: flex;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 15px;
 }

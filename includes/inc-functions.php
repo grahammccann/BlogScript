@@ -595,6 +595,20 @@ function startsWith($haystack, $needle) {
      return substr($haystack, 0, $length) === $needle;
 }
 
+function truncateArticle($text, $chars = 120) {
+	try {
+		if (strlen($text) > $chars) {
+			$text = $text . ' ';
+			$text = substr($text, 0, $chars);
+			$text = substr($text, 0, strrpos($text ,' '));
+			$text = $text . ' ...';
+		}
+		return $text;
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+}
+
 function updatePostViews($postId) {
 	try {	
 		if (is_numeric($postId)) {
