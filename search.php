@@ -59,29 +59,33 @@
 	
 		<div class="col-md-9">
 		
+			<?php
+			
+			$count = 0;
+			foreach($posts as $post) {	
+			
+			?>
+		
 			<div class="card">
-			 <div class="card-header bg-success text-white"><i class="fa-solid fa-magnifying-glass"></i> RESULT(S) ...</div>
-			  <div class="card-body">			  			  
-				<?php
-				
-				$count = 0;
-				foreach($posts as $post) {
-					$count++;
-					echo "<h1><i class=\"fa-solid fa-hand-point-right\"></i> " . seoFriendlyUrls($post['post_title'], $post['post_id']) . "</h1>";
-					echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" . getFeaturedImageToUse($post['post_image']) . "\" alt=\"" . $post['post_image_alt_text'] . "\"></p>";
-					echo "<p>" . str_replace("\n\r", "<br><br>", $post['post_body']) ."</p>";
-					echo ($count == $max) ? "" : "<hr>";
-				}
+			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
+			  <div class="card-body">	
+		
+				<?php	  			  
+
+                    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
 				
 				?>
+				
 			  </div>
-			  <div class="card-footer mt-3"><?= pagination($page, $total, $max, $pagination); ?></div>
+			  <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max, $pagination) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
 			</div>
+			
+			<?php } ?>	
 			
 		</div>
 		
 		<div class="col-md-3">
-		
+			
 			<?php 
 			
 			if (getValue("homepage_show_categories")) { 
