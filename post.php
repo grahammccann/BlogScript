@@ -9,8 +9,7 @@
     <?php 
 	
 	    $postId = isset($_GET['postId']) ? $_GET['postId'] : ''; 
-        $update = isset($_GET['postId']) ? updatePostViews($_GET['postId']) : ''; 
-		
+        $update = isset($_GET['postId']) ? updatePostViews($_GET['postId']) : ''; 		
 		$post   = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'"); 
 	?>
 	

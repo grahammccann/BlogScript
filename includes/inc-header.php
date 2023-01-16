@@ -20,12 +20,12 @@
   </head>
 <body> 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light padding-bottom border-bottom " id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark padding-bottom border-bottom " id="mainNav">
 	
 	<div class="container-fluid">       
 		
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-			<i class="fas fa-bars"></i>
+			<i class="fas fa-bars" style="color: white;"></i>
 		</button>    
 
         <!-- mobile -->
