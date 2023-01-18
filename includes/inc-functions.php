@@ -15,8 +15,6 @@ function checkForAndReplaceAnyImages($postBody) {
 	try {	
 	    $finalSource = "";	
 	    $matchCount  = preg_match_all("/IMID(.*)/", $postBody, $matches, PREG_SET_ORDER); 
-	    //print "<pre>"; print_r($matches); print "</pre>";
-		//print "count -> " . $matchCount;
 		if ($matchCount > 0) {
 			foreach ($matches as $match) {
 				$theId = trim($match[1]);
@@ -67,6 +65,26 @@ function createSitemap() {
     }	
 }
 
+function createPostBody($postData)
+{
+    return "<p>".strip_tags(truncateArticle($postData['post_body'], 350))."</p>";
+}
+
+function createPostImage($postData)
+{
+    return "<p class='text-center'><img class='img-thumbnail' src='" . getFeaturedImageToUse($postData['post_image']) . "' alt='" . $postData['post_image_alt_text'] . "'></p>";
+}
+
+function createPostTitle($postData)
+{
+    return "<h1>".seoFriendlyUrls($postData['post_title'], $postData['post_id'])."</h1>";
+}
+
+function createReadMoreButton($postData)
+{
+    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-sm'><i class='fa-solid fa-book-open-reader'></i> Read More</a>";
+}
+
 function createRobotsFile() {
 	try
 	{
@@ -110,6 +128,33 @@ function doTableCount($table) {
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}	
+}
+
+function generateTableOfContents($htmlContent) {
+    preg_match_all("/<h[1-6]>(.*?)<\/h[1-6]>/i", $htmlContent, $matches);
+	
+	if(count($matches[1]) == 0) {
+		return "...";
+	}
+
+    $tableOfContents = array();
+    foreach ($matches[1] as $heading) {
+        $tableOfContents[] = $heading;
+    }
+    $i=1;
+    foreach($matches[0] as $heading) {
+        $new_heading = preg_replace("/<h[1-6]>/", "<h2 id='$i'>", $heading);
+        $htmlContent = str_replace($heading, $new_heading, $htmlContent);
+        $i++;
+    }
+    echo "<ol class='table-of-contents'>";
+    $i=1;
+    foreach ($tableOfContents as $item) {
+        echo "<li><span class='number'>".$i."</span>. <a href='#".$i."'>".$item."</a></li>";
+        $i++;
+    }
+    echo "</ol>";
+    echo $htmlContent;
 }
 
 function getCategoryname($categoryId) {
@@ -370,6 +415,11 @@ function pagination($page, $totalResults, $maxResults, $params = array())
 
     <?php
 }
+
+function removeEmptyClasses($html) {
+    return preg_replace('/class=""/', '', $html);
+}
+
 
 function resizeImage($source, $destination, $size, $quality = null) { 
     try {

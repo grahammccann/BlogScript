@@ -86,7 +86,7 @@
 						
 							<tr>
 						    	<td><?= $post['post_id']; ?></td>
-								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?></td>
+								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?><br><small><a href="category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none"><?= getCategoryname($post['post_category_id']); ?></a> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a></small></td>
 								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>
 								<td><?= $post['post_views']; ?></td>

@@ -125,7 +125,11 @@
 
 					<div class="mb-3">
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
-						<textarea class="form-control" id="summernote" name="post_body" rows="15" required></textarea>
+						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
+						<br><hr>
+						<div class="text-center"><a href="#" class="btn btn-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> CLICK HERE TO CHECK STOCK AVAILABILITY!</a></div>
+						<div class="text-center"><a href="#" class="btn btn-success"><i class="fa-solid fa-arrow-up-right-from-square"></i> VISIT THE OFFICIAL WEBSITE!</a></div>
+						</textarea>
 					</div>
 
 					<div class="mb-3">

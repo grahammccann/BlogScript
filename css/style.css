@@ -34,16 +34,38 @@
     font-weight : 500;
 }
 
-
 .nav.navbar-nav.ms-auto {
     display: flex;
     margin: auto;
 }
-
 
 .navbar-brand {
 	display: flex;
 	margin-right: auto;
 	margin-left: auto;
 	margin-bottom: 15px;
+}
+
+.table-of-contents {
+    list-style-type: none;
+    padding-left: 0;
+    background-color: #f7f7f9;
+    padding: 1.5rem; 
+    border-radius: 0.25rem; 
+    margin-bottom: 1.5rem; 
+    border: 1px solid #dee2e6; 
+}
+
+.table-of-contents li {
+    margin-bottom: 0.75rem; 
+}
+
+.table-of-contents a {
+    color: #007bff; 
+    text-decoration: none; 
+    font-weight: bold; 
+}
+
+.table-of-contents a:hover {
+    color: #0056b3;
 }

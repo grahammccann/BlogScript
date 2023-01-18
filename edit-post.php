@@ -85,6 +85,9 @@
 						
 						} 
 	
+	                    // Fix: Small fix becuase summer note does this: class="" to <h# tags.
+                        // $cleanedHtml = removeEmptyClasses($_POST['post_body']);
+	                    // Fix: Small fix becuase summer note does this: class="" to <h# tags.
 						
 						$u = DB::getInstance()->update(
 							'posts',

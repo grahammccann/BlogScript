@@ -38,7 +38,7 @@
 				    <p class="text-center"><img class="img-thumbnail" src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= $post['post_image_alt_text']; ?>"></p>
 				<?php } ?>
 				<p class="text-center"><?= !empty(getValue("ads_post_top")) ? html_entity_decode(getValue("ads_post_top")) : "&nbsp;"; ?></p>
-				<div id="post-content"><?= $post['post_body']; ?></div>
+				<div id="post-content"><?= (generateTableOfContents($post['post_body']) == "...") ? $post['post_body'] : generateTableOfContents($post['post_body']); ?></div>
 				<div id="post-content-videos"><?php if (startsWith($post['post_source_url'], "[") == true) { getSourceVideos($post['post_source_url']); } else { echo "&nbsp;"; } ?></div>
 				<div id="post-content-source-urls"><?php if (startsWith($post['post_source_url'], "[") == true) { getSourceUrls($post['post_source_url']); } else { echo "&nbsp;"; } ?></div>
 			  </div>
