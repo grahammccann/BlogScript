@@ -91,16 +91,17 @@ INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_descr
 (1, 'homepage_title', '...', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
 (2, 'homepage_description', '...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
 (3, 'homepage_pagination', '10', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
-(4, 'homepage_show_categories', '1', 'This will show the categories. (true or false)', '2021-10-23 20:40:35'),
-(5, 'homepage_about', '...', 'This is a description on what your blog is about.', '2021-10-23 20:55:27'),
-(6, 'homepage_hide_login_link', '1', 'This will show the admin login link on the main page footer. (true or false)', '2021-10-29 20:22:40'),
-(7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This is the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
+(4, 'homepage_show_categories', '1', 'This sets if the categories section will show. (true or false)', '2021-10-23 20:40:35'),
+(5, 'homepage_about', 'We are dedicated to helping fellow fish enthusiasts care for their pet fish indoor and outdoor ...', 'This sets the description on what your blog is about.', '2021-10-23 20:55:27'),
+(6, 'homepage_hide_login_link', '1', 'This sets if the admin login link on the main page footer shows to everyone or not. (true or false)', '2021-10-29 20:22:40'),
+(7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This sets the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
 (8, 'footer_twitter', 'https://twitter.com', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
 (9, 'footer_meta', 'https://www.facebook.com/', 'This sets your meta (aka facebook) account on the footer.', '2021-10-31 09:06:06'),
 (10, 'footer_instagram', 'https://www.instagram.com/', 'This sets your instagram account on the footer.', '2021-10-31 09:23:11'),
-(11, 'site_admin_email', 'contact@site.com', 'This is the main email associated with your site.', '2022-09-20 20:54:07'),
+(11, 'site_admin_email', 'contact@site.com', 'This sets the main email associated with your site.', '2022-09-20 20:54:07'),
 (12, 'ads_post_top', '', 'This sets the ad code at the top of the post page.', '2022-10-09 15:24:42'),
-(13, 'category_style_icon', '<i class=\"fa-solid fa-fish\" style=\"color: orange;\"></i>', 'This will display a custom icon next to each category name.', '2022-12-18 09:59:54');
+(13, 'category_style_icon', '<i class=\"fa-solid fa-...\" style=\"color: orange;\"></i>', 'This sets a custom icon next to each category name.', '2022-12-18 09:59:54'),
+(14, 'google_adsense', '', 'This sets the AdSense code needed by Google in the <head></head> tags.', '2023-01-19 10:58:58');
 
 -- --------------------------------------------------------
 

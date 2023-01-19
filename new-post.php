@@ -104,32 +104,66 @@
 				 }
 				 
 				 ?>
+				 
+				<script>
+				$(document).ready(function() {
+					$('#post_call_to_action_button').on('change', function() {
+					  var selectedOption = $(this).val();
+					  if(selectedOption === 'cta_1') {
+						$('#check-stock-button').show();
+						$('#visit-website-button').hide();
+					  } else if(selectedOption === 'cta_2') {
+						$('#check-stock-button').hide();
+						$('#visit-website-button').show();
+					  }
+					});
+				});
+				</script>
 				
-				<form action="new-post.php" method="post" enctype="multipart/form-data">
-
+				<script>
+				$(document).ready(function() {
+					$('#summernote').summernote({
+					  height: 300,       // set editor height
+					  minHeight: null,   // set minimum height of editor
+					  maxHeight: null,   // set maximum height of editor
+					  focus: true        // set focus to editable area after initializing summernote
+					});
+				});
+			   </script>
+			
+			   <form action="new-post.php" method="post" enctype="multipart/form-data">
+				   
 					<div class="mb-3">
 						<label for="post_title" class="form-label"><strong>Title:</strong></label>
 						<input type="text" class="form-control" id="post_title" name="post_title" required>
 					</div>
-					
-					<script>
-					$(document).ready(function() {
-						$('#summernote').summernote({
-						  height: 300,       // set editor height
-						  minHeight: null,   // set minimum height of editor
-						  maxHeight: null,   // set maximum height of editor
-						  focus: true        // set focus to editable area after initializing summernote
-						});
-					});
-                   </script>
 
 					<div class="mb-3">
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
 						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
-						<br><hr>
-						<div class="text-center"><a href="#" class="btn btn-primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> CLICK HERE TO CHECK STOCK AVAILABILITY!</a></div>
-						<div class="text-center"><a href="#" class="btn btn-success"><i class="fa-solid fa-arrow-up-right-from-square"></i> VISIT THE OFFICIAL WEBSITE!</a></div>
+							
+						   <br>
+						   <hr>
+							
+							<div class="text-center" id="check-stock-button-container">
+							  <a href="#" class="btn btn-primary" id="check-stock-button">
+								<i class="fa fa-arrow-up-right-from-square"></i> CHECK STOCK AVAILABILITY</a>
+							</div>
+
+							<div class="text-center" id="visit-website-button-container">
+							  <a href="#" class="btn btn-success" id="visit-website-button">
+								<i class="fa fa-arrow-up-right-from-square"></i> VISIT THE OFFICIAL WEBSITE</a>					
+						    </div>
+							
 						</textarea>
+					</div>
+					
+					<div class="mb-3">
+						<label for="post_call_to_action_button" class="form-label"><strong>Button CTA Type/Text:</strong></label>
+						<select id="post_call_to_action_button" name="post_call_to_action_button" class="form-select" required>
+                            <option value="cta_1">Button 1: CHECK STOCK AVAILABILITY</option>
+							<option value="cta_2">Button 2: VISIT THE OFFICIAL WEBSITE</option>
+						</select>
 					</div>
 
 					<div class="mb-3">

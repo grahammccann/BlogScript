@@ -67,7 +67,7 @@ function createSitemap() {
 
 function createPostBody($postData)
 {
-    return "<p>".strip_tags(truncateArticle($postData['post_body'], 350))."</p>";
+    return "<p>".strip_tags(truncateArticle($postData['post_body'], 650))."</p>";
 }
 
 function createPostImage($postData)
@@ -132,10 +132,6 @@ function doTableCount($table) {
 
 function generateTableOfContents($htmlContent) {
     preg_match_all("/<h[1-6]>(.*?)<\/h[1-6]>/i", $htmlContent, $matches);
-	
-	if(count($matches[1]) == 0) {
-		return "...";
-	}
 
     $tableOfContents = array();
     foreach ($matches[1] as $heading) {
@@ -147,13 +143,15 @@ function generateTableOfContents($htmlContent) {
         $htmlContent = str_replace($heading, $new_heading, $htmlContent);
         $i++;
     }
-    echo "<ol class='table-of-contents'>";
-    $i=1;
-    foreach ($tableOfContents as $item) {
-        echo "<li><span class='number'>".$i."</span>. <a href='#".$i."'>".$item."</a></li>";
-        $i++;
-    }
-    echo "</ol>";
+	if (count($tableOfContents) > 0) {
+		echo "<ol class='table-of-contents'>";
+		$i=1;
+		foreach ($tableOfContents as $item) {
+			echo "<li><span class='number'>".$i."</span>. <a href='#".$i."'>".$item."</a></li>";
+			$i++;
+		}
+		echo "</ol>";		
+	}
     echo $htmlContent;
 }
 
@@ -227,6 +225,22 @@ function getGenericDescription($page, $postId) {
 			$description = urlFull();
 		}
 		return $description;	
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}	
+}
+
+function getPublishedStatus($status) {
+	try {
+        if ($status == "published") {
+			return '<span class="badge rounded-pill bg-success">Published</span>';
+		}	
+        if ($status == "draft") {
+			return '<span class="badge rounded-pill bg-primary">Draft</span>';
+		}	
+        if ($status == "archived") {
+			return '<span class="badge rounded-pill bg-danger">Archived</span>';
+		}	
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}	

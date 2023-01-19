@@ -17,6 +17,7 @@
 	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
 	<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
+	<?php if (!empty(getValue("google_adsense"))) { echo getValue("google_adsense") . "\n"; } ?>
   </head>
 <body> 
 
