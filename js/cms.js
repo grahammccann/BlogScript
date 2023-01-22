@@ -9,17 +9,3 @@ var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggl
 var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
-
-$("#post_quick_tags").on("change", function() {
-    var $select = $(this);
-    $("#post_body").val(function(i, val) {
-        return val += $select.val() + "\n";
-    })
-});
-
-$("#post_image_tags").on("change", function() {
-    var $select = $(this);
-    $("#post_body").val(function(i, val) {
-        return val += $select.val() + "\n";
-    })
-});

@@ -4,10 +4,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <?php
+    if (!empty(getValue("google_analytics_property_id"))) {
+        $propertyId = getValue("google_analytics_property_id");
+		echo '
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=' . $propertyId . '"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag("js", new Date());
+		  gtag("config", "' . $propertyId . '");
+		</script>';
+	}
+	?>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericDescription($_SERVER['PHP_SELF'], $thePostId); ?>">
-    <title><?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericTitle($_SERVER['PHP_SELF'], $thePostId); ?></title>
+    <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
+	<?php
+	if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
+		echo "<meta name='robots' content='follow, noindex'/>\n";
+	}
+	?>
+    <title><?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?></title>
     <link href="<?= urlFull(); ?>favicon.ico" rel="icon">
 	<link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">

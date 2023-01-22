@@ -36,6 +36,15 @@ function checkForAndReplaceAnyImages($postBody) {
 	return $finalSource;
 }
 
+function checkUrl() {
+    $currentUrl = $_SERVER['REQUEST_URI'];
+    if (strpos($currentUrl, 'index.php?page=') !== false) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function createSitemap() {
 	try
 	{
@@ -179,55 +188,47 @@ function getFeaturedImageToUse($imageName) {
 	}		
 }
 
-function getGenericTitle($page, $postId) {
-	try {	
-		$replace = array("/", ".php");	
-		if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
-		    $title = urlFull() . " | " . ucwords(str_replace($replace, "", $page));	
-		} else if ($page == "/post.php") {
-		    $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
-		    $title = $post['post_seo_title'];
-		} else if ($page == "/category.php") {
+function getGenericMeta($page, $postId, $metaType) {
+    try {
+        $replace = array("/", ".php");
+        if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
+            if ($metaType == 'title') {
+                $meta = urlFull() . " | " . ucwords(str_replace($replace, "", $page));
+            } else {
+                $meta = urlFull();
+            }
+        } else if ($page == "/post.php") {
+            $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
+            if ($metaType == 'title') {
+                $meta = $post['post_seo_title'];
+            } elseif ($metaType == 'description') {
+                $meta = $post['post_seo_description'];
+            }
+        } else if ($page == "/category.php") {
+			$category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
+			$meta = urlFull() . " | " . ucwords($category['category_name']);
 			if (isset($_GET['page'])) {
-				echo $_GET['page'];
+				$meta .= " | Page {$_GET['page']}";
 			}
-		    $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
-		    $title = urlFull() . " | " . ucwords($category['category_name']);
-		} else if ($page == "/page.php") {
-			$slug = explode("=", $_SERVER['REQUEST_URI']);
-		    $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");
-		    $title = urlFull() . " | " . ucwords($page['page_name']);					
-		} else {
-			$title = urlFull();
-		}
-		return $title;	
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}	
-}
-
-function getGenericDescription($page, $postId) {
-	try {
-		$replace = array("/", ".php");
-		if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
-			$description = urlFull() . " | " . ucwords(str_replace($replace, "", $page));
-		} else if ($page == "/post.php") {
-		    $post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
-		    $description = $post['post_seo_description'];	
-		} else if ($page == "/category.php") {
-		    $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
-		    $description = urlFull() . " | " . ucwords($category['category_name']);
-		} else if ($page == "/page.php") {
-			$slug = explode("=", $_SERVER['REQUEST_URI']);
-		    $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");
-		    $description = urlFull() . " | " . ucwords($page['page_name']);				
-		} else {
-			$description = urlFull();
-		}
-		return $description;	
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}	
+        } else if ($page == "/page.php") {
+            $slug = explode("=", $_SERVER['REQUEST_URI']);
+            $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");
+            if ($metaType == 'title') {
+                $meta = urlFull() . " | " . ucwords($page['page_name']);
+            } else {
+                $meta = urlFull() . " | " . ucwords($page['page_name']);
+            }
+        } else {
+            if ($metaType == 'title') {
+                $meta = urlFull();
+            } else {
+                $meta = urlFull();
+            }
+        }
+        return $meta;
+    } catch(Exception $e) {
+        echo $e->getMessage();
+    }
 }
 
 function getPublishedStatus($status) {
@@ -370,13 +371,13 @@ function getYoutubeEmbedUrl($url)
      $longUrlRegex = '/youtube.com\/((?:embed)|(?:watch))((?:\?v\=)|(?:\/))([a-zA-Z0-9_-]+)/i';
 
     if (preg_match($longUrlRegex, $url, $matches)) {
-        $youtube_id = $matches[count($matches) - 1];
+        $youtubeId = $matches[count($matches) - 1];
     }
 
     if (preg_match($shortUrlRegex, $url, $matches)) {
-        $youtube_id = $matches[count($matches) - 1];
+        $youtubeId = $matches[count($matches) - 1];
     }
-    return 'https://www.youtube.com/embed/' . $youtube_id ;
+    return 'https://www.youtube.com/embed/' . $youtubeId;
 }
 
 function pagination($page, $totalResults, $maxResults, $params = array())
@@ -691,27 +692,43 @@ function updatePostViews($postId) {
 	}
 }
 
-function uploadImage($imageName, $imageTemp) {
-	try {
-		$validFormats   = array("jpg", "png", "gif", "jpeg");
-		$imageNameFinal = "";
-		if (strlen($imageName) > 0) {
-			list($txt, $ext) = explode(".", $imageName);
-			if (in_array($ext, $validFormats)) {
-				$imageNameFinal = md5($imageName . date('Y/m/d H:i:s')) . "." . $ext;
-				$imagePath = "uploads/" . $imageNameFinal;
-				if (move_uploaded_file($imageTemp, $imagePath)) {
-					if (file_exists($imagePath)) {
-						stdmsg("The <strong>image</strong> file already exists.");
-					}			
-				}
-			}
-		}
-		return $imageNameFinal;		
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}
-}	
+function uploadImage($imageName, $imageTemp, $imageAltTextName) {
+    try {
+        $validFormats = array("jpg", "png", "gif", "jpeg");
+        $imageNameFinal = "";
+        if (strlen($imageName) > 0) {
+            list($txt, $ext) = explode(".", $imageName);
+            if (in_array($ext, $validFormats)) {
+                $size = filesize($imageTemp);
+                if ($size > 5000000) {
+                    stdmsg("File size must be <strong>less</strong> than 5MB.");
+                    return;
+                }
+                $mime = mime_content_type($imageTemp);
+                if (!strstr($mime, 'image')) {
+                    stdmsg("Invalid file type. Only <strong>images</strong> are allowed.");
+                    return;
+                }
+                $randomInt = rand();
+                $imageAltText = str_replace(" ", "-", $imageAltTextName);
+                $imageNameFinal = $imageAltText . "-" . $randomInt . "." . $ext;
+                $imagePath = "uploads/" . $imageNameFinal;
+                if (!is_dir("uploads")) {
+                    mkdir("uploads");
+                }
+                if (file_exists($imagePath)) {
+                    stdmsg("The <strong>image</strong> file already exists.");
+                    return;
+                }
+                if (move_uploaded_file($imageTemp, $imagePath)) {
+                    return $imageNameFinal;
+                }
+            }
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+}
 
 function xmlFriendlyUrls($postName, $postId) {
 	try {

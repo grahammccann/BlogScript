@@ -58,7 +58,7 @@
 						
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name']);	
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));	
 							DB::getInstance()->insert(
 								'images',
 							[
@@ -82,7 +82,7 @@
 							'post_seo_title' => $_POST['post_seo_title'],
 							'post_seo_description' => $_POST['post_seo_description'],
 							'post_image' => $imageName,
-							'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "generic alt text" : strtolower($_POST['post_image_alt_text']),
+							'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
 							'post_status' => $_POST['post_status'],
 							'post_source_url' => urlFull(),
 							'post_date' => date('Y-m-d H:i:s')
@@ -147,12 +147,12 @@
 							
 							<div class="text-center" id="check-stock-button-container">
 							  <a href="#" class="btn btn-primary" id="check-stock-button">
-								<i class="fa fa-arrow-up-right-from-square"></i> CHECK STOCK AVAILABILITY</a>
+								<i class="fa fa-arrow-up-right-from-square"></i> CHECK PRICE</a>
 							</div>
 
 							<div class="text-center" id="visit-website-button-container">
 							  <a href="#" class="btn btn-success" id="visit-website-button">
-								<i class="fa fa-arrow-up-right-from-square"></i> VISIT THE OFFICIAL WEBSITE</a>					
+								<i class="fa fa-arrow-up-right-from-square"></i> OFFICIAL WEBSITE</a>					
 						    </div>
 							
 						</textarea>
@@ -161,8 +161,8 @@
 					<div class="mb-3">
 						<label for="post_call_to_action_button" class="form-label"><strong>Button CTA Type/Text:</strong></label>
 						<select id="post_call_to_action_button" name="post_call_to_action_button" class="form-select" required>
-                            <option value="cta_1">Button 1: CHECK STOCK AVAILABILITY</option>
-							<option value="cta_2">Button 2: VISIT THE OFFICIAL WEBSITE</option>
+                            <option value="cta_1">Button 1: CHECK PRICE</option>
+							<option value="cta_2">Button 2: OFFICIAL WEBSITE</option>
 						</select>
 					</div>
 
@@ -207,7 +207,7 @@
 
 					<div class="mb-3">
 					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
-					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text">
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" required>
 					</div>
 
 					<button type="submit" name="submitPost" class="btn btn-success float-end"><i class="fas fa-plus"></i> New Post</button>

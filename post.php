@@ -25,8 +25,6 @@
 	  </div>
 	</div>
 	
-	&nbsp;
-	
 	<div class="row">
 	
 		<div class="col-md-9">
@@ -60,6 +58,29 @@
 			
 		</div>
 	
+	</div>
+	
+	<div class="row">
+		<div class="col-md-9">
+			<div class="card">
+				<div class="card-header bg-secondary text-white text-center py-2"><i class="fas fa-link"></i> <strong>Related Articles</strong></div>
+				<div class="card-body">
+					<?php 
+						$relatedArticles = DB::getInstance()->select("SELECT * FROM posts WHERE `post_category_id`='{$post['post_category_id']}' ORDER BY RAND() LIMIT 3");
+						foreach($relatedArticles as $relatedArticle) { 
+					?>
+					<div class="card mb-3" style="padding-top: 10px;">
+						<div class="card-body">
+							<img src="<?= getFeaturedImageToUse($relatedArticle['post_image']) ?>" alt="<?= $relatedArticle['post_image_alt_text']; ?>" class="img-thumbnail mx-auto position-relative" width="150" height="150">
+							<a href="<?= urlFull(); ?>post.php?postId=<?= $relatedArticle['post_id']; ?>" class="text-decoration-none link-overlay">
+						        <?= seoFriendlyUrls($relatedArticle['post_title'], $relatedArticle['post_id']) ?>
+							</a>
+						</div>
+					</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 </main>

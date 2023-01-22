@@ -108,3 +108,18 @@
 #check-stock-button, #visit-website-button {
     display: none;
 }
+
+.related-card {
+	max-height: 300px;
+	display: flex;
+	flex-wrap:wrap;
+	align-items: center;
+}
+
+.link-overlay {
+    width:150px;
+    height:150px;
+    position: absolute;
+    top:0;
+    left:0;
+}

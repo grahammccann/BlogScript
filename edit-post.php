@@ -63,8 +63,7 @@
 	
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name']);	
-							
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));								
 							$i = DB::getInstance()->insert(
 								'images',
 							[
@@ -80,7 +79,7 @@
 								$_POST['updateId'],
 							[
 								'post_image' => $imageName,
-								'post_image_alt_text' => (empty($_POST['post_image_alt_text'])) ? "Generic blog post alt text" : $_POST['post_image_alt_text']
+								'post_image_alt_text' => $_POST['post_image_alt_text']
 							]);
 						
 						} 
@@ -100,6 +99,7 @@
 							'post_body' => $_POST['post_body'],
 							'post_seo_title' => $_POST['post_seo_title'],
 							'post_seo_description' => $_POST['post_seo_description'],
+							'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
 							'post_status' => $_POST['post_status'],
 							'post_date_updated' => date('Y-m-d H:i:s'),
 							'post_sticky' => $_POST['post_sticky']						
@@ -216,7 +216,7 @@
 
 					<div class="mb-3">
 					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
-					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text">
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" value="<?= $post['post_image_alt_text']; ?>" required>
 					</div>
 				  
 					<input type="hidden" name="updateId" value="<?= $_GET['postId']; ?>">	

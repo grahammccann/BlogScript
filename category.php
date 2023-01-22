@@ -17,8 +17,6 @@
 	  </div>
 	</div>
 	
-	&nbsp;
-	
 	<?php
 
 		if (isset($_GET['page'])) {
