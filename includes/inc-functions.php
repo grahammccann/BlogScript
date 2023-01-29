@@ -91,7 +91,7 @@ function createPostTitle($postData)
 
 function createReadMoreButton($postData)
 {
-    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-sm'><i class='fa-solid fa-book-open-reader'></i> Read More</a>";
+    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-sm'><i class='fa-solid fa-book-open-reader'></i> Continue reading</a>";
 }
 
 function createRobotsFile() {

@@ -44,18 +44,39 @@
 			</div>
 		</div>
 		
+		<!-- categories / sidebars -->
 		<div class="col-md-3">
-
+			
 			<?php 
 			
 			if (getValue("homepage_show_categories")) { 
 						
-			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-category-sidebar.php");  
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-categories.php");  
 				
 			}
 			
 			?>	
 			
+			<?php 
+			
+			if (!empty(getValue("sidebar_cta_1"))) { 
+						
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-1.php");  
+				
+			}
+			
+			?>	
+			
+			<?php 
+			
+			if (!empty(getValue("sidebar_cta_2"))) { 
+						
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-2.php");  
+				
+			}
+			
+			?>
+
 		</div>
 	
 	</div>

@@ -9,12 +9,12 @@
         $propertyId = getValue("google_analytics_property_id");
 		echo '
 		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=' . $propertyId . '"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id='.$propertyId.'"></script>
 		<script>
 		  window.dataLayer = window.dataLayer || [];
 		  function gtag(){dataLayer.push(arguments);}
 		  gtag("js", new Date());
-		  gtag("config", "' . $propertyId . '");
+		  gtag("config", "'.$propertyId.'");
 		</script>';
 	}
 	?>
@@ -36,7 +36,9 @@
 	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
 	<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
-	<?php if (!empty(getValue("google_adsense"))) { echo getValue("google_adsense") . "\n"; } ?>
+	<?php if (!empty(getValue("google_adsense"))) { 
+	    $googleClientId = getValue("google_adsense");
+	    echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } ?>
   </head>
 <body> 
 

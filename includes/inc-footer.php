@@ -3,17 +3,17 @@
 <p class="text-center">
 	<?php 
 	if (!empty(getValue("footer_twitter"))) { ?>
-	<a class="btn btn-primary border-0" style="background-color: #55acee;" href="<?= getValue("footer_twitter"); ?>" role="button"><i class="fab fa-twitter me-2"></i>Twitter</a>	
+	    <a class="btn btn-primary border-0" style="background-color: #55acee;" href="<?= getValue("footer_twitter"); ?>" role="button"><i class="fab fa-twitter me-2"></i>Twitter</a>	
 	<?php } ?>
 
 	<?php 
 	if (!empty(getValue("footer_meta"))) { ?>
-	<a class="btn btn-primary border-0" style="background-color: #3b5998;" href="<?= getValue("footer_meta"); ?>" role="button"><i class="fab fa-facebook-f me-2"></i>Facebook</a>	
+	    <a class="btn btn-primary border-0" style="background-color: #3b5998;" href="<?= getValue("footer_meta"); ?>" role="button"><i class="fab fa-facebook-f me-2"></i>Facebook</a>	
 	<?php } ?>		
 
 	<?php 
 	if (!empty(getValue("footer_instagram"))) { ?>
-	<a class="btn btn-primary border-0" style="background-color: #ac2bac;" href="<?= getValue("footer_instagram"); ?>" role="button"><i class="fab fa-instagram me-2"></i>Instagram</a>	
+	    <a class="btn btn-primary border-0" style="background-color: #ac2bac;" href="<?= getValue("footer_instagram"); ?>" role="button"><i class="fab fa-instagram me-2"></i>Instagram</a>	
 	<?php } ?>	
 </p>
 
