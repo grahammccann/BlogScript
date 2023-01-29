@@ -44,6 +44,16 @@
 	?>
 	
 	<div class="row">	
+	
+		<?php 
+		
+		if (getValue("homepage_introduction")) { 
+					
+			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header-introduction.php");  
+			
+		}
+		
+		?>	
 	 
 	    <!-- posts -->
 		<div class="col-md-9">
