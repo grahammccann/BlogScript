@@ -3,51 +3,51 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <?php
-    if (!empty(getValue("google_analytics_property_id"))) {
-        $propertyId = getValue("google_analytics_property_id");
-		echo '
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id='.$propertyId.'"></script>
-		<script>
-		  window.dataLayer = window.dataLayer || [];
-		  function gtag(){dataLayer.push(arguments);}
-		  gtag("js", new Date());
-		  gtag("config", "'.$propertyId.'");
-		</script>';
-	}
-	?>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
-	<?php
-	if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
-		echo "<meta name='robots' content='follow, noindex'/>\n";
-	}
-	?>
-    <title><?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?></title>
-    <link href="<?= urlFull(); ?>favicon.ico" rel="icon">
-	<link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
-    <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
-    <link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
-	<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-	<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
-	<?php if (!empty(getValue("google_adsense"))) { 
-	    $googleClientId = getValue("google_adsense");
-	    echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } ?>
-  </head>
+<head>
+<?php
+if (!empty(getValue("google_analytics_property_id"))) {
+$propertyId = getValue("google_analytics_property_id");
+echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$propertyId.'"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "'.$propertyId.'");
+</script>
+';
+}
+?>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
+<?php
+if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
+	echo "<meta name='robots' content='follow, noindex'/>\n";
+}
+?>
+<title><?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?></title>
+<link href="<?= urlFull(); ?>favicon.ico" rel="icon">
+<link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
+<link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
+<link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
+<link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
+<?php if (!empty(getValue("google_adsense"))) { 
+	$googleClientId = getValue("google_adsense");
+	echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } 
+?>
+</head>
 <body> 
 
-<nav class="navbar navbar-expand-lg bg-dark border-bottom" id="mainNav">
+<nav class="navbar navbar-expand-lg bg-light border-bottom" id="mainNav">
 	
 	<div class="container-fluid">       
 		
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-			<i class="fas fa-bars" style="color: white;"></i>
+			<i class="fas fa-bars"></i>
 		</button>    
 
         <!-- mobile -->

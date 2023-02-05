@@ -97,6 +97,12 @@
 		
 		<!-- categories / sidebars -->
 		<div class="col-md-3">
+		
+			<?php 
+									
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-recent-posts.php");  
+		
+			?>	
 			
 			<?php 
 			

@@ -46,6 +46,12 @@
 		
 		<!-- categories / sidebars -->
 		<div class="col-md-3">
+		
+			<?php 
+									
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-recent-posts.php");  
+		
+			?>	
 			
 			<?php 
 			
@@ -82,7 +88,7 @@
 	</div>
 	
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header bg-secondary text-white text-center py-2"><i class="fas fa-link"></i> <strong>Related Articles</strong></div>
 				<div class="card-body">
@@ -93,7 +99,6 @@
 					<div class="card mb-3" style="padding-top: 10px;">
 						<div class="card-body">
 							<img src="<?= getFeaturedImageToUse($relatedArticle['post_image']) ?>" alt="<?= $relatedArticle['post_image_alt_text']; ?>" class="img-thumbnail mx-auto position-relative" width="150" height="150">
-							<a href="<?= urlFull(); ?>post.php?postId=<?= $relatedArticle['post_id']; ?>" class="text-decoration-none link-overlay">
 						        <?= seoFriendlyUrls($relatedArticle['post_title'], $relatedArticle['post_id']) ?>
 							</a>
 						</div>

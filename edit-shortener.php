@@ -37,19 +37,19 @@
 		<div class="col-md-9">
 		
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-upload"></i> Update Category</div>
+			  <div class="card-header"><i class="fas fa-upload"></i> Update Shortener</div>
                 <div class="card-body">
 				
 				<?php
 				 
 				$errors = [];
 				 
-				if (isset($_POST['submitEditCategory'])) {
+				if (isset($_POST['submitEditShortener'])) {
 					 
-					$dupe = DB::getInstance()->selectOneByField('categories', 'category_name', $_POST['category_name']);
+					$dupe = DB::getInstance()->selectOneByField('shorteners', 'shortener_original_url', $_POST['shortener_original_url']);
 					
 					if (!empty($dupe)) {
-			            $errors[] = 'That <strong>category</strong> is already in use please choose another.';
+			            $errors[] = 'That <strong>Original URL</strong> is already in use please choose another.';
 		            }
 					
 					if (!empty($errors) > 0) {
@@ -61,14 +61,14 @@
 					} else {
 						
 						$u = DB::getInstance()->update(
-							'categories',
-							'category_id',
+							'shorteners',
+							'shortener_id',
 							$_POST['updateId'],
 						[
-							'category_name' => $_POST['category_name']
+							'shortener_original_url' => $_POST['shortener_original_url']
 						]);
 						
-						stdmsg("Your <strong>category</strong> has been <strong>updated</strong>.");
+						stdmsg("Your <strong>Original URL</strong> has been <strong>updated</strong>.");
 					
 					}
 					 
@@ -78,19 +78,24 @@
 				
 				<?php
 				
-				    $category = DB::getInstance()->selectValues("SELECT `category_name` FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
+				    $shortener = DB::getInstance()->selectValues("SELECT * FROM `shorteners` WHERE `shortener_id`='{$_GET['shortenerId']}'");
 				
 				?>
 				
-				<form action="edit-category.php?categoryId=<?= $_GET['categoryId']; ?>" method="post">
+				<form action="edit-shortener.php?shortenerId=<?= $_GET['shortenerId']; ?>" method="post">
 				 
-				<div class="mb-3">
-					<label for="category_name" class="form-label"><strong>Name:</strong></label>
-					<input type="text" class="form-control" id="category_name" name="category_name" value="<?= $category['category_name']; ?>" required>
-				</div>
-
-				<input type="hidden" name="updateId" value="<?= $_GET['categoryId']; ?>">				  
-				<button type="submit" name="submitEditCategory" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
+					<div class="mb-3">
+						<label for="shortener_original_url" class="form-label"><strong>Original URL:</strong></label>
+						<input type="text" class="form-control" id="shortener_original_url" name="shortener_original_url" value="<?= $shortener['shortener_original_url']; ?>" required>
+					</div>
+					
+					<div class="mb-3">
+						<label for="shortener_short" class="form-label"><strong>Short Code (optional):</strong></label>
+						<input type="text" class="form-control" id="shortener_short" name="shortener_short" value="<?= $shortener['shortener_short']; ?>" disabled>
+					</div>
+				  
+					<input type="hidden" name="updateId" value="<?= $_GET['shortenerId']; ?>">				  
+					<button type="submit" name="submitEditShortener" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
 				
 				</form>               
 				

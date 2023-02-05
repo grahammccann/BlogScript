@@ -28,6 +28,10 @@
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>
 			
+			<div class="card">
+			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+			</div>
+			
 		</div>
 		
 		<div class="col-md-9">
@@ -44,7 +48,8 @@
 
 						if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);	
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));
+							
                             if (!empty($imageName)) {
 								
 								$i = DB::getInstance()->insert(
@@ -64,7 +69,8 @@
 
                         if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name']);
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));
+							
                             if (!empty($imageName)) {
 								
 								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);

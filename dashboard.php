@@ -24,9 +24,15 @@
 	<div class="row">
 	
 		<div class="col-md-3">
+		
 			<div class="card">
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>
+			
+			<div class="card">
+			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+			</div>
+			
 		</div>
 		
 		<div class="col-md-9">		

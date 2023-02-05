@@ -27,7 +27,11 @@
 			<div class="card">
 			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard.php"); ?>
 			</div>
-		
+			
+			<div class="card">
+			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+			</div>
+			
 		</div>
 		
 		<div class="col-md-9">
@@ -77,41 +81,41 @@
 				
 				?>
 				
-				 <form action="edit-user.php?userId=<?= $_GET['userId']; ?>" method="post">
+				<form action="edit-user.php?userId=<?= $_GET['userId']; ?>" method="post">
 				 
-				  <div class="mb-3">
-					<label for="user_username" class="form-label"><strong>Username:</strong></label>
-					<input type="text" class="form-control" id="user_username" name="user_username" value="<?= $user['member_username']; ?>" required>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="user_password" class="form-label"><strong>Password:</strong></label>
-					<input type="text" class="form-control" id="user_password" name="user_password" value="<?= $user['member_password']; ?>" required>
-				  </div>
-				  
-				  <div class="mb-3">
-					<label for="user_email" class="form-label"><strong>Email:</strong></label>
-					<input type="email" class="form-control" id="user_email" name="user_email" value="<?= $user['member_email']; ?>" required>
-				  </div>
-				  
-				  <div class="mb-3">
+					<div class="mb-3">
+						<label for="user_username" class="form-label"><strong>Username:</strong></label>
+						<input type="text" class="form-control" id="user_username" name="user_username" value="<?= $user['member_username']; ?>" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="user_password" class="form-label"><strong>Password:</strong></label>
+						<input type="text" class="form-control" id="user_password" name="user_password" value="<?= $user['member_password']; ?>" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="user_email" class="form-label"><strong>Email:</strong></label>
+						<input type="email" class="form-control" id="user_email" name="user_email" value="<?= $user['member_email']; ?>" required>
+					</div>
+
+					<div class="mb-3">
 					<label for="user_status" class="form-label"><strong>Administrator:</strong></label>
 					<select id="user_status" name="user_status" class="form-select" required>
 					  <?php 
-					      $admin = array("no" => "No", "yes" => "Yes");
-					      foreach($admin as $key => $value) {
-					          echo "<option value='{$key}' ";
-						      if ($key == $user['member_is_admin']) { 
-						          echo " selected"; 
-						      } 							  
+						  $admin = array("no" => "No", "yes" => "Yes");
+						  foreach($admin as $key => $value) {
+							  echo "<option value='{$key}' ";
+							  if ($key == $user['member_is_admin']) { 
+								  echo " selected"; 
+							  } 							  
 							  echo ">{$value}</option>";
-                          } 
+						  } 
 					  ?>
 					</select>
-				  </div>
-				  
-				  <input type="hidden" name="updateId" value="<?= $_GET['userId']; ?>">	
-				  <button type="submit" name="submitEditUser" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
+					</div>
+
+					<input type="hidden" name="updateId" value="<?= $_GET['userId']; ?>">	
+					<button type="submit" name="submitEditUser" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
 				
 				</form>               
 				

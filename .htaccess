@@ -1,15 +1,14 @@
 RewriteEngine on
-# Force www: from http://stackoverflow.com/a/4958847/1078583
+# [1] - Force www: from http://stackoverflow.com/a/4958847/1078583
 RewriteCond %{HTTP_HOST} !^$
 RewriteCond %{HTTP_HOST} !^www\. [NC]
 RewriteCond %{HTTPS}s ^on(s)|
 RewriteRule ^ http%1://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-# Force SSL: From http://stackoverflow.com/q/24322035/
+# [2] - Force SSL: From http://stackoverflow.com/q/24322035/
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=302,L,NE]
-# URL Rewrite post names
+# [3] - Rewrite post names so they are SEO friendly
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([0-9a-zA-Z]+)-[^/]+\/$ /post.php?postId=$1 [QSA,L]
-# URL Rewrite Category names
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([0-9a-zA-Z]+)-[^/]+\/$ /category.php?categoryId=$1 [QSA,L]
+# [4] - Rewrite the shorteners URL
+RewriteRule ^recommends/([A-Za-z0-9-]+)/?$ /redirect.php?redirect=$1 [L,QSA]

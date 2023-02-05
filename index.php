@@ -73,7 +73,7 @@
 					<?php	  			  
 
 						echo "<h1>" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
-						echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" .getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
+						echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" . getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
 						echo $sticky[0]['post_body'];
 					
 					?>
@@ -107,6 +107,12 @@
 		
 		<!-- categories / sidebars -->
 		<div class="col-md-3">
+		
+			<?php 
+									
+			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-recent-posts.php");  
+		
+			?>	
 			
 			<?php 
 			

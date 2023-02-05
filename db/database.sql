@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 29, 2023 at 06:42 PM
+-- Generation Time: Jan 31, 2023 at 09:39 PM
 -- Server version: 5.7.39-0ubuntu0.18.04.2
 -- PHP Version: 7.4.30
 
@@ -82,10 +82,10 @@ CREATE TABLE `options` (
 
 INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_description`, `option_date`) VALUES
 (1, 'homepage_title', '', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
-(2, 'homepage_description', '...', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
+(2, 'homepage_description', '', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
 (3, 'homepage_pagination', '5', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
 (4, 'homepage_show_categories', '1', 'This sets if the categories section will show. (true or false)', '2021-10-23 20:40:35'),
-(5, 'homepage_about', 'We are dedicated to helping fellow fish enthusiasts care for their pet fish indoor and outdoor ...', 'This sets the description on what your blog is about.', '2021-10-23 20:55:27'),
+(5, 'homepage_about', '', 'This sets the description on what your blog is about.', '2021-10-23 20:55:27'),
 (6, 'homepage_hide_login_link', '1', 'This sets if the admin login link on the main page footer shows to everyone or not. (true or false)', '2021-10-29 20:22:40'),
 (7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This sets the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
 (8, 'footer_twitter', 'https://twitter.com/', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
@@ -96,7 +96,7 @@ INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_descr
 (13, 'category_style_icon', '', 'This sets a custom icon next to each category name.', '2022-12-18 09:59:54'),
 (14, 'google_adsense', '', 'This sets the AdSense code needed by Google in the <head></head> tags.', '2023-01-19 10:58:58'),
 (15, 'google_analytics_property_id', '', 'This sets the Google Analytics property ID, only enter a value if you want it to work else leave it blank.', '2023-01-21 21:46:26'),
-(16, 'sidebar_cta_1', '', 'This sets a new sidebar (#1) where you can add an Amazon product or banner ad.', '2023-01-29 10:59:06'),
+(16, 'sidebar_cta_1', '', '2023-01-29 10:59:06'),
 (17, 'sidebar_cta_1_text', '', 'This sets the text and awesome font icon above your sidebar (#1) on the card header.', '2023-01-29 11:17:34'),
 (18, 'sidebar_cta_2', '', 'This sets a new sidebar (#2) where you can add an Amazon product or banner ad.', '2023-01-29 11:29:50'),
 (19, 'sidebar_cta_2_text', '', 'This sets the text and awesome font icon above your sidebar (#1) on the card header.', '2023-01-29 11:31:13'),
@@ -141,6 +141,20 @@ CREATE TABLE `posts` (
   `post_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shorteners`
+--
+
+CREATE TABLE `shorteners` (
+  `shortener_id` bigint(20) NOT NULL,
+  `shortener_short` varchar(50) NOT NULL,
+  `shortener_original_url` longtext NOT NULL,
+  `shortener_clicks_count` int(11) NOT NULL,
+  `shortener_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Indexes for dumped tables
 --
@@ -182,6 +196,12 @@ ALTER TABLE `posts`
   ADD PRIMARY KEY (`post_id`);
 
 --
+-- Indexes for table `shorteners`
+--
+ALTER TABLE `shorteners`
+  ADD PRIMARY KEY (`shortener_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -194,7 +214,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
 --
 -- AUTO_INCREMENT for table `members`
 --
@@ -214,7 +234,12 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=595;
+  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=597;
+--
+-- AUTO_INCREMENT for table `shorteners`
+--
+ALTER TABLE `shorteners`
+  MODIFY `shortener_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

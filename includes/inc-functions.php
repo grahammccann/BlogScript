@@ -91,7 +91,7 @@ function createPostTitle($postData)
 
 function createReadMoreButton($postData)
 {
-    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-sm'><i class='fa-solid fa-book-open-reader'></i> Continue reading</a>";
+    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-md'>Read more</a>";
 }
 
 function createRobotsFile() {
@@ -146,7 +146,7 @@ function generateTableOfContents($htmlContent) {
     foreach ($matches[1] as $heading) {
         $tableOfContents[] = $heading;
     }
-    $i=1;
+    $i = 1;
     foreach($matches[0] as $heading) {
         $new_heading = preg_replace("/<h[1-6]>/", "<h2 id='$i'>", $heading);
         $htmlContent = str_replace($heading, $new_heading, $htmlContent);
@@ -275,6 +275,15 @@ function getImageAltText($imageName) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
+}
+
+function getLinkCount() {
+	try {
+		$count = DB::getInstance()->selectValues("SELECT SUM(shortener_clicks_count) as `total_clicks` FROM `shorteners`"); 
+		return $count['total_clicks'];
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
 }
 
 function getLoggedInUserId($sessionUsername) {
@@ -685,6 +694,24 @@ function updatePostViews($postId) {
 				$postId,
 			[
 				'post_views' => $countToUpdate + 1
+			]);			
+		}			
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+}
+
+function updateRedirectClicks($redirectId) {
+	try {	
+		if (is_numeric($redirectId)) {
+			$countUpdate   = DB::getInstance()->selectOneByField('shorteners', 'shortener_id', $redirectId);
+			$countToUpdate = $countUpdate['shortener_clicks_count'];
+			$u = DB::getInstance()->update(
+				'shorteners',
+				'shortener_id',
+				$redirectId,
+			[
+				'shortener_clicks_count' => $countToUpdate + 1
 			]);			
 		}			
 	} catch(Exception $e) {
