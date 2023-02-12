@@ -18,6 +18,14 @@
 	}
 	
 	?>
+	
+	<?php
+
+	if (isset($_GET['index']) && isset($_GET['url']) && isset($_GET['keywords'])) {
+		echo stdmsg(indexNow("", $_GET['url'], $_GET['keywords']));
+	}
+
+	?>
 
 	<div class="row">
 	
@@ -92,7 +100,7 @@
 						
 							<tr>
 						    	<td><?= $post['post_id']; ?></td>
-								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <a href="category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none"><?= getCategoryname($post['post_category_id']); ?></a> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a></small></td>
+								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <a href="category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none"><?= getCategoryname($post['post_category_id']); ?></a> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a> | <a href="posts.php?index=1&amp;url=&amp;keywords=" class="text-decoration-none">Index</a></small></td>
 								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>
 								<td><?= $post['post_views']; ?></td>

@@ -37,6 +37,12 @@
 				<?php } ?>
 				<p class="text-center"><?= !empty(getValue("ads_post_top")) ? html_entity_decode(getValue("ads_post_top")) : "&nbsp;"; ?></p>
 				<div id="post-content"><?= generateTableOfContents($post['post_body']); ?></div>
+                <br>
+				<p style="font-size: 1.2em; text-align: center;">Share this Article</p>
+				<p class="text-center">
+				   <a href="https://twitter.com/intent/tweet?text=<?= $post['post_title']; ?>&amp;url=<?= sharingSocialMediaUrls($post['post_id'], $post['post_title']); ?>" data-bs-toggle="tooltip" data-placement="bottom" title="Share on Twitter" target="_blank"><i class="fab fa-twitter fa-2x me-3" style="color: #55acee;"></i></a>
+				   <a href="https://www.facebook.com/sharer/sharer.php?u=<?= sharingSocialMediaUrls($post['post_id'], $post['post_title']); ?>&amp;quote=Check this out!" data-bs-toggle="tooltip" data-placement="bottom" title="Share on Facebook" target="_blank"><i class="fab fa-facebook fa-2x me-3" style="color: #4267B2;"></i></a>              
+				</p>
 				<div id="post-content-videos"><?php if (startsWith($post['post_source_url'], "[") == true) { getSourceVideos($post['post_source_url']); } else { echo "&nbsp;"; } ?></div>
 				<div id="post-content-source-urls"><?php if (startsWith($post['post_source_url'], "[") == true) { getSourceUrls($post['post_source_url']); } else { echo "&nbsp;"; } ?></div>
 			  </div>

@@ -151,12 +151,12 @@
 							
 							<div class="text-center" id="check-stock-button-container">
 							  <a href="#" class="btn btn-primary" id="check-stock-button">
-								<i class="fa fa-arrow-up-right-from-square"></i> CHECK PRICE</a>
+							      CHECK PRICE <i class="fa fa-arrow-up-right-from-square"></i></a>
 							</div>
 
 							<div class="text-center" id="visit-website-button-container">
 							  <a href="#" class="btn btn-success" id="visit-website-button">
-								<i class="fa fa-arrow-up-right-from-square"></i> OFFICIAL WEBSITE</a>					
+							      OFFICIAL WEBSITE <i class="fa fa-arrow-up-right-from-square"></i> </a>					
 						    </div>
 							
 						</textarea>

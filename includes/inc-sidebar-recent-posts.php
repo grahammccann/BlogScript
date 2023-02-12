@@ -4,7 +4,7 @@
 		    <?php $posts = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_status`='published' AND `post_sticky`='0' ORDER BY `post_date` DESC  LIMIT 10"); ?>	  
 			<?php foreach($posts as $post) { ?>
 				<li class="list-group-item">
-                    <img src="<?= getFeaturedImageToUse($post['post_image']) ?>" style="width: 25px; height: 25px"> <?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?>
+                    <img src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= $post['post_image_alt_text']; ?>" style="width: 25px; height: 25px"> <?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?>
                 </li>		
 			<?php } ?>				
 		  </ul>

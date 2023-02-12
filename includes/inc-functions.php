@@ -11,31 +11,6 @@ function urlFull() {
 function stdmsg($text) { ?><div class="alert alert-success" role="alert"><i class="fas fa-check"></i> <?= $text; ?></div><?php }
 function stderr($text) { ?><div class="alert alert-danger" role="alert"><i class="fas fa-times"></i> <?= $text; ?></div> <?php }
 
-function checkForAndReplaceAnyImages($postBody) {
-	try {	
-	    $finalSource = "";	
-	    $matchCount  = preg_match_all("/IMID(.*)/", $postBody, $matches, PREG_SET_ORDER); 
-		if ($matchCount > 0) {
-			foreach ($matches as $match) {
-				$theId = trim($match[1]);
-				print "<pre>"; print_r($match); print "</pre>";
-				$images = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_id`='{$theId}'");
-				echo "SELECT * FROM `images` WHERE `image_id`='{$theId}'";
-				print "<pre>"; print_r($images); print "</pre>";
-				foreach ($images as $image) {
-					$imageSource = sprintf('<div class="text-center"><img src="'.urlFull().'uploads/%s" class="img-fluid" alt="%s"></div>', $image['image_name'], $image['image_alt_text']);				
-					$finalSource = str_replace($match[0], $imageSource, $postBody);
-				}				
-		    }		
-	    } else {
-			$finalSource = $postBody;
-		}		
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}	
-	return $finalSource;
-}
-
 function checkUrl() {
     $currentUrl = $_SERVER['REQUEST_URI'];
     if (strpos($currentUrl, 'index.php?page=') !== false) {
@@ -81,7 +56,12 @@ function createPostBody($postData)
 
 function createPostImage($postData)
 {
-    return "<p class='text-center'><img class='img-thumbnail' src='" . getFeaturedImageToUse($postData['post_image']) . "' alt='" . $postData['post_image_alt_text'] . "'></p>";
+    $postName = $postData['post_title'];
+    $postId = $postData['post_id'];
+    $imageUrl = getFeaturedImageToUse($postData['post_image']);
+    $imageAltText = $postData['post_image_alt_text'];
+
+    return "<p class='text-center'>" . seoMobileFriendlyUrls($postName, $postId, $imageUrl, $imageAltText) . "</p>";
 }
 
 function createPostTitle($postData)
@@ -95,18 +75,16 @@ function createReadMoreButton($postData)
 }
 
 function createRobotsFile() {
-	try
-	{
-		$robots = fopen("robots.txt", "a") or die("Unable to open file!");
-        $lines = array("User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml");
-		
-        foreach($lines as $line) {
-			fwrite($robots, $line . "\n");
-		}	
-		fclose($robots);
-    } catch (Exception $e) {
-        stderr($e->getMessage());
-    }	
+  try {
+    $robots = fopen("robots.txt", "a") or die("Unable to open file!");
+    $lines = ["User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml"];
+    foreach ($lines as $line) {
+		fwrite($robots, $line . "\n");
+	}
+    fclose($robots);
+  } catch (Exception $e) {
+    stderr($e->getMessage());
+  }
 }
 
 function deleteAnyImages($postId) {
@@ -357,6 +335,15 @@ function getSourceVideos($sourceUrls) {
 	}	
 }
 
+function getTwitterImage($postId) {
+	try {
+		$image = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
+		return $image['post_image'];	
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}		
+}
+
 function getUsersDetails($member) {
 	try {
         return DB::getInstance()->selectOneByField('members', 'member_username', $member);
@@ -387,6 +374,55 @@ function getYoutubeEmbedUrl($url)
         $youtubeId = $matches[count($matches) - 1];
     }
     return 'https://www.youtube.com/embed/' . $youtubeId;
+}
+
+function indexNow($apiKey, $url, $keywords) {
+    // Endpoint URL
+    $endpoint = "https://api.indexnow.io/v1/index";
+
+    // Data to be sent to the API
+    $data = [
+        "url" => $url,
+        "keywords" => $keywords
+    ];
+
+    // Convert data to JSON
+    $dataJson = json_encode($data);
+
+    // Initialize cURL
+    $ch = curl_init();
+
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_URL, $endpoint);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataJson);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer " . $apiKey,
+        "Content-Type: application/json"
+    ]);
+
+    // Execute cURL request
+    $response = curl_exec($ch);
+
+    // Check for errors
+    if (curl_errno($ch)) {
+        return "cURL Error: " . curl_error($ch);
+    } else {
+        // Decode JSON response
+        $responseData = json_decode($response, true);
+
+        // Check for API errors
+        if (isset($responseData["error"])) {
+            return "API Error: " . $responseData["error"];
+        } else {
+            // Successful API response
+            return "Indexed Successfully!";
+        }
+    }
+
+    // Close cURL connection
+    curl_close($ch);
 }
 
 function pagination($page, $totalResults, $maxResults, $params = array())
@@ -649,6 +685,21 @@ function sendEmail($emailTo, $emailFrom, $emailSubject, $emailMessage) {
 	return mail($emailTo, urlFull() . " - " . $emailSubject, $emailBody, $emailHeaders);
 }
 
+function sharingSocialMediaUrls($productId, $productName) {
+	try {
+		$rootUrl = urlFull();
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($productName));
+        $replace = preg_replace("~[^-\w]+~", "", $replace);
+        $replace = preg_replace('~-+~', '-', $replace);
+		if (substr($replace, -1) === '-'){
+           $replace = rtrim($replace, '-'); 
+        }
+		return $rootUrl . $productId . "-" . $replace . "/";
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}
+}
+
 function seoFriendlyUrls($postName, $postId) {
 	try {
 		$rootUrl = urlFull();
@@ -662,6 +713,21 @@ function seoFriendlyUrls($postName, $postId) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
+}
+
+function seoMobileFriendlyUrls($postName, $postId, $imageUrl, $imageAltText) {
+    try {
+        $rootUrl = urlFull();
+        $replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+        $replace = preg_replace("~[^-\w]+~", "", $replace);
+        $replace = preg_replace('~-+~', '-', $replace);
+        if (substr($replace, -1) === '-') {
+            $replace = rtrim($replace, '-');
+        }
+        return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl . "' alt='" . $imageAltText . "'></a>";
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
 }
 
 function startsWith($haystack, $needle) {

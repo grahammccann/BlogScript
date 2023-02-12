@@ -18,6 +18,11 @@ echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$property
 }
 ?>
 <meta charset="utf-8">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@<?= getValue("twitter_username"); ?>">
+<meta name="twitter:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
+<meta name="twitter:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
+<meta name="twitter:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
 <?php
