@@ -1,8 +1,11 @@
 $(document).ready(function() {
-  $('#categoryTable').DataTable();
-  $('#postTable').DataTable();
-  $('#userTable').DataTable();
-  $('#imageTable').DataTable();
+  $('#tableCategories').DataTable();
+  $('#tableClicks').DataTable();
+  $('#tableImages').DataTable();
+  $('#tablePages').DataTable();
+  $('#tablePosts').DataTable();
+  $('#tableShorteners').DataTable();
+  $('#tableUsers').DataTable();
 });
 
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

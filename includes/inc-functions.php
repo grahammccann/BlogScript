@@ -1,15 +1,35 @@
 <?php
 
-function urlFull() {
+function addImageToArticle($article) {	
 	try {
-	    return sprintf("%s://%s/", isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http', $_SERVER['SERVER_NAME']);
+		$pattern = '/<a href="([^#][^"]*\/recommends\/[^"]*)"|<a href=\'([^#][^\']*\/recommends\/[^\']*)\'/';
+		preg_match($pattern, $article, $match);
+		if (empty($match)) {
+			return $article;
+		}
+		$link = $match[1] ?? $match[2];
+
+		$image_html = '';
+		if (strpos($article, $match[0]) < strpos($article, '</h2>')) {
+			//$image_html = '<div style="text-align:center;"><a href="'.$link.'"><img class="img-fluid" src="'.urlFull().'images/img-check-price.png" alt="Check stock availability"></a></div>';		
+		} else {
+			$image_html = '<div style="text-align:center;"><a href="'.$link.'"><img class="img-fluid" src="'.urlFull().'images/img-visit-official-website.png" alt="Visit the official website"></a></div>';
+		}
+
+		preg_match('/<h2.*?>/', $article, $matches, PREG_OFFSET_CAPTURE);
+		$h2_offset = $matches[0][1];
+		
+		if (empty($matches)) {
+			return $article;
+		}
+
+		$new_article = substr_replace($article, $image_html, $h2_offset, 0);
+
+		return $new_article;
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
 }
-
-function stdmsg($text) { ?><div class="alert alert-success" role="alert"><i class="fas fa-check"></i> <?= $text; ?></div><?php }
-function stderr($text) { ?><div class="alert alert-danger" role="alert"><i class="fas fa-times"></i> <?= $text; ?></div> <?php }
 
 function checkUrl() {
     $currentUrl = $_SERVER['REQUEST_URI'];
@@ -21,32 +41,34 @@ function checkUrl() {
 }
 
 function createSitemap() {
-	try
-	{
-		$xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
-	
-		$xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
-		$xmlString .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-		
-		foreach ($xml as $row) {
-			$xmlString .= '<url>';
-			$xmlString .= '<loc><![CDATA['.xmlFriendlyUrls($row['post_title'], $row['post_id']).'/]]></loc>';
-			$xmlString .= '<lastmod>'.date(DATE_ATOM,time()).'</lastmod>';
-			$xmlString .= '<changefreq>weekly</changefreq>';
-			$xmlString .= '<priority>1.0</priority>';
-			$xmlString .= '</url>';
-		}
-
-		$xmlString .= '</urlset>';
+    try {
+        $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
+        
+        $xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
+        $xmlString .= "\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ";
+        $xmlString .= "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+        $xmlString .= "xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 ";
+        $xmlString .= "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">\n";
+        
+        foreach ($xml as $row) {
+            $xmlString .= "    <url>\n";
+            $xmlString .= "        <loc><![CDATA[" . xmlUrls($row['post_title'], $row['post_id']) . "]]></loc>\n";
+            $xmlString .= "        <lastmod>" . date(DATE_ATOM, time()) . "</lastmod>\n";
+            $xmlString .= "        <changefreq>weekly</changefreq>\n";
+            $xmlString .= "        <priority>1.0</priority>\n";
+            $xmlString .= "    </url>\n";
+        }
+        
+        $xmlString .= "</urlset>\n";
         
 		$dom = new DOMDocument;
 		$dom->preserveWhiteSpace = false;
 		$dom->loadXML($xmlString);
-		$dom->save('sitemap.xml');	
-
+		$dom->formatOutput = true;
+		$dom->save('sitemap.xml');
     } catch (Exception $e) {
         stderr($e->getMessage());
-    }	
+    }
 }
 
 function createPostBody($postData)
@@ -61,7 +83,7 @@ function createPostImage($postData)
     $imageUrl = getFeaturedImageToUse($postData['post_image']);
     $imageAltText = $postData['post_image_alt_text'];
 
-    return "<p class='text-center'>" . seoMobileFriendlyUrls($postName, $postId, $imageUrl, $imageAltText) . "</p>";
+    return "<p class='text-center'>" . mobileUrls($postName, $postId, $imageUrl, $imageAltText) . "</p>";
 }
 
 function createPostTitle($postData)
@@ -71,7 +93,7 @@ function createPostTitle($postData)
 
 function createReadMoreButton($postData)
 {
-    return "<hr><a href='".xmlFriendlyUrls($postData['post_title'], $postData['post_id'])."/' class='btn btn-success btn-md'>Read more</a>";
+    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".xmlUrls($postData['post_title'], $postData['post_id'])."' class='btn btn-success btn-md'>Read more</a>";
 }
 
 function createRobotsFile() {
@@ -95,6 +117,23 @@ function deleteAnyImages($postId) {
         echo $e->getMessage();
 	}		
 }
+
+function displayArticle($article) {
+	try {
+		libxml_use_internal_errors(true);
+		// This removes the awesomefont icons on update!
+		//$article = preg_replace('/<[^\/>]*>([\s]?)*<\/[^>]*>/', '', $article);
+/* 		$dom = new DOMDocument();
+		$dom->loadHTML($article);
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$formattedArticle = $dom->saveHTML(); */
+		return $article;
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}		
+}
+
 
 function doesPostContainAnInternalLink($postBody) {
 	try {
@@ -150,6 +189,20 @@ function getCategoryname($categoryId) {
         echo $e->getMessage();
 	}	
 }
+
+function getCountryFromIP($ip) {
+	try {
+		$country = geoip_country_code_by_name($ip);
+		if ($country) {
+			return $country;
+		} else {
+			return 'Unknown';
+		}
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}
+}
+
 
 function getFeaturedImageToUse($imageName) {
 	try {
@@ -255,15 +308,6 @@ function getImageAltText($imageName) {
 	}
 }
 
-function getLinkCount() {
-	try {
-		$count = DB::getInstance()->selectValues("SELECT SUM(shortener_clicks_count) as `total_clicks` FROM `shorteners`"); 
-		return $count['total_clicks'];
-	} catch(Exception $e) {
-        echo $e->getMessage();
-	}	
-}
-
 function getLoggedInUserId($sessionUsername) {
 	try {
 		$id = DB::getInstance()->selectValues("SELECT `member_id` FROM `members` WHERE `member_username`='{$sessionUsername}'");
@@ -297,6 +341,25 @@ function getPostTitleOnly($postId) {
 		return $title['post_title'];
 	} catch(Exception $e) {
         echo $e->getMessage();
+	}
+}
+
+
+function getRealIp() {
+	try {
+		if (!empty($_SERVER['HTTP_CLIENT_IP'])) 
+		{
+		  $ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+		{
+		  $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else
+		{
+		  $ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return $ip;
+	} catch(Exception $e) {
+        echo $e->getMessage();		
 	}
 }
 
@@ -425,6 +488,21 @@ function indexNow($apiKey, $url, $keywords) {
     curl_close($ch);
 }
 
+function mobileUrls($postName, $postId, $imageUrl, $imageAltText) {
+    try {
+        $rootUrl = urlFull();
+        $replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+        $replace = preg_replace("~[^-\w]+~", "", $replace);
+        $replace = preg_replace('~-+~', '-', $replace);
+        if (substr($replace, -1) === '-') {
+            $replace = rtrim($replace, '-');
+        }
+        return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl . "' alt='" . $imageAltText . "'></a>";
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+}
+
 function pagination($page, $totalResults, $maxResults, $params = array())
 {
     $totalPages = ceil($totalResults / $maxResults);
@@ -474,6 +552,20 @@ function pagination($page, $totalResults, $maxResults, $params = array())
 	</nav>
 
     <?php
+}
+
+function recordClicks($page, $ip) {
+    try {
+		$i = DB::getInstance()->insert(
+			'clicks',
+		[
+			'click_page' => $page,
+			'click_ip' => $ip,
+			'click_date' => date('Y-m-d H:i:s')
+		]);		
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}	
 }
 
 function removeEmptyClasses($html) {
@@ -529,6 +621,21 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		imagedestroy($original);
 		imagedestroy($resized);
 		
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+}
+
+function rssUrls($postName, $postId) {
+	try {
+		$rootUrl = urlFull();
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+        $replace = preg_replace("~[^-\w]+~", "", $replace);
+        $replace = preg_replace('~-+~', '-', $replace);
+		if(substr($replace, -1) === '-'){
+           $replace = rtrim($replace, '-'); 
+        }
+		return "{$rootUrl}{$postId}-{$replace}/";
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
@@ -715,20 +822,8 @@ function seoFriendlyUrls($postName, $postId) {
 	}
 }
 
-function seoMobileFriendlyUrls($postName, $postId, $imageUrl, $imageAltText) {
-    try {
-        $rootUrl = urlFull();
-        $replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
-        $replace = preg_replace("~[^-\w]+~", "", $replace);
-        $replace = preg_replace('~-+~', '-', $replace);
-        if (substr($replace, -1) === '-') {
-            $replace = rtrim($replace, '-');
-        }
-        return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl . "' alt='" . $imageAltText . "'></a>";
-    } catch (Exception $e) {
-        echo $e->getMessage();
-    }
-}
+function stdmsg($text) { ?><div class="alert alert-success" role="alert"><i class="fas fa-check"></i> <?= $text; ?></div><?php }
+function stderr($text) { ?><div class="alert alert-danger" role="alert"><i class="fas fa-times"></i> <?= $text; ?></div> <?php }
 
 function startsWith($haystack, $needle) {
      $length = strlen($needle);
@@ -823,7 +918,15 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName) {
     }
 }
 
-function xmlFriendlyUrls($postName, $postId) {
+function urlFull() {
+	try {
+	    return sprintf("%s://%s/", isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http', $_SERVER['SERVER_NAME']);
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+}
+
+function xmlUrls($postName, $postId) {
 	try {
 		$rootUrl = urlFull();
 		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
@@ -832,7 +935,7 @@ function xmlFriendlyUrls($postName, $postId) {
 		if(substr($replace, -1) === '-'){
            $replace = rtrim($replace, '-'); 
         }
-		return "{$rootUrl}{$postId}-{$replace}";
+		return "{$rootUrl}{$postId}-{$replace}/";
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}

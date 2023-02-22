@@ -116,9 +116,13 @@
 					  if(selectedOption === 'cta_1') {
 						$('#check-stock-button').show();
 						$('#visit-website-button').hide();
+						$('#cta_message_retailer').show();
+						$('#cta_message_official').hide();
 					  } else if(selectedOption === 'cta_2') {
 						$('#check-stock-button').hide();
 						$('#visit-website-button').show();
+						$('#cta_message_retailer').hide();
+						$('#cta_message_official').show();
 					  }
 					});
 				});
@@ -146,18 +150,19 @@
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
 						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
 							
-						   <br>
-						   <hr>
-							
+						    <br>
+													
 							<div class="text-center" id="check-stock-button-container">
+							  <div id="cta_message_retailer" class="text-center" style="display: none;"><p>Click on the button below to check this product's availability and lowest price.</p></div>
 							  <a href="#" class="btn btn-primary" id="check-stock-button">
-							      CHECK PRICE <i class="fa fa-arrow-up-right-from-square"></i></a>
+								  CHECK PRICE <i class="fa fa-arrow-up-right-from-square"></i></a>
 							</div>
 
 							<div class="text-center" id="visit-website-button-container">
+							  <div id="cta_message_official" class="text-center" style="display: none;"><p>Click on the button below to be taken automatically to the official website for this product or service.</p></div>
 							  <a href="#" class="btn btn-success" id="visit-website-button">
-							      OFFICIAL WEBSITE <i class="fa fa-arrow-up-right-from-square"></i> </a>					
-						    </div>
+								  OFFICIAL WEBSITE <i class="fa fa-arrow-up-right-from-square"></i> </a>					
+							</div>
 							
 						</textarea>
 					</div>

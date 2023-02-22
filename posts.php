@@ -70,7 +70,7 @@
 				
 				<!-- DataTables -->
 				<div class="table-responsive">
-				<table class="table table-striped" id="postTable" width="100%" cellspacing="0">	  
+				<table class="table table-striped" id="tablePosts" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
 					  <th>ID</th>

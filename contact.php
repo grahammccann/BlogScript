@@ -7,6 +7,10 @@
 <main>
 
 	<h1 class="text-center">Contact</h1>
+	
+	<p>Thank you for visiting our website! We value your input and welcome any questions, comments, or concerns you may have. To get in touch with us, please use the contact form below. This form allows you to send us a message directly without navigating through multiple pages or searching for our contact information.</p>
+	<p>When using the contact form, please provide us with as much detail as possible so we can better assist you. This includes your name, email address, and a brief message outlining the reason for your inquiry. Our team will respond to your message quickly, typically within 24-48 hours.</p>
+    <p>Using the contact form is a simple and convenient way to contact us. It allows us to keep all our communications organized and in one place, ensuring that your message doesn't get lost in a sea of emails. Additionally, by using the contact form, we can ensure that your message is directed to the appropriate team member, who will be best equipped to answer your questions or address your concerns.</p>
 
 	<div id="results"></div>
 

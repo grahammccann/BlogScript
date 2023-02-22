@@ -136,7 +136,7 @@
 					<div class="mb-3">
 						<label for="post_title" class="form-label"><strong>Title:</strong></label>
 						<input type="text" class="form-control" id="post_title" name="post_title" value="<?= $post['post_title']; ?>" required>
-					</div>
+					</div>				
 					
 					<script>
 					$(document).ready(function() {
@@ -148,10 +148,12 @@
 						});
 					});
 					</script>
-
+					
 					<div class="mb-3">
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
-						<textarea class="form-control" id="summernote" name="post_body" rows="15" required><?= $post['post_body']; ?></textarea>
+						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
+						<?= displayArticle($post['post_body']); ?>
+						</textarea>
 					</div>
 
 					<div class="mb-3">

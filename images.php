@@ -62,7 +62,7 @@
 				
 				<!-- DataTables -->
 				<div class="table-responsive">
-				<table class="table table-striped" id="imageTable" width="100%" cellspacing="0">	  
+				<table class="table table-striped" id="tableImages" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
 					  <th>ID</th>

@@ -23,11 +23,18 @@ echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$property
 <meta name="twitter:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta name="twitter:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta name="twitter:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
+<meta property="og:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
+<meta property="og:type" content="website">
+<meta property="og:url" content="<?= isset($_GET['postId']) ? xmlUrls(getPostTitleOnly($thePostId), $thePostId) : $_SERVER['REQUEST_URI']; ?>">
+<meta property="og:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
+<meta property="og:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
+<meta property="og:site_name" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
+<meta property="og:locale" content="en_US">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
 <?php
-if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
-	echo "<meta name='robots' content='follow, noindex'/>\n";
+if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['PHP_SELF'] == "/login.php" || $_SERVER['PHP_SELF'] == "/recovery.php") {
+    echo "<meta name='robots' content='follow, noindex'/>\n";
 }
 ?>
 <title><?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?></title>
@@ -39,7 +46,7 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 <script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlFriendlyUrls(getPostTitleOnly($thePostId), $thePostId).'/" />'; } ?>
+<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.xmlUrls(getPostTitleOnly($thePostId), $thePostId).'">'; } ?>
 <?php if (!empty(getValue("google_adsense"))) { 
 	$googleClientId = getValue("google_adsense");
 	echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } 
@@ -63,10 +70,10 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true) {
 			<ul class="nav nav-pills nav-fill ms-auto">   
 				<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
 				
-				<?php $pages = DB::getInstance()->select("SELECT * FROM `pages`"); ?>
+				<?php $pages = DB::getInstance()->select("SELECT * FROM `pages` ORDER BY `page_name` ASC"); ?>
 				<?php foreach($pages as $page) { ?>
 				
-				<li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>	
+				    <li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>	
 				
 				<?php } ?>
 				

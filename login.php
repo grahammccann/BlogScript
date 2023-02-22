@@ -1,64 +1,63 @@
 <?php
-	session_start();
-	include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-db-connection.php");
-	include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-functions.php");
-	include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header.php");
+    ob_start();
+    session_start();
+    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-db-connection.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-functions.php");
+    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header.php");
 ?>
 
 <main>
 
     <?php
 	
-	if (isset($_SESSION['member'])) {
-		header('Location: dashboard.php');
-        exit;		
-	}
-	
-	?>
+    if (isset($_SESSION['member'])) {
+        header('Location: dashboard.php');
+        exit;        
+    }
+    ?>
 
-	<?php
-	
-	if (isset($_POST['submitLogin'])) {
-	
-		$errors = [];
+    <?php
+    if (isset($_POST['submitLogin'])) {
+    
+        $errors = [];
 
-		$username = trim(strtolower($_POST['admin_username']));
-		$password = trim(strtolower($_POST['admin_password']));
-		
- 		if (empty($username) || empty($password)) {
+        $username = trim(strtolower($_POST['admin_username']));
+        $password = trim(strtolower($_POST['admin_password']));
+
+        if (empty($username) || empty($password)) {
             $errors[] = "Your <strong>username</strong> or <strong>password</strong> field was empty!";
-		} 
+        } 
 
- 		$memberInfo = DB::getInstance()->selectOne(
-			"
-			SELECT  DISTINCT member_username
-			FROM    `members`
-			WHERE   `member_username` = :member_username
-			AND     `member_password` = :member_password",
-			[
-				'member_username' => $username,
-				'member_password' => $password
-			]
-		);
+        $memberInfo = DB::getInstance()->selectOne(
+            "
+            SELECT  DISTINCT member_username
+            FROM    `members`
+            WHERE   `member_username` = :member_username
+            AND     `member_password` = :member_password",
+            [
+                'member_username' => $username,
+                'member_password' => $password
+            ]
+        );
 
-		if ($memberInfo == null) {
+        if ($memberInfo == null) {
             $errors[] = "Your <strong>credentials</strong> were not found in the database!";
-		}
-		
-		if (!empty($errors) > 0) {
-			
-			foreach($errors as $error) {
-				echo "<div class=\"alert alert-danger\" role=\"alert\"><i class=\"fas fa-exclamation-triangle\"></i> {$error}</div>";
-			}
-			
-		} else {
-			
-			$_SESSION['member'] = $username;		
-			header('Location: dashboard.php');
-		}		
-	}
+        }
+        
+        if (!empty($errors) > 0) {
+            
+            foreach($errors as $error) {
+                echo "<div class=\"alert alert-danger\" role=\"alert\"><i class=\"fas fa-exclamation-triangle\"></i> {$error}</div>";
+            }
+            
+        } else {
+            
+            $_SESSION['member'] = $username;        
+            header('Location: dashboard.php');
+        }       
+    }
 	
-	?>
+    ?>
 	
 	<h1 class="text-center">Login</h1>
 

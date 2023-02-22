@@ -19,5 +19,4 @@ if (!$cookie)
 }
 global $ANON_SESSION_ID;
 $ANON_SESSION_ID = $cookie;
-?>
 

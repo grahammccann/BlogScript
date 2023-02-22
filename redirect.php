@@ -13,6 +13,7 @@
 		$redirect = DB::getInstance()->selectValues("SELECT * FROM `shorteners` WHERE `shortener_short`='{$shortUrl}'");
 	    if (count($redirect) > 0) {
 			$update = isset($_GET['redirect']) ? updateRedirectClicks($redirect['shortener_id']) : ''; 	
+			$clicks = recordClicks($_SERVER['REQUEST_URI'], getRealIp()); 	
 			header("Location: {$redirect['shortener_original_url']}");
 			exit;
 		} else {

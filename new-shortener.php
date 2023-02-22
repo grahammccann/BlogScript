@@ -96,7 +96,7 @@
 						);
 
 						stdmsg("Your new <strong>shortener</strong> has been <strong>added</strong>.");
-						stdmsg("Shortened URL: <strong>" . strtolower(urlFull() . "recommends/" . $short . "/") . "<strong>");
+						stdmsg("Shortened URL: <strong>" . strtolower(urlFull() . "recommends/" . $short . "/") . "</strong>");
 						
 					}
 				}
