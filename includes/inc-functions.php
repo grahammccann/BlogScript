@@ -1,5 +1,236 @@
 <?php
 
+function interlinkArticles($content, $pagesArray) {
+    $linkedPages = array();
+    foreach ($pagesArray as $page) {
+        $pageId = getPageIdFromUrl($page);
+        // var_dump($pageId);
+        if (!empty($pageId)) {
+            $pageTitle = getPageTitleFromUrl($page);
+
+            $commonSequences = findFilteredCommonSequences($content, $pageTitle);
+			$callback = function ($matches) use ($page, &$linkedPages) {
+				$text = $matches[0];
+				$lowerText = strtolower($text);
+				if (!in_array($lowerText, $linkedPages)) {
+					$linkedPages[] = $lowerText;
+					return '<a href="' . $page . '" class="text-decoration-none">' . $text . '</a>';
+				} else {
+					return $text;
+				}
+			};
+            $count = 0;
+            foreach ($commonSequences as $commonsequence) {
+                $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+            }
+        }
+    }
+    return $content;
+}
+
+function findFilteredCommonSequences($str1, $str2) {
+    $commonSequences = array();
+
+    // Split input strings into arrays of individual words
+    $words1 = preg_split('/\s+/', $str1);
+    $words2 = preg_split('/\s+/', $str2);
+
+    // Find all common sequences of words
+    $len1 = count($words1);
+    $len2 = count($words2);
+    for ($i = 0; $i < $len1; $i++) {
+        for ($j = 0; $j < $len2; $j++) {
+            $k = 0;
+            while ($i + $k < $len1 && $j + $k < $len2 && $words1[$i + $k] == $words2[$j + $k]) {
+                $k++;
+            }
+            if ($k > 0) {
+                $commonSequences[] = implode(' ', array_slice($words1, $i, $k));
+            }
+        }
+    }
+
+    // Trim stop words from common sequences and filter out those with fewer than two non-stop words
+    $filteredSequences = array();
+    foreach ($commonSequences as $sequence) {
+        $sequenceWithoutStopWords = removeStopWords($sequence);
+        if (atleastTwoWords($sequenceWithoutStopWords) != '') {
+            $isSubsequence = false;
+            foreach ($filteredSequences as $prevSequence) {
+                if (strpos($prevSequence, $sequenceWithoutStopWords) !== false) {
+                    $isSubsequence = true;
+                    break;
+                }
+            }
+            if (!$isSubsequence) {
+                $filteredSequences[] = $sequenceWithoutStopWords;
+            }
+        }
+    }
+
+    return $filteredSequences;
+}
+
+
+function getPageIdFromUrl($url) {
+    preg_match('/\/(\d+)/', $url, $matches);
+    return isset($matches[1]) ? $matches[1] : '';
+}
+
+function getPageTitleFromUrl($url) {
+    $parts = explode('/', rtrim($url, '/'));
+    $lastPart = end($parts);
+    $pattern = '/^.*\/(\d+)-(.*)\/$/';
+    preg_match($pattern, $url, $matches);
+    $pageTitle = $matches[2];
+    $pageTitle = str_replace('-', ' ', $pageTitle);
+    return urldecode($pageTitle);
+}
+
+function atleastTwoWords($text) {
+    $words = preg_split('/\s+/', $text);
+    return count($words) < 2 ? '' : $text;
+}
+
+function removeStopWords($text) {
+	$stopWords = array(
+		'a',
+		'about',
+		'above',
+		'after',
+		'again',
+		'against',
+		'all',
+		'am',
+		'an',
+		'and',
+		'any',
+		'are',
+		'as',
+		'at',
+		'be',
+		'because',
+		'been',
+		'before',
+		'being',
+		'below',
+		'between',
+		'both',
+		'but',
+		'by',
+		'can',
+		'cannot',
+		'could',
+		'did',
+		'do',
+		'does',
+		'doing',
+		'don',
+		'down',
+		'during',
+		'each',
+		'few',
+		'for',
+		'from',
+		'further',
+		'had',
+		'has',
+		'have',
+		'having',
+		'he',
+		'her',
+		'here',
+		'hers',
+		'herself',
+		'him',
+		'himself',
+		'his',
+		'how',
+		'i',
+		'if',
+		'in',
+		'into',
+		'is',
+		'it',
+		'its',
+		'itself',
+		'just',
+		'me',
+		'more',
+		'most',
+		'must',
+		'my',
+		'myself',
+		'no',
+		'nor',
+		'not',
+		'now',
+		'of',
+		'off',
+		'on',
+		'once',
+		'only',
+		'or',
+		'other',
+		'our',
+		'ours',
+		'ourselves',
+		'out',
+		'over',
+		'own',
+		's',
+		'same',
+		'shan',
+		'she',
+		'should',
+		'so',
+		'some',
+		'such',
+		't',
+		'than',
+		'that',
+		'the',
+		'their',
+		'theirs',
+		'them',
+		'themselves',
+		'then',
+		'there',
+		'these',
+		'they',
+		'this',
+		'those',
+		'through',
+		'to',
+		'too',
+		'under',
+		'until',
+		'up',
+		'very',
+		'was',
+		'we',
+		'were',
+		'what',
+		'when',
+		'where',
+		'which',
+		'while',
+		'who',
+		'whom',
+		'why',
+		'with',
+		'would',
+		'you',
+		'your',
+		'yours',
+		'yourself',
+		'yourselves'
+	);
+    $words = preg_split('/\s+/', $text);
+    $filteredWords = array_diff($words, $stopWords);
+    return implode(' ', $filteredWords);
+}
+
 function addImageToArticle($article) {	
 	try {
 		$pattern = '/<a href="([^#][^"]*\/recommends\/[^"]*)"|<a href=\'([^#][^\']*\/recommends\/[^\']*)\'/';
@@ -40,6 +271,25 @@ function checkUrl() {
     }
 }
 
+function checkUsersIpToEdit($ipFromUser) {
+    $allowedIps = getValue("ip_edit");
+    if (strpos($allowedIps, '|') !== false) {
+        // If there are multiple allowed IPs, split the string into an array
+        $allowedIps = explode('|', $allowedIps);
+        foreach ($allowedIps as $allowedIp) {
+            if ($allowedIp === $ipFromUser) {
+                return true;
+            }
+        }
+    } else {
+        // If there is only one allowed IP, compare it with the user's IP directly
+        if ($allowedIps === $ipFromUser) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function createSitemap() {
     try {
         $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
@@ -52,7 +302,7 @@ function createSitemap() {
         
         foreach ($xml as $row) {
             $xmlString .= "    <url>\n";
-            $xmlString .= "        <loc><![CDATA[" . xmlUrls($row['post_title'], $row['post_id']) . "]]></loc>\n";
+            $xmlString .= "        <loc><![CDATA[" . rawUrls($row['post_title'], $row['post_id']) . "]]></loc>\n";
             $xmlString .= "        <lastmod>" . date(DATE_ATOM, time()) . "</lastmod>\n";
             $xmlString .= "        <changefreq>weekly</changefreq>\n";
             $xmlString .= "        <priority>1.0</priority>\n";
@@ -93,7 +343,7 @@ function createPostTitle($postData)
 
 function createReadMoreButton($postData)
 {
-    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".xmlUrls($postData['post_title'], $postData['post_id'])."' class='btn btn-success btn-md'>Read more</a>";
+    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".rawUrls($postData['post_title'], $postData['post_id'])."' class='btn btn-success btn-md'>Read more</a>";
 }
 
 function createRobotsFile() {
@@ -133,7 +383,6 @@ function displayArticle($article) {
         echo $e->getMessage();
 	}		
 }
-
 
 function doesPostContainAnInternalLink($postBody) {
 	try {
@@ -179,6 +428,19 @@ function generateTableOfContents($htmlContent) {
 		echo "</ol>";		
 	}
     echo $htmlContent;
+}
+
+function getAllPages() {
+	try {
+	    $pages = [];
+		$query = DB::getInstance()->select("SELECT * FROM `posts`");
+		foreach ($query as $page) {
+			$pages[] = rawUrls($page['post_title'], $page['post_id']);
+		}
+	    return $pages;	
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}		
 }
 
 function getCategoryname($categoryId) {
@@ -554,6 +816,21 @@ function pagination($page, $totalResults, $maxResults, $params = array())
     <?php
 }
 
+function rawUrls($postName, $postId) {
+	try {
+		$rootUrl = urlFull();
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+        $replace = preg_replace("~[^-\w]+~", "", $replace);
+        $replace = preg_replace('~-+~', '-', $replace);
+		if(substr($replace, -1) === '-'){
+           $replace = rtrim($replace, '-'); 
+        }
+		return "{$rootUrl}{$postId}-{$replace}/";
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+}
+
 function recordClicks($page, $ip) {
     try {
 		$i = DB::getInstance()->insert(
@@ -921,21 +1198,6 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName) {
 function urlFull() {
 	try {
 	    return sprintf("%s://%s/", isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http', $_SERVER['SERVER_NAME']);
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}
-}
-
-function xmlUrls($postName, $postId) {
-	try {
-		$rootUrl = urlFull();
-		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
-        $replace = preg_replace("~[^-\w]+~", "", $replace);
-        $replace = preg_replace('~-+~', '-', $replace);
-		if(substr($replace, -1) === '-'){
-           $replace = rtrim($replace, '-'); 
-        }
-		return "{$rootUrl}{$postId}-{$replace}/";
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}

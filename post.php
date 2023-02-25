@@ -12,6 +12,8 @@
         $update = isset($_GET['postId']) ? updatePostViews($_GET['postId']) : ''; 		
 		$post = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'"); 
 		$categoryId = $post['post_category_id'];
+		
+		$pagesArray = getAllPages();
 	?>
 	
 	<div class="card">
@@ -30,14 +32,25 @@
 	
 		<div class="col-md-9">
 			<div class="card">
-			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small></div>
+			 <div class="card-header"><small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small>
+			 <?php if (checkUsersIpToEdit(getRealIp())) { ?>
+				  <span class="float-end">
+					<form action="<?php echo urlFull().'edit-post.php'; ?>" method="GET" style="display: inline;">
+					  <input type="hidden" name="postId" value="<?php echo $post['post_id']; ?>">
+					  <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Quick edit">
+						<i class="fas fa-edit"></i>
+					  </button>
+					</form>
+				  </span>
+				<?php } ?>
+			 </div>
 			  <div class="card-body">
 				<h1><?= $post['post_title']; ?></h1>
 				<?php if (!empty($post['post_image'])) { ?>
 				    <p class="text-center"><img class="img-thumbnail" src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= $post['post_image_alt_text']; ?>"></p>
 				<?php } ?>
 				<p class="text-center"><?= !empty(getValue("ads_post_top")) ? html_entity_decode(getValue("ads_post_top")) : "&nbsp;"; ?></p>
-				<div id="post-content"><?= generateTableOfContents(addImageToArticle($post['post_body'])); ?></div>
+				<div id="post-content"><?= generateTableOfContents(addImageToArticle(interlinkArticles($post['post_body'], $pagesArray))); ?></div>
                 <br>
 				<div class="astrodivider"><div class="astrodividermask"></div><span><i>&#10038;</i></span></div>
 				<p style="font-size: 1.2em; text-align: center;">Share this Article</p>

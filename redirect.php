@@ -1,7 +1,6 @@
 <?php
     include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-db-connection.php");
     include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-functions.php");
-    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header.php");
 ?>
 
 <?php
@@ -21,8 +20,4 @@
 		}
 	}
 
-?>
-
-<?php 
-    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
 ?>
