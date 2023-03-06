@@ -25,7 +25,7 @@ echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$property
 <meta name="twitter:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
 <meta property="og:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta property="og:type" content="website">
-<meta property="og:url" content="<?= isset($_GET['postId']) ? rawUrls(getPostTitleOnly($thePostId), $thePostId) : $_SERVER['REQUEST_URI']; ?>">
+<meta property="og:url" content="<?= isset($_GET['postId']) ? rawUrls($thePostId, getPostTitleOnly($thePostId), false) : $_SERVER['REQUEST_URI']; ?>">
 <meta property="og:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
 <meta property="og:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta property="og:site_name" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
@@ -46,7 +46,7 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
 <script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.rawUrls(getPostTitleOnly($thePostId), $thePostId).'">'; } ?>
+<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.rawUrls($thePostId, getPostTitleOnly($thePostId), false).'">'; } ?>
 <?php if (!empty(getValue("google_adsense"))) { 
 	$googleClientId = getValue("google_adsense");
 	echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } 
@@ -55,44 +55,46 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 <body> 
 
 <nav class="navbar navbar-expand-lg bg-light border-bottom" id="mainNav">
-	
-	<div class="container-fluid">       
-		
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-			<i class="fas fa-bars"></i>
-		</button>    
-
-        <!-- mobile -->
-		<div class="collapse navbar-collapse w-100 justify-content-center" id="collapsibleNavbar">
-	  
-			<a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d- d-block d-sm-inline-block mw-100 mx-auto"></a>	
-			
-			<ul class="nav nav-pills nav-fill ms-auto">   
-				<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
-				
-				<?php $pages = DB::getInstance()->select("SELECT * FROM `pages` ORDER BY `page_name` ASC"); ?>
-				<?php foreach($pages as $page) { ?>
-				
-				    <li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>	
-				
-				<?php } ?>
-				
-				<li class="nav-item"><a href="<?= urlFull(); ?>contact.php" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/contact.php") ? "active" : ""; ?>">Contact</a></li>	
-			</ul>
-			
-			<ul class="nav navbar-nav ms-auto" style="padding-top: 10px;">
-				<li>		
-					<form class="d-flex" action="<?= urlFull(); ?>search.php" method="get">
-						<input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
-						<button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
-					</form>		
-				</li>           
-			</ul> 
-	
-	    </div>
-	
-	</div>              
-	
+  <div class="container-fluid">       
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+      <i class="fas fa-bars"></i>
+    </button>    
+    <div class="collapse navbar-collapse w-100 justify-content-center" id="collapsibleNavbar">
+      <a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d- d-block d-sm-inline-block mw-100 mx-auto"></a>  
+      <ul class="nav nav-pills nav-fill ms-auto">   
+        <li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+            <?php $categories = DB::getInstance()->select("SELECT * FROM `categories` ORDER BY `category_name` ASC"); ?>      
+            <?php foreach($categories as $category) { ?>
+			<li>
+			    <?= seoFriendlyUrls($category['category_id'], $category['category_name'], true, true); ?>
+				<span style="color: #555; font-size: 1.2em;"><?= getValue("category_style_icon"); ?></span>
+			  </a>
+			</li> 
+            <?php } ?>
+          </ul>
+        </li>
+        <?php $pages = DB::getInstance()->select("SELECT * FROM `pages` ORDER BY `page_name` ASC"); ?>
+        <?php foreach($pages as $page) { ?>
+          <li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>    
+        <?php } ?>
+        <li class="nav-item"><a href="<?= urlFull(); ?>contact.php" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/contact.php") ? "active" : ""; ?>">Contact</a></li>  
+      </ul>
+      <ul class="nav navbar-nav ms-auto" style="padding-top: 10px;">
+        <li>    
+          <form class="d-flex" action="<?= urlFull(); ?>search.php" method="get">
+            <input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
+            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
+          </form>    
+        </li>           
+      </ul> 
+    </div>
+  </div>
 </nav>
+
 
 <div class="col-lg-8 mx-auto p-3 py-md-5">

@@ -12,10 +12,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -45,12 +45,6 @@
 				$errors = [];
 				 
 				if (isset($_POST['submitEditCategory'])) {
-					 
-					$dupe = DB::getInstance()->selectOneByField('categories', 'category_name', $_POST['category_name']);
-					
-					if (!empty($dupe)) {
-			            $errors[] = 'That <strong>category</strong> is already in use please choose another.';
-		            }
 					
 					if (!empty($errors) > 0) {
 						

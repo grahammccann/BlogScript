@@ -2,6 +2,7 @@ $(document).ready(function() {
   $('#tableCategories').DataTable();
   $('#tableClicks').DataTable();
   $('#tableImages').DataTable();
+  $('#tableNewsletters').DataTable();
   $('#tablePages').DataTable();
   $('#tablePosts').DataTable();
   $('#tableShorteners').DataTable();

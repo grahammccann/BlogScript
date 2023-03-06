@@ -14,7 +14,7 @@
 
 	<div id="results"></div>
 
-	<div class="d-flex justify-content-center">
+	<div class="d-flex justify-content-center" style="padding-bottom: 20px;">
 
 		<form class="w-50" method="post"> 
 

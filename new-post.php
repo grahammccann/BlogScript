@@ -11,10 +11,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -89,6 +89,7 @@
 							'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
 							'post_status' => $_POST['post_status'],
 							'post_source_url' => urlFull(),
+							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",
 							'post_date' => date('Y-m-d H:i:s')
 						]);
 						
@@ -148,31 +149,12 @@
 
 					<div class="mb-3">
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
-						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
-							
-						    <br>
-													
-							<div class="text-center" id="check-stock-button-container">
-							  <div id="cta_message_retailer" class="text-center" style="display: none;"><p>Click on the button below to check this product's availability and lowest price.</p></div>
-							  <a href="#" class="btn btn-primary" id="check-stock-button">
-								  CHECK PRICE <i class="fa fa-arrow-up-right-from-square"></i></a>
-							</div>
-
-							<div class="text-center" id="visit-website-button-container">
-							  <div id="cta_message_official" class="text-center" style="display: none;"><p>Click on the button below to be taken automatically to the official website for this product or service.</p></div>
-							  <a href="#" class="btn btn-success" id="visit-website-button">
-								  OFFICIAL WEBSITE <i class="fa fa-arrow-up-right-from-square"></i> </a>					
-							</div>
-							
-						</textarea>
+						<textarea class="form-control" id="summernote" name="post_body" rows="15" required></textarea>
 					</div>
 					
 					<div class="mb-3">
-						<label for="post_call_to_action_button" class="form-label"><strong>Button CTA Type/Text:</strong></label>
-						<select id="post_call_to_action_button" name="post_call_to_action_button" class="form-select" required>
-                            <option value="cta_1">Button 1: CHECK PRICE</option>
-							<option value="cta_2">Button 2: OFFICIAL WEBSITE</option>
-						</select>
+						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
+						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="...">
 					</div>
 
 					<div class="mb-3">

@@ -12,10 +12,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>

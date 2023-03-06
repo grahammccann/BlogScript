@@ -11,10 +11,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -106,7 +106,8 @@
 							'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
 							'post_status' => $_POST['post_status'],
 							'post_date_updated' => date('Y-m-d H:i:s'),
-							'post_sticky' => $_POST['post_sticky']						
+							'post_sticky' => $_POST['post_sticky'],
+							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",							
 						]);
 						
 						if (file_exists("sitemap.xml")) {
@@ -154,6 +155,11 @@
 						<textarea class="form-control" id="summernote" name="post_body" rows="15" required>
 						<?= displayArticle($post['post_body']); ?>
 						</textarea>
+					</div>
+					
+					<div class="mb-3">
+						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
+						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="<?= $post['post_affiliate_url']; ?>">
 					</div>
 
 					<div class="mb-3">

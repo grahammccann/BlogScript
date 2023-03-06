@@ -5,5 +5,6 @@
 		<li class="list-group-item"><a href="pages.php" class="text-decoration-none">Pages</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("pages"); ?></span></li>			
 		<li class="list-group-item"><a href="posts.php" class="text-decoration-none">Posts</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("posts"); ?></span></li>			
 		<li class="list-group-item"><a href="shorteners.php" class="text-decoration-none">Shorteners</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("shorteners"); ?></span></li>				
-		<li class="list-group-item"><a href="users.php" class="text-decoration-none">Users</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("members"); ?></span></li>				
+		<li class="list-group-item"><a href="users.php" class="text-decoration-none">Users</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("members"); ?></span></li>	
+		<li class="list-group-item"><a href="newsletters.php" class="text-decoration-none">Newsletters</a> <span class="badge rounded-pill bg-primary float-end"><?= doTableCount("newsletters"); ?></span></li>		
 	</ol>

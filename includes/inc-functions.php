@@ -1,41 +1,67 @@
 <?php
 
-function interlinkArticles($content, $pagesArray) {
+function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings) {
     $linkedPages = array();
     foreach ($pagesArray as $page) {
         $pageId = getPageIdFromUrl($page);
         // var_dump($pageId);
         if (!empty($pageId)) {
             $pageTitle = getPageTitleFromUrl($page);
-
             $commonSequences = findFilteredCommonSequences($content, $pageTitle);
-			$callback = function ($matches) use ($page, &$linkedPages) {
-				$text = $matches[0];
-				$lowerText = strtolower($text);
-				if (!in_array($lowerText, $linkedPages)) {
-					$linkedPages[] = $lowerText;
-					return '<a href="' . $page . '" class="text-decoration-none">' . $text . '</a>';
-				} else {
-					return $text;
-				}
-			};
+			//print "<pre>"; print_r($commonSequences); print "</pre>";
+            $callback = function ($matches) use ($page, &$linkedPages) {
+                $text = $matches[0];
+                $lowerText = strtolower($text);
+                if (!in_array($lowerText, $linkedPages)) {
+                    $linkedPages[] = $lowerText;
+                    return '<a href="' . $page . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                } else {
+                    return $text;
+                }
+            };
             $count = 0;
             foreach ($commonSequences as $commonsequence) {
+                // Skip interlinking if the current sequence is found in the $excludeHeadings array.
+                if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                    continue;
+                }
                 $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
             }
         }
     }
+	
+	foreach ($categoriesArray as $category) {
+		$categoryId = getCategoryIdFromUrl($category);
+		if (!empty($categoryId)) {
+			$categoryTitle = getCategoryTitleFromUrl($category);
+			$commonSequences = findFilteredCommonSequences($content, $categoryTitle);
+			//print "<pre>"; print_r($commonSequences); print "</pre>";
+			$callback = function ($matches) use ($category, &$linkedPages) {
+				$text = $matches[0];
+				$lowerText = strtolower($text);
+				if (!in_array($lowerText, $linkedPages)) {
+					$linkedPages[] = $lowerText;
+					return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+				} else {
+					return $text;
+				}
+			};
+			$count = 0;
+			foreach ($commonSequences as $commonsequence) {
+				if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+					continue;
+				}
+				$content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+			}
+		}
+	}	
     return $content;
 }
 
 function findFilteredCommonSequences($str1, $str2) {
     $commonSequences = array();
-
-    // Split input strings into arrays of individual words
     $words1 = preg_split('/\s+/', $str1);
     $words2 = preg_split('/\s+/', $str2);
-
-    // Find all common sequences of words
     $len1 = count($words1);
     $len2 = count($words2);
     for ($i = 0; $i < $len1; $i++) {
@@ -49,12 +75,11 @@ function findFilteredCommonSequences($str1, $str2) {
             }
         }
     }
-
     // Trim stop words from common sequences and filter out those with fewer than two non-stop words
     $filteredSequences = array();
     foreach ($commonSequences as $sequence) {
         $sequenceWithoutStopWords = removeStopWords($sequence);
-        if (atleastTwoWords($sequenceWithoutStopWords) != '') {
+        if (atleastXWords($sequenceWithoutStopWords) != '') {
             $isSubsequence = false;
             foreach ($filteredSequences as $prevSequence) {
                 if (strpos($prevSequence, $sequenceWithoutStopWords) !== false) {
@@ -67,10 +92,20 @@ function findFilteredCommonSequences($str1, $str2) {
             }
         }
     }
-
     return $filteredSequences;
 }
 
+function getCategoryIdFromUrl($url) {
+    preg_match('/\/category\/(\d+)/', $url, $matches);
+    return isset($matches[1]) ? $matches[1] : '';
+}
+
+function getCategoryTitleFromUrl($url) {
+    $parts = explode('/', rtrim($url, '/'));
+    $lastPart = end($parts);
+    $categoryTitle = str_replace('-', ' ', $lastPart);
+    return urldecode($categoryTitle);
+}
 
 function getPageIdFromUrl($url) {
     preg_match('/\/(\d+)/', $url, $matches);
@@ -87,7 +122,7 @@ function getPageTitleFromUrl($url) {
     return urldecode($pageTitle);
 }
 
-function atleastTwoWords($text) {
+function atleastXWords($text) {
     $words = preg_split('/\s+/', $text);
     return count($words) < 2 ? '' : $text;
 }
@@ -231,37 +266,6 @@ function removeStopWords($text) {
     return implode(' ', $filteredWords);
 }
 
-function addImageToArticle($article) {	
-	try {
-		$pattern = '/<a href="([^#][^"]*\/recommends\/[^"]*)"|<a href=\'([^#][^\']*\/recommends\/[^\']*)\'/';
-		preg_match($pattern, $article, $match);
-		if (empty($match)) {
-			return $article;
-		}
-		$link = $match[1] ?? $match[2];
-
-		$image_html = '';
-		if (strpos($article, $match[0]) < strpos($article, '</h2>')) {
-			//$image_html = '<div style="text-align:center;"><a href="'.$link.'"><img class="img-fluid" src="'.urlFull().'images/img-check-price.png" alt="Check stock availability"></a></div>';		
-		} else {
-			$image_html = '<div style="text-align:center;"><a href="'.$link.'"><img class="img-fluid" src="'.urlFull().'images/img-visit-official-website.png" alt="Visit the official website"></a></div>';
-		}
-
-		preg_match('/<h2.*?>/', $article, $matches, PREG_OFFSET_CAPTURE);
-		$h2_offset = $matches[0][1];
-		
-		if (empty($matches)) {
-			return $article;
-		}
-
-		$new_article = substr_replace($article, $image_html, $h2_offset, 0);
-
-		return $new_article;
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}
-}
-
 function checkUrl() {
     $currentUrl = $_SERVER['REQUEST_URI'];
     if (strpos($currentUrl, 'index.php?page=') !== false) {
@@ -290,6 +294,10 @@ function checkUsersIpToEdit($ipFromUser) {
     return false;
 }
 
+function cleanUpImages() {
+	return DB::getInstance()->select("SELECT * FROM `images`");
+}
+
 function createSitemap() {
     try {
         $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
@@ -302,7 +310,7 @@ function createSitemap() {
         
         foreach ($xml as $row) {
             $xmlString .= "    <url>\n";
-            $xmlString .= "        <loc><![CDATA[" . rawUrls($row['post_title'], $row['post_id']) . "]]></loc>\n";
+            $xmlString .= "        <loc><![CDATA[" . rawUrls($row['post_id'], $row['post_title'], false) . "]]></loc>\n";
             $xmlString .= "        <lastmod>" . date(DATE_ATOM, time()) . "</lastmod>\n";
             $xmlString .= "        <changefreq>weekly</changefreq>\n";
             $xmlString .= "        <priority>1.0</priority>\n";
@@ -338,12 +346,12 @@ function createPostImage($postData)
 
 function createPostTitle($postData)
 {
-    return "<h1>".seoFriendlyUrls($postData['post_title'], $postData['post_id'])."</h1>";
+    return "<h1>".seoFriendlyUrls($postData['post_id'], $postData['post_title'], false, false)."</h1>";
 }
 
 function createReadMoreButton($postData)
 {
-    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".rawUrls($postData['post_title'], $postData['post_id'])."' class='btn btn-success btn-md'>Read more</a>";
+    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".rawUrls($postData['post_id'], $postData['post_title'], false)."' class='btn btn-success btn-md'>Read more</a>";
 }
 
 function createRobotsFile() {
@@ -371,22 +379,85 @@ function deleteAnyImages($postId) {
 function displayArticle($article) {
 	try {
 		libxml_use_internal_errors(true);
-		// This removes the awesomefont icons on update!
-		//$article = preg_replace('/<[^\/>]*>([\s]?)*<\/[^>]*>/', '', $article);
-/* 		$dom = new DOMDocument();
-		$dom->loadHTML($article);
-		$dom->preserveWhiteSpace = false;
-		$dom->formatOutput = true;
-		$formattedArticle = $dom->saveHTML(); */
 		return $article;
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}		
 }
 
+function displayCTAImage($affiliateUrl) {
+	try {
+        if ($affiliateUrl != "...") {
+			return '<div style="text-align:center;"><a href="'.$affiliateUrl.'"><img class="img-fluid" src="'.urlFull().'images/img-visit-official-website.png" alt="Visit the official website"></a></div>';
+		} else {
+			return '&nbsp;';
+		}
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
+function displayProsAndCons($articleBody) {
+  $pros = array();
+  $cons = array();
+
+  preg_match_all('/(?<=Pros:|Pros\s).*?(?=Cons:|Cons\s|$)/is', $articleBody, $matches);
+
+  if (!empty($matches[0][0])) {
+    $pros = explode(",", $matches[0][0]);
+  }
+
+  if (!empty($matches[0][1])) {
+    $cons = explode(",", $matches[0][1]);
+  }
+
+  echo "<table style='border: 1px solid black;'>";
+  echo "<tr>";
+  echo "<th style='border: 1px solid black;'>Pros</th>";
+  echo "<th style='border: 1px solid black;'>Cons</th>";
+  echo "</tr>";
+  
+  $maxRows = max(count($pros), count($cons));
+
+  for ($i = 0; $i < $maxRows; $i++) {
+    echo "<tr>";
+    echo "<td style='border: 1px solid black; color: green; vertical-align: top; padding: 5px;'>";
+
+    if (isset($pros[$i])) {
+      echo "<ul style='margin: 0px;'>";
+      echo "<li>".$pros[$i]."</li>";
+      echo "</ul>";
+    }
+    echo "</td>";
+    
+    echo "<td style='border: 1px solid black; color: red; vertical-align: top; padding: 5px;'>";
+
+    if (isset($cons[$i])) {
+      echo "<ul style='margin: 0px;'>";
+      echo "<li>".$cons[$i]."</li>";
+      echo "</ul>";
+    }
+    echo "</td>";
+    echo "</tr>";
+  }
+  echo "</table>";
+}
+
 function doesPostContainAnInternalLink($postBody) {
 	try {
 		if (strpos($postBody, urlFull()) !== false) {
+			return true;
+		} else {
+			return false;
+		}   
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
+function doesPostContainMonetizationLinks($postBody) {
+	try {
+		if (strpos($postBody, "/recommends/") !== false) {
 			return true;
 		} else {
 			return false;
@@ -405,13 +476,15 @@ function doTableCount($table) {
 	}	
 }
 
-function generateTableOfContents($htmlContent) {
+function generateTableOfContents($htmlContent, $pagesArray, $categoriesArray) {
     preg_match_all("/<h[1-6]>(.*?)<\/h[1-6]>/i", $htmlContent, $matches);
 
-    $tableOfContents = array();
-    foreach ($matches[1] as $heading) {
-        $tableOfContents[] = $heading;
-    }
+	$tableOfContents = array();
+	foreach ($matches[1] as $heading) {
+		$tableOfContents[] = $heading;
+	}
+	$htmlContent = interlinkArticles($htmlContent, $pagesArray, $categoriesArray, $tableOfContents);
+
     $i = 1;
     foreach($matches[0] as $heading) {
         $new_heading = preg_replace("/<h[1-6]>/", "<h2 id='$i'>", $heading);
@@ -419,6 +492,8 @@ function generateTableOfContents($htmlContent) {
         $i++;
     }
 	if (count($tableOfContents) > 0) {
+		echo "<div class='table-of-contents-container'>";
+        echo "<h2>Table of Contents</h2>";
 		echo "<ol class='table-of-contents'>";
 		$i=1;
 		foreach ($tableOfContents as $item) {
@@ -426,8 +501,22 @@ function generateTableOfContents($htmlContent) {
 			$i++;
 		}
 		echo "</ol>";		
+        echo "</div>";
 	}
     echo $htmlContent;
+}
+
+function getAllCategories() {
+	try {
+	    $pages = [];
+		$query = DB::getInstance()->select("SELECT * FROM `categories`");
+		foreach ($query as $page) {		
+			$pages[] = rawUrls($page['category_id'], $page['category_name'], true);
+		}
+	    return $pages;	
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}		
 }
 
 function getAllPages() {
@@ -435,12 +524,20 @@ function getAllPages() {
 	    $pages = [];
 		$query = DB::getInstance()->select("SELECT * FROM `posts`");
 		foreach ($query as $page) {
-			$pages[] = rawUrls($page['post_title'], $page['post_id']);
+			$pages[] = rawUrls($page['post_id'], $page['post_title'], false);
 		}
 	    return $pages;	
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}		
+}
+
+function getArticleData($count) {
+	try {
+		return DB::getInstance()->select("SELECT * FROM (SELECT * FROM `posts`) sub WHERE LENGTH(`post_body`) - LENGTH(REPLACE(`post_body`, ' ', '')) + 1 <= {$count};"); 
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
 }
 
 function getCategoryname($categoryId) {
@@ -464,7 +561,6 @@ function getCountryFromIP($ip) {
         echo $e->getMessage();
 	}
 }
-
 
 function getFeaturedImageToUse($imageName) {
 	try {
@@ -625,9 +721,25 @@ function getRealIp() {
 	}
 }
 
+function getPostWordCount($postId, $postBody) {
+	try {
+		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM `posts` WHERE `post_id`='{$postId}'"); 
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
 function getSiteWordCount() {
 	try {
-		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM posts"); 
+		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM `posts`"); 
+	} catch(Exception $e) {
+        echo $e->getMessage();
+	}	
+}
+
+function getSiteArticlesToDelete($count) {
+	try {
+		return DB::getInstance()->selectValue("SELECT COUNT(*) as row_count FROM (SELECT post_body FROM posts) sub WHERE LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1 <= {$count};"); 
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}	
@@ -816,16 +928,36 @@ function pagination($page, $totalResults, $maxResults, $params = array())
     <?php
 }
 
-function rawUrls($postName, $postId) {
+function performArticlePurge($articleId, $articleImage, $imageName) {
+    try {
+		$delete1 = DB::getInstance()->remove('images', 'image_name', $imageName);
+        $delete2 = DB::getInstance()->remove('posts', 'post_id', $articleId);
+        if (!empty($articleImage)) {
+            $imagePath = 'uploads/' . $articleImage;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+    } catch(Exception $e) {
+        echo $e->getMessage();
+    }
+}
+
+
+function rawUrls($id, $name, $category) {
 	try {
 		$rootUrl = urlFull();
-		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($name));
         $replace = preg_replace("~[^-\w]+~", "", $replace);
         $replace = preg_replace('~-+~', '-', $replace);
-		if(substr($replace, -1) === '-'){
+		if (substr($replace, -1) === '-'){
            $replace = rtrim($replace, '-'); 
         }
-		return "{$rootUrl}{$postId}-{$replace}/";
+		if ($category) {
+			return "{$rootUrl}category/{$id}-{$replace}/";		
+		} else {
+		    return "{$rootUrl}{$id}-{$replace}/";		
+		}
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
@@ -1069,31 +1201,39 @@ function sendEmail($emailTo, $emailFrom, $emailSubject, $emailMessage) {
 	return mail($emailTo, urlFull() . " - " . $emailSubject, $emailBody, $emailHeaders);
 }
 
-function sharingSocialMediaUrls($productId, $productName) {
+function sharingSocialMediaUrls($id, $name) {
 	try {
 		$rootUrl = urlFull();
-		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($productName));
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($name));
         $replace = preg_replace("~[^-\w]+~", "", $replace);
         $replace = preg_replace('~-+~', '-', $replace);
 		if (substr($replace, -1) === '-'){
            $replace = rtrim($replace, '-'); 
         }
-		return $rootUrl . $productId . "-" . $replace . "/";
+		return $rootUrl . $id . "-" . $replace . "/";
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
 }
 
-function seoFriendlyUrls($postName, $postId) {
+function seoFriendlyUrls($id, $name, $category, $dropdown) {
 	try {
 		$rootUrl = urlFull();
-		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
+		$replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($name));
         $replace = preg_replace("~[^-\w]+~", "", $replace);
         $replace = preg_replace('~-+~', '-', $replace);
-		if(substr($replace, -1) === '-'){
+		if(substr($replace, -1) === '-') {
            $replace = rtrim($replace, '-'); 
         }
-		return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\">{$postName}</a>";
+		if ($category && $dropdown) {
+			return "<a class=\"dropdown-item text-decoration-none\" href=\"{$rootUrl}category/{$id}-{$replace}/\">{$name}</a>";
+		}
+		
+		if ($category == true && $dropdown != true) {
+			return "<a class=\"text-decoration-none\" href=\"{$rootUrl}category/{$id}-{$replace}/\">{$name}</a>";			
+		} else {
+			return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$id}-{$replace}/\">{$name}</a>";
+		}
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}
@@ -1159,19 +1299,25 @@ function updateRedirectClicks($redirectId) {
 
 function uploadImage($imageName, $imageTemp, $imageAltTextName) {
     try {
+        if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
+            stderr("Invalid <strong>file</strong> upload.");
+            return;
+        }
+
         $validFormats = array("jpg", "png", "gif", "jpeg");
         $imageNameFinal = "";
         if (strlen($imageName) > 0) {
             list($txt, $ext) = explode(".", $imageName);
             if (in_array($ext, $validFormats)) {
                 $size = filesize($imageTemp);
-                if ($size > 5000000) {
-                    stdmsg("File size must be <strong>less</strong> than 5MB.");
+                $maxFileSize = 5000000; // maximum file size in bytes (5MB)
+                if ($size > $maxFileSize) {
+                    stderr("File size must be <strong>less</strong> than " . $maxFileSize/1000000 . "MB.");
                     return;
                 }
-                $mime = mime_content_type($imageTemp);
-                if (!strstr($mime, 'image')) {
-                    stdmsg("Invalid file type. Only <strong>images</strong> are allowed.");
+                $type = exif_imagetype($imageTemp);
+                if (!$type || !in_array($type, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF])) {
+                    stderr("Invalid file type. Only <strong>images</strong> are allowed.");
                     return;
                 }
                 $randomInt = rand();

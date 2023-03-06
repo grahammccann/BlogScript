@@ -11,10 +11,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -85,7 +85,7 @@
 						
 							<tr>
 							    <td><?= $category['category_id']; ?></td>
-								<td><a href="<?= urlFull(); ?>category.php?categoryId=<?= $category['category_id']; ?>" class="text-decoration-none"><?= getPostersCategory($category['category_id']); ?></a></td>
+								<td><?= seoFriendlyUrls($category['category_id'], getCategoryName($category['category_id']), true, false); ?></td>
 								<td><?= date("m.d.y", strtotime($category['category_date'])); ?></td>
 								<td class="text-center"><a href="edit-category.php?categoryId=<?= $category['category_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="categories.php?delete=1&amp;categoryId=<?= $category['category_id']; ?>" onClick="return confirm('Delete the category?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>

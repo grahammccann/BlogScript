@@ -11,10 +11,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -78,7 +78,9 @@
 					  <th>Sticky</th>
 					  <th>Added</th>
 					  <th><i class="fas fa-eye"></i></th>
-					  <th>IL</th>
+					  <th><i class="fa fa-arrow-up-right-from-square"></i></th>
+					  <th><i class="fa-solid fa-dollar-sign"></i></th>
+					  <th><i class="fa-solid fa-list-ol"></i></th>
 					  <th>&nbsp;</th>
 					  <th>&nbsp;</th>
 					</tr>
@@ -90,7 +92,9 @@
 					  <th>Sticky</th>
 					  <th>Added</th>
 					  <th><i class="fas fa-eye"></i></th>
-					  <th>IL</th>
+					  <th><i class="fa fa-arrow-up-right-from-square"></i></th>
+					  <th><i class="fa-solid fa-dollar-sign"></i></th>
+					  <th><i class="fa-solid fa-list-ol"></i></th>
 					  <th>&nbsp;</th>
 					  <th>&nbsp;</th>
 					</tr>
@@ -100,11 +104,13 @@
 						
 							<tr>
 						    	<td><?= $post['post_id']; ?></td>
-								<td><?= seoFriendlyUrls($post['post_title'], $post['post_id']); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <a href="category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none"><?= getCategoryname($post['post_category_id']); ?></a> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a> | <a href="posts.php?index=1&amp;url=&amp;keywords=" class="text-decoration-none">Index</a></small></td>
+								<td><?= seoFriendlyUrls($post['post_id'], $post['post_title'], false, false); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <?= seoFriendlyUrls($post['post_category_id'], getCategoryname($post['post_category_id']), true, false); ?> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a> | <a href="posts.php?index=1&amp;url=&amp;keywords=" class="text-decoration-none">Index</a></small></td>
 								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>
 								<td><?= $post['post_views']; ?></td>
 								<td><?= (doesPostContainAnInternalLink($post['post_body']) == true) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
+								<td><?= (doesPostContainMonetizationLinks($post['post_body']) == true) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
+								<td><?= getPostWordCount($post['post_id'], $post['post_body']); ?></td>
 								<td class="text-center"><a href="edit-post.php?postId=<?= $post['post_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="posts.php?delete=1&amp;postId=<?= $post['post_id']; ?>" onClick="return confirm('Delete the post?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
 							</tr>	

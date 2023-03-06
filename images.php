@@ -11,10 +11,10 @@
 	
 	<?php
 	
-	if ($user['member_is_admin'] != "yes") {
+	if (!$user || $user['member_is_admin'] != "yes") {
 		stderr("<strong>Protected</strong> page.");
-        include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php"); 
-        die();		
+		include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-footer.php");
+		die();		
 	}
 	
 	?>
@@ -62,41 +62,63 @@
 				
 				<!-- DataTables -->
 				<div class="table-responsive">
-				<table class="table table-striped" id="tableImages" width="100%" cellspacing="0">	  
-				  <thead>
-					<tr>
-					  <th>ID</th>
-					  <th>Image</th>
-					  <th>ALT Text</th>
-					  <th>&nbsp;</th>
-					</tr>
-				  </thead>
-				  <tfoot>
-					<tr>
-					  <th>ID</th>
-					  <th>Image</th>
-					  <th>ALT Text</th>
-					  <th>&nbsp;</th>
-					</tr>
-				  </tfoot>
-				  <tbody>	  
-						<?php foreach ($images as $image) { ?>		
-						
+					<table class="table table-striped" id="tableImages" width="100%" cellspacing="0">
+						<thead>
 							<tr>
-						    	<td><?= $image['image_id']; ?></td>
-								<td class="text-center"><img src="<?= urlFull(); ?>uploads/<?= $image['image_name']; ?>" class="img-thumbnail" alt="<?= $image['image_alt_text']; ?>"></td>
-								<td><?= $image['image_alt_text']; ?></td>
-								<td class="text-center"><a href="images.php?delete=1&amp;imageName=<?= $image['image_name']; ?>" onClick="return confirm('Delete the image?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-							</tr>	
-							
-						<?php } ?>	
-				  </tbody>	  
-				</table>
-				</div>    							
-                </div>
+								<th>ID</th>
+								<th>Image</th>
+								<th>ALT Text</th>
+								<th>Copy</th>
+								<th>&nbsp;</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>ID</th>
+								<th>Image</th>
+								<th>ALT Text</th>
+								<th>Copy</th>
+								<th>&nbsp;</th>
+							</tr>
+						</tfoot>
+						<tbody>
+							<?php foreach ($images as $image) { ?>
+								<tr>
+									<td><?= $image['image_id']; ?></td>
+									<td class="text-center"><img src="<?= urlFull(); ?>uploads/<?= $image['image_name']; ?>" class="img-thumbnail" alt="<?= $image['image_alt_text']; ?>"></td>
+									<td><?= $image['image_alt_text']; ?></td>
+									<td class="text-center">
+										<button class="btn btn-outline-secondary" type="button" onclick="copyImageURL('<?= $image['image_name']; ?>')">Copy</button>
+									</td>
+									<td class="text-center">
+										<a href="images.php?delete=1&amp;imageName=<?= $image['image_name']; ?>" onClick="return confirm('Delete the image?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>   							
 			</div>	
 		</div>
 	</div>
+	<script>
+		function copyImageURL(imageName) {
+			var url = "<?= urlFull(); ?>uploads/" + imageName;
+			copyToClipboard(url);
+		}
+
+		function copyToClipboard(text) {
+			var input = document.createElement('textarea');
+			input.style.position = 'fixed';
+			input.style.opacity = 0;
+			input.value = text;
+			document.body.appendChild(input);
+			input.select();
+			document.execCommand('copy');
+			document.body.removeChild(input);
+			alert("Copied to clipboard: " + text);
+		}
+	</script>
 
 </main>
 
