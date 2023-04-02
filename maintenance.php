@@ -37,7 +37,7 @@
 		
 		<?php
 
-		if (isset($_POST['countWordCountDelete'])) {
+		if (isset($_POST['submitTheWordCount'])) {
 			
 			$count = getSiteArticlesToDelete($_POST['delete_words_count']);
 			$value = $_POST['delete_words_count'];
@@ -144,12 +144,12 @@
 		  <div class="card-body">
 			<form action="maintenance.php" method="POST">
 			  <div class="mb-3">
-				<label for="inputField" class="form-label"><strong>Articles:</strong> - Here you can delete articles with less than X words in the body or low content articles.</label>
+				<label for="inputField" class="form-label"><strong>Articles:</strong> - ...</label>
 				<input type="text" class="form-control" id="inputField" name="delete_words_count" placeholder="Enter number values here only" pattern="[0-9]+" required>
-				<div class="invalid-feedback">Please enter a valid number</div>
+				<div class="invalid-feedback">Please enter a number</div>
 			  </div>
 			  <div class="mb-3">
-				<button type="submit" name="countWordCountDelete" class="btn btn-primary">Count Articles</button>
+				<button type="submit" name="submitTheWordCount" class="btn btn-primary">Count Articles</button>
 				<button type="submit" name="submitWordCountDelete" class="btn btn-danger" onClick="return confirm('Are you sure you want to delete articles and images?');">Delete Articles</button>
 			  </div>
 			</form>
@@ -160,15 +160,13 @@
 		  <div class="card-body">
 			<form action="maintenance.php" method="POST">
 			  <div class="mb-3">
-				<label for="inputField" class="form-label"><strong>Images:</strong> - Clean up rogue images.</label>
+				<label for="inputField" class="form-label"><strong>Images:</strong> - ...</label>
 				 <div class="mb-3">
 				<button type="submit" name="submitCleanUpImages" class="btn btn-danger" onClick="return confirm('Are you sure you want to clean images?');">Clean Images</button>
 				</div>
 			  </div>
 			</form>
 		  </div>
-		</div>
-		  
 		</div>
 		
 	</div>

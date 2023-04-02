@@ -62,7 +62,7 @@
 				</p>
 			  <?php } ?>
 			  <div id="post-cta"><?= displayCTAImage($post['post_affiliate_url']); ?></div>
-			      <div id="post-content"><?= generateTableOfContents($post['post_body'], $pagesArray, $categoriesArray); ?></div>
+			      <div id="post-content"><?= generateTableOfContents($post['post_body'], $pagesArray, $categoriesArray, $post['post_image_alt_text']); ?></div>
               <div id="post-cta"><?= displayCTAImage($post['post_affiliate_url']); ?></div>
 			  <p style="font-size: 1.2em; text-align: center;">Share this Article</p>
 			  <p class="text-center">
@@ -125,7 +125,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_1"))) { 
+			if (!empty(getValue("sidebar_cta_1_header"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-1.php");  
 				
@@ -135,7 +135,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_2"))) { 
+			if (!empty(getValue("sidebar_cta_2_header"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-2.php");  
 				

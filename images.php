@@ -88,7 +88,7 @@
 									<td class="text-center"><img src="<?= urlFull(); ?>uploads/<?= $image['image_name']; ?>" class="img-thumbnail" alt="<?= $image['image_alt_text']; ?>"></td>
 									<td><?= $image['image_alt_text']; ?></td>
 									<td class="text-center">
-										<button class="btn btn-outline-secondary" type="button" onclick="copyImageURL('<?= $image['image_name']; ?>')">Copy</button>
+										<button class="btn btn-outline-secondary btn-sm" type="button" onclick="copyImageURL('<?= $image['image_name']; ?>')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Copy image location to clipboard"><i class="fa-solid fa-copy"></i></button>
 									</td>
 									<td class="text-center">
 										<a href="images.php?delete=1&amp;imageName=<?= $image['image_name']; ?>" onClick="return confirm('Delete the image?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>

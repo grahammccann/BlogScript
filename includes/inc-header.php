@@ -54,47 +54,59 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 </head>
 <body> 
 
-<nav class="navbar navbar-expand-lg bg-light border-bottom" id="mainNav">
-  <div class="container-fluid">       
+<nav class="navbar navbar-expand-lg bg-dark border-bottom" id="mainNav">
+  
+  <div class="container-fluid">     
+  
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-      <i class="fas fa-bars"></i>
+      <i class="fas fa-bars" style="color: #fff"></i>
     </button>    
-    <div class="collapse navbar-collapse w-100 justify-content-center" id="collapsibleNavbar">
-      <a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d- d-block d-sm-inline-block mw-100 mx-auto"></a>  
-      <ul class="nav nav-pills nav-fill ms-auto">   
-        <li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
-            <?php $categories = DB::getInstance()->select("SELECT * FROM `categories` ORDER BY `category_name` ASC"); ?>      
-            <?php foreach($categories as $category) { ?>
-			<li>
-			    <?= seoFriendlyUrls($category['category_id'], $category['category_name'], true, true); ?>
+	
+    <div class="collapse navbar-collapse w-100" id="collapsibleNavbar">
+	
+      <a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d-block d-sm-inline-block mw-100 mx-auto"></a>  
+	  
+		<ul class="nav nav-pills nav-fill ms-auto flex-column flex-sm-row mb-3" style="display: flex; gap: 10px;">   
+		<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
+		
+		<li class="nav-item dropdown">
+		  <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			Categories
+		  </a>
+		  <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+			<?php $categories = DB::getInstance()->select("SELECT * FROM `categories` ORDER BY `category_name` ASC"); ?>      
+			<?php foreach($categories as $category) { ?>
+			  <li>
+				<?= seoFriendlyUrls($category['category_id'], $category['category_name'], true, true); ?>
 				<span style="color: #555; font-size: 1.2em;"><?= getValue("category_style_icon"); ?></span>
-			  </a>
-			</li> 
-            <?php } ?>
-          </ul>
-        </li>
-        <?php $pages = DB::getInstance()->select("SELECT * FROM `pages` ORDER BY `page_name` ASC"); ?>
-        <?php foreach($pages as $page) { ?>
-          <li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>    
-        <?php } ?>
-        <li class="nav-item"><a href="<?= urlFull(); ?>contact.php" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/contact.php") ? "active" : ""; ?>">Contact</a></li>  
-      </ul>
-      <ul class="nav navbar-nav ms-auto" style="padding-top: 10px;">
-        <li>    
-          <form class="d-flex" action="<?= urlFull(); ?>search.php" method="get">
-            <input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
-            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
-          </form>    
-        </li>           
-      </ul> 
+			  </li> 
+			<?php } ?>
+		  </ul>
+		  
+		</li>
+		
+		<?php $pages = DB::getInstance()->select("SELECT * FROM `pages` ORDER BY `page_name` ASC"); ?>
+		<?php foreach($pages as $page) { ?>
+		  <li class="nav-item"><a href="<?= urlFull(); ?>page.php?page=<?= $page['page_slug']; ?>" class="nav-link <?= ($_SERVER['REQUEST_URI'] == "/page.php?page={$page['page_slug']}") ? "active" : ""; ?>"><?= $page['page_name']; ?></a></li>    
+		<?php } ?>
+		  <li class="nav-item"><a href="<?= urlFull(); ?>contact.php" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/contact.php") ? "active" : ""; ?>">Contact</a></li>  
+		
+		</ul>
+
+		<ul class="nav navbar-nav ms-auto">
+		<li>    
+		   <form class="d-flex mb-3" action="<?= urlFull(); ?>search.php" method="get">
+			   <input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
+			   <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
+		   </form>    
+		</li>           
+		</ul> 
+	  
     </div>
+	
   </div>
+  
 </nav>
 
-
-<div class="col-lg-8 mx-auto p-3 py-md-5">
+<div class="page-container col-lg-8 mx-auto p-3 py-md-5">
+<div class="content-container">

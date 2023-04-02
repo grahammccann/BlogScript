@@ -45,15 +45,19 @@
 	
 	<div class="row">	
 	
-		<?php 
+		<div class="col-md-12">	    
 		
-		if (getValue("homepage_introduction")) { 
-					
-			include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header-introduction.php");  
+			<?php 
 			
-		}
-		
-		?>	
+			if (getValue("homepage_introduction_header")) { 
+						
+				include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-header-introduction.php");  
+				
+			}
+			
+			?>	
+			
+		</div>
 	 
 	    <!-- posts -->
 		<div class="col-md-9">
@@ -113,7 +117,7 @@
 		
 			<?php 
 			
-			if (!empty(getValue("about_us_text"))) { 
+			if (!empty(getValue("about_us_header")) && !empty(getValue("about_us_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-about-us.php");  
 				
@@ -139,7 +143,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_1"))) { 
+			if (!empty(getValue("sidebar_cta_1_header")) && !empty(getValue("sidebar_cta_1_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-1.php");  
 				
@@ -149,7 +153,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_2"))) { 
+			if (!empty(getValue("sidebar_cta_2_header")) && !empty(getValue("sidebar_cta_2_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-2.php");  
 				

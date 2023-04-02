@@ -1,14 +1,13 @@
 <?php
 
-function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings) {
+function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings, $moneyKeyword) {
     $linkedPages = array();
     foreach ($pagesArray as $page) {
         $pageId = getPageIdFromUrl($page);
-        // var_dump($pageId);
         if (!empty($pageId)) {
             $pageTitle = getPageTitleFromUrl($page);
             $commonSequences = findFilteredCommonSequences($content, $pageTitle);
-			//print "<pre>"; print_r($commonSequences); print "</pre>";
+
             $callback = function ($matches) use ($page, &$linkedPages) {
                 $text = $matches[0];
                 $lowerText = strtolower($text);
@@ -19,9 +18,9 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                     return $text;
                 }
             };
+
             $count = 0;
             foreach ($commonSequences as $commonsequence) {
-                // Skip interlinking if the current sequence is found in the $excludeHeadings array.
                 if (in_array(strtolower($commonsequence), $excludeHeadings)) {
                     continue;
                 }
@@ -30,31 +29,38 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
         }
     }
 	
-	foreach ($categoriesArray as $category) {
-		$categoryId = getCategoryIdFromUrl($category);
-		if (!empty($categoryId)) {
-			$categoryTitle = getCategoryTitleFromUrl($category);
-			$commonSequences = findFilteredCommonSequences($content, $categoryTitle);
-			//print "<pre>"; print_r($commonSequences); print "</pre>";
-			$callback = function ($matches) use ($category, &$linkedPages) {
-				$text = $matches[0];
-				$lowerText = strtolower($text);
-				if (!in_array($lowerText, $linkedPages)) {
-					$linkedPages[] = $lowerText;
-					return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
-				} else {
-					return $text;
-				}
-			};
-			$count = 0;
-			foreach ($commonSequences as $commonsequence) {
-				if (in_array(strtolower($commonsequence), $excludeHeadings)) {
-					continue;
-				}
-				$content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
-			}
-		}
-	}	
+    foreach ($categoriesArray as $category) {
+        $categoryId = getCategoryIdFromUrl($category);
+        if (!empty($categoryId)) {
+            $categoryTitle = getCategoryTitleFromUrl($category);
+            $commonSequences = findFilteredCommonSequences($content, $categoryTitle);
+
+            $callback = function ($matches) use ($category, &$linkedPages) {
+                $text = $matches[0];
+                $lowerText = strtolower($text);
+                if (!in_array($lowerText, $linkedPages)) {
+                    $linkedPages[] = $lowerText;
+                    return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                } else {
+                    return $text;
+                }
+            };
+
+            $count = 0;
+            foreach ($commonSequences as $commonsequence) {
+                if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                    continue;
+                }
+                $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+            }
+        }
+    }
+
+    // Bold the money keyword
+    if (!empty($moneyKeyword)) {
+        $content = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $content, 1);
+    }
+
     return $content;
 }
 
@@ -351,7 +357,7 @@ function createPostTitle($postData)
 
 function createReadMoreButton($postData)
 {
-    return "<div class='astrodivider'><div class='astrodividermask'></div><span><i>&#10038;</i></span></div><a href='".rawUrls($postData['post_id'], $postData['post_title'], false)."' class='btn btn-success btn-md'>Read more</a>";
+    return "<a href='".rawUrls($postData['post_id'], $postData['post_title'], false)."' class='btn btn-success btn-md'>Read more</a>";
 }
 
 function createRobotsFile() {
@@ -378,7 +384,7 @@ function deleteAnyImages($postId) {
 
 function displayArticle($article) {
 	try {
-		libxml_use_internal_errors(true);
+		//libxml_use_internal_errors(true);
 		return $article;
 	} catch(Exception $e) {
         echo $e->getMessage();
@@ -476,14 +482,14 @@ function doTableCount($table) {
 	}	
 }
 
-function generateTableOfContents($htmlContent, $pagesArray, $categoriesArray) {
+function generateTableOfContents($htmlContent, $pagesArray, $categoriesArray, $moneyKeyword) {
     preg_match_all("/<h[1-6]>(.*?)<\/h[1-6]>/i", $htmlContent, $matches);
 
 	$tableOfContents = array();
 	foreach ($matches[1] as $heading) {
 		$tableOfContents[] = $heading;
 	}
-	$htmlContent = interlinkArticles($htmlContent, $pagesArray, $categoriesArray, $tableOfContents);
+	$htmlContent = interlinkArticles($htmlContent, $pagesArray, $categoriesArray, $tableOfContents, $moneyKeyword);
 
     $i = 1;
     foreach($matches[0] as $heading) {
@@ -581,7 +587,7 @@ function getGenericMeta($page, $postId, $metaType) {
     try {
         $replace = array("/", ".php");
         if ($postId == false && $page != "/page.php" && $page != "/category.php" ) {
-            if ($metaType == 'title') {
+            if ($metaType == 'title' || $metaType == 'description') {
                 $meta = urlFull() . " | " . ucwords(str_replace($replace, "", $page));
             } else {
                 $meta = urlFull();
@@ -594,25 +600,17 @@ function getGenericMeta($page, $postId, $metaType) {
                 $meta = $post['post_seo_description'];
             }
         } else if ($page == "/category.php") {
-			$category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
-			$meta = urlFull() . " | " . ucwords($category['category_name']);
-			if (isset($_GET['page'])) {
-				$meta .= " | Page {$_GET['page']}";
-			}
+            $category = DB::getInstance()->selectValues("SELECT * FROM `categories` WHERE `category_id`='{$_GET['categoryId']}'");
+            $meta = urlFull() . " | " . ucwords($category['category_name']);
+            if (isset($_GET['page'])) {
+                $meta .= " | Page {$_GET['page']}";
+            }
         } else if ($page == "/page.php") {
             $slug = explode("=", $_SERVER['REQUEST_URI']);
             $page = DB::getInstance()->selectValues("SELECT * FROM `pages` WHERE `page_slug`='{$slug[1]}'");
-            if ($metaType == 'title') {
-                $meta = urlFull() . " | " . ucwords($page['page_name']);
-            } else {
-                $meta = urlFull() . " | " . ucwords($page['page_name']);
-            }
+            $meta = urlFull() . " | " . ucwords($page['page_name']);
         } else {
-            if ($metaType == 'title') {
-                $meta = urlFull();
-            } else {
-                $meta = urlFull();
-            }
+            $meta = urlFull();
         }
         return $meta;
     } catch(Exception $e) {
@@ -792,7 +790,11 @@ function getUsersDetails($member) {
 function getValue($optionValue) {
 	try {
 		$option = DB::getInstance()->selectValues("SELECT * FROM `options` WHERE `option_name`='{$optionValue}'");
-		return $option['option_value'];	
+		if (!empty($option)) {
+			return $option['option_value'];
+		} else {
+			return null;
+		}
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
@@ -877,16 +879,18 @@ function mobileUrls($postName, $postId, $imageUrl, $imageAltText) {
     }
 }
 
-function pagination($page, $totalResults, $maxResults, $params = array())
-{
-    $totalPages = ceil($totalResults / $maxResults);
+function pagination($page, $totalResults, $maxResults, $params = array()) {
+    $totalPages = 0;
+    if (is_numeric($totalResults) && is_numeric($maxResults) && $maxResults > 0) {
+        $totalPages = ceil($totalResults / $maxResults);
+    }
     $urlTemplate = $_SERVER['PHP_SELF'] . '?page=%s';
     $paramsString = '';
-    if (count($params)) {
-        foreach ($params as $key => $value) {
-            $paramsString .= sprintf('&%s=%s', $key, urlencode($value));
-        }
-    }
+	if (is_array($params)) {
+		foreach ($params as $key => $value) {
+			$paramsString .= sprintf('&%s=%s', $key, urlencode($value));
+		}
+	}
 
     $loopFrom = ($page > 3)? $page - 3: 1;
     $loopTo = ($page < $totalPages -3)? $page + 3: $totalPages;
@@ -894,38 +898,37 @@ function pagination($page, $totalResults, $maxResults, $params = array())
     ?>
 
     <nav aria-label="...">
-		<ul class="pagination justify-content-center mt-3">
-			<li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
-				<a class="page-link" href="<?php echo sprintf($urlTemplate, 1) . $paramsString ?>">First</a>
-			</li>
-			<li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
-				<a class="page-link" href="<?php echo ($page == 1)? 'javascript:void(0)': sprintf($urlTemplate, $page - 1) . $paramsString ?>">Prev</a>
-			</li>
-			<?php if ($loopFrom > 1) { ?>
-				<li class="page-item">
-					<a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($page / 2)) . $paramsString ?>">...</a>
-				</li>
-			<?php } ?>
-			<?php for ($i = $loopFrom; $i <= $loopTo; $i++) { ?>
-				<li<?php if ($page == $i) { ?> class="page-item active"<?php } ?>>
-					<a class="page-link" href="<?php echo ($page == $i)? 'javascript:void(0)': sprintf($urlTemplate, $i) . $paramsString ?>"><?php echo $i ?></a>
-				</li>
-			<?php } ?>
-			<?php if ($loopTo < $totalPages) { ?>
-				<li class="page-item">
-					<a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($totalPages - $page / 2)) . $paramsString ?>">...</a>
-				</li>
-			<?php } ?>
-			<li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
-				<a class="page-link" href="<?php echo (($page == $totalPages) || !$totalPages)? 'javascript:void(0)': sprintf($urlTemplate, $page + 1) . $paramsString ?>">Next</a>
-			</li>
-			<li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
-				<a class="page-link" href="<?php echo sprintf($urlTemplate, $totalPages) . $paramsString ?>">Last</a>
-			</li>
-		</ul>
-	</nav>
-
-    <?php
+        <ul class="pagination justify-content-center mt-3">
+            <li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
+                <a class="page-link" href="<?php echo sprintf($urlTemplate, 1) . $paramsString ?>">First</a>
+            </li>
+            <li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
+                <a class="page-link" href="<?php echo ($page == 1)? 'javascript:void(0)': sprintf($urlTemplate, $page - 1) . $paramsString ?>">Prev</a>
+            </li>
+            <?php if ($loopFrom > 1) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($page / 2)) . $paramsString ?>">...</a>
+                </li>
+            <?php } ?>
+            <?php for ($i = $loopFrom; $i <= $loopTo; $i++) { ?>
+                <li<?php if ($page == $i) { ?> class="page-item active"<?php } ?>>
+                    <a class="page-link" href="<?php echo ($page == $i)? 'javascript:void(0)': sprintf($urlTemplate, $i) . $paramsString ?>"><?php echo $i ?></a>
+                </li>
+            <?php } ?>
+            <?php if ($loopTo < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($totalPages - $page / 2)) . $paramsString ?>">...</a>
+                </li>
+            <?php } ?>
+            <li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
+                <a class="page-link" href="<?php echo (($page == $totalPages) || !$totalPages)? 'javascript:void(0)': sprintf($urlTemplate, $page + 1) . $paramsString ?>">Next</a>
+            </li>
+            <li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
+                <a class="page-link" href="<?php echo sprintf($urlTemplate, $totalPages) .$paramsString ?>">Last</a>
+             </li>
+        </ul>
+    </nav>
+<?php
 }
 
 function performArticlePurge($articleId, $articleImage, $imageName) {
@@ -1297,7 +1300,7 @@ function updateRedirectClicks($redirectId) {
 	}
 }
 
-function uploadImage($imageName, $imageTemp, $imageAltTextName) {
+function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark=true) {
     try {
         if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
             stderr("Invalid <strong>file</strong> upload.");
@@ -1332,13 +1335,48 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName) {
                     return;
                 }
                 if (move_uploaded_file($imageTemp, $imagePath)) {
+                    if ($addWatermark) {
+                        // Add URL to the image
+                        $image = imagecreatefromstring(file_get_contents($imagePath));
+                        $color = imagecolorallocate($image, 255, 0, 0); // set text color to red
+                        $black = imagecolorallocate($image, 0, 0, 0); // set background color to black
+                        $font = "font/TiltWarp-Regular.ttf"; // path to your font file
+                        $fontSize = 16;
+                        $text = urlFull(); // your site URL
+                        $textWidth = imagettfbbox($fontSize, 0, $font, $text)[2] - imagettfbbox($fontSize, 0, $font, $text)[0];
+                        $textHeight = imagettfbbox($fontSize, 0, $font, $text)[3] - imagettfbbox($fontSize, 0, $font, $text)[5];
+                        $textX = (imagesx($image) - $textWidth) / 2;
+                        $textY = imagesy($image) - $textHeight - 10;
+
+						// Add background for the text
+						$padding = 10; // adjust the padding as needed
+						$backgroundX1 = $textX - $padding;
+						$backgroundY1 = $textY - $textHeight + 5 - $padding;
+						$backgroundX2 = $textX + $textWidth + $padding;
+						$backgroundY2 = $textY + 5 + $padding;
+						imagefilledrectangle($image, $backgroundX1, $backgroundY1, $backgroundX2, $backgroundY2, $black);
+
+						// Add a yellow border around the black background
+						$borderColor = imagecolorallocate($image, 255, 0, 0); // set border color to red
+						$borderThickness = 3; // adjust the border thickness as needed
+						for ($i = 0; $i < $borderThickness; $i++) {
+							imagerectangle($image, $backgroundX1 + $i, $backgroundY1 + $i, $backgroundX2 - $i, $backgroundY2 - $i, $borderColor);
+						}
+
+						// Add the text
+						imagettftext($image, $fontSize, 0, $textX, $textY, $color, $font, $text);
+
+						// Save and destroy the image
+						imagepng($image, $imagePath);
+						imagedestroy($image);
+                    }
                     return $imageNameFinal;
                 }
             }
-        }
-    } catch (Exception $e) {
-        echo $e->getMessage();
-    }
+		}	
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
 }
 
 function urlFull() {

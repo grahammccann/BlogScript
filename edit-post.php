@@ -67,7 +67,8 @@
 	
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));								
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);		
+							
 							$i = DB::getInstance()->insert(
 								'images',
 							[
@@ -107,7 +108,8 @@
 							'post_status' => $_POST['post_status'],
 							'post_date_updated' => date('Y-m-d H:i:s'),
 							'post_sticky' => $_POST['post_sticky'],
-							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",							
+							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",	
+							'post_will_show_ads' => $_POST['post_will_show_ads']					
 						]);
 						
 						if (file_exists("sitemap.xml")) {
@@ -156,11 +158,6 @@
 						<?= displayArticle($post['post_body']); ?>
 						</textarea>
 					</div>
-					
-					<div class="mb-3">
-						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
-						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="<?= $post['post_affiliate_url']; ?>">
-					</div>
 
 					<div class="mb-3">
 							<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
@@ -170,6 +167,11 @@
 					<div class="mb-3">
 						<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
 						<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required><?= $post['post_seo_description']; ?></textarea>
+					</div>
+					
+					<div class="mb-3">
+					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">SEO Featured Image ALT Text:</span></strong></label>
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" value="<?= $post['post_image_alt_text']; ?>" required>
 					</div>
 
 					<div class="mb-3">
@@ -209,7 +211,7 @@
 						<select id="post_sticky" name="post_sticky" class="form-select" required>
 						  <?php 
 							  $sticky = array("0" => "No", "1" => "Yes");
-							  foreach($sticky  as $key => $value) {
+							  foreach($sticky as $key => $value) {
 								  echo "<option value='{$key}' ";
 								  if ($key == $post['post_sticky']) { 
 									  echo " selected"; 
@@ -225,10 +227,26 @@
 					    <label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
 					    <input class="form-control" type="file" id="post_image" name="post_image">
 					</div>
-
+					
 					<div class="mb-3">
-					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
-					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" value="<?= $post['post_image_alt_text']; ?>" required>
+						<label for="post_will_show_ads" class="form-label"><strong>Show Ads:</strong></label>
+						<select id="post_will_show_ads" name="post_will_show_ads" class="form-select" required>
+						  <?php 
+							  $showAds = array("no" => "No", "yes" => "Yes");
+							  foreach($showAds as $key => $value) {
+								  echo "<option value='{$key}' ";
+								  if ($key == $post['post_will_show_ads']) { 
+									  echo " selected"; 
+								  } 							  										  
+								  echo ">{$value}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+					
+					<div class="mb-3">
+						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
+						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="<?= $post['post_affiliate_url']; ?>">
 					</div>
 				  
 					<input type="hidden" name="updateId" value="<?= $_GET['postId']; ?>">	

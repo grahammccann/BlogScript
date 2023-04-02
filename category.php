@@ -36,7 +36,7 @@
 		$posts = DB::getInstance()->select("
 			SELECT  *
 			FROM    `posts`
-			WHERE `post_category_id`='{$_GET['categoryId']}'
+			WHERE `post_category_id`='{$categoryId}'
 			AND `post_status`='published'
 			ORDER   BY `post_date` DESC
 			LIMIT   :from, :max_results",
@@ -69,9 +69,7 @@
 		$params['categoryId'] = $_GET['categoryId'];
 		$pagination['categoryId'] = $_GET['categoryId'];		
 	}
-	
 	?>
-	
 	<div class="row">
 	
 	    <!-- posts -->
@@ -97,9 +95,8 @@
 				?>
 
 				</div>
-			    <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max, $pagination) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
+			    <div class="card-footer mt-3"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $post['post_views']; ?></span></small></div>
 			</div>
-			
 			<?php } ?>	
 			
 		</div>
@@ -109,7 +106,7 @@
 		
 			<?php 
 			
-			if (!empty(getValue("about_us_text"))) { 
+			if (!empty(getValue("about_us_header")) && !empty(getValue("about_us_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-about-us.php");  
 				
@@ -135,7 +132,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_1"))) { 
+			if (!empty(getValue("sidebar_cta_1_header")) && !empty(getValue("sidebar_cta_1_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-1.php");  
 				
@@ -145,7 +142,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_2"))) { 
+			if (!empty(getValue("sidebar_cta_2_header")) && !empty(getValue("sidebar_cta_2_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-2.php");  
 				

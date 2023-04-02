@@ -48,7 +48,7 @@
 
 						if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
 							
                             if (!empty($imageName)) {
 								
@@ -69,7 +69,7 @@
 
                         if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {
 							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));
+                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), false);
 							
                             if (!empty($imageName)) {
 								

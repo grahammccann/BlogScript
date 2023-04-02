@@ -62,7 +62,8 @@
 						
 						if (!empty($_FILES['post_image']['name'])) {
 							
-                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']));	
+                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);	
+							
 							DB::getInstance()->insert(
 								'images',
 							[
@@ -90,6 +91,7 @@
 							'post_status' => $_POST['post_status'],
 							'post_source_url' => urlFull(),
 							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",
+							'post_will_show_ads' => $_POST['post_will_show_ads'],
 							'post_date' => date('Y-m-d H:i:s')
 						]);
 						
@@ -151,11 +153,6 @@
 						<label for="post_body" class="form-label"><strong>Body:</strong></label>
 						<textarea class="form-control" id="summernote" name="post_body" rows="15" required></textarea>
 					</div>
-					
-					<div class="mb-3">
-						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
-						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="...">
-					</div>
 
 					<div class="mb-3">
 						<label for="post_seo_title" class="form-label"><strong><span class="text-success">SEO META Title:</span></strong></label>
@@ -165,6 +162,11 @@
 					<div class="mb-3">
 						<label for="post_seo_description" class="form-label"><strong><span class="text-success">SEO META Description:</span></strong></label>
 						<textarea class="form-control" id="post_seo_description" name="post_seo_description" rows="3" required></textarea>
+					</div>
+					
+					<div class="mb-3">
+					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">SEO Featured Image ALT Text:</span></strong></label>
+					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" required>
 					</div>
 
 					<div class="mb-3">
@@ -195,10 +197,22 @@
 					    <label for="post_image" class="form-label"><strong>Featured Image:</strong></label>
 					    <input class="form-control" type="file" id="post_image" name="post_image">
 					</div>
-
+					
 					<div class="mb-3">
-					    <label for="post_image_alt_text" class="form-label"><strong><span class="text-success">Featured Image ALT Text:</span></strong></label>
-					    <input type="text" class="form-control" id="post_image_alt_text" name="post_image_alt_text" required>
+						<label for="post_will_show_ads" class="form-label"><strong>Show Ads:</strong></label>
+						<select id="post_will_show_ads" name="post_will_show_ads" class="form-select" required>
+						  <?php 
+							  $showAds = array("no" => "No", "yes" => "Yes");
+							  foreach($showAds as $key => $value) {
+								  echo "<option value='{$key}'>{$value}</option>";
+							  } 
+						  ?>
+						</select>
+					</div>
+					
+					<div class="mb-3">
+						<label for="post_affiliate_url" class="form-label"><strong>Affiliate URL:</strong></label>
+						<input type="text" class="form-control" id="post_affiliate_url" name="post_affiliate_url" value="...">
 					</div>
 
 					<button type="submit" name="submitPost" class="btn btn-success float-end"><i class="fas fa-plus"></i> New Post</button>
