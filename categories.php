@@ -64,20 +64,22 @@
 				<table class="table table-striped" id="tableCategories" width="100%" cellspacing="0">	  
 				  <thead>
 					<tr>
-					  <th>ID</th>
-					  <th>Name</th>
-					  <th>Added</th>
-					  <th>&nbsp;</th>
-					  <th>&nbsp;</th>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Posts</th>
+						<th>Added</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
 					</tr>
 				  </thead>
 				  <tfoot>
 					<tr>
-					  <th>ID</th>
-					  <th>Name</th>
-					  <th>Added</th>
-					  <th>&nbsp;</th>
-					  <th>&nbsp;</th>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Posts</th>
+						<th>Added</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
 					</tr>
 				  </tfoot>
 				  <tbody>	  
@@ -86,6 +88,7 @@
 							<tr>
 							    <td><?= $category['category_id']; ?></td>
 								<td><?= seoFriendlyUrls($category['category_id'], getCategoryName($category['category_id']), true, false); ?></td>
+								<td><?= countPostsInCategories($category['category_id']); ?></td>
 								<td><?= date("m.d.y", strtotime($category['category_date'])); ?></td>
 								<td class="text-center"><a href="edit-category.php?categoryId=<?= $category['category_id']; ?>" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="fas fa-edit"></i></a></td>
 								<td class="text-center"><a href="categories.php?delete=1&amp;categoryId=<?= $category['category_id']; ?>" onClick="return confirm('Delete the category?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>

@@ -102,3 +102,19 @@ footer {
 .content-container {
 	flex: 1;
 }
+
+.fab.fa-twitter {
+    color: #55acee;
+}
+
+.fab.fa-facebook {
+    color: #3b5998;
+}
+
+.fab.fa-instagram {
+    color: #ac2bac;
+}
+
+.icon-container {
+    word-spacing: -1em;
+}

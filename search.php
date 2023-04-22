@@ -67,20 +67,18 @@
 			
 			?>
 		
-			<div class="card">
-				<div class="card-header" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; background-color: #f5f5f5; padding: 1rem;">
-				  <small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small>
+			<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+				<div class="card-header bg-primary text-white" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; padding: 1rem;">
+					<small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><?= getPostersUsername($post['post_member_id']); ?></strong>.</small>
 				</div>
-				<div class="card-body">	
-
-				<?php	  			  
-
-					include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
-
-				?>
-
+				<div class="card-body">    
+					<?php                          
+						include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
+					?>
 				</div>
-			    <div class="card-footer mt-3"><?= ($count == $max) ? pagination($page, $total, $max, $pagination) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?></div>
+				<div class="card-footer mt-3 bg-primary text-white" style="font-size: 14px;">
+					<?= ($count == $max) ? pagination($page, $total, $max, $pagination) : "<small><span class=\"float-end\"><i class=\"fas fa-eye\"></i> {$post['post_views']}</span></small>"; ?>
+				</div>
 			</div>
 			
 			<?php } ?>	

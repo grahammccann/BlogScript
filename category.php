@@ -13,13 +13,13 @@
 
 	?>
 	
-	<div class="card">
+	<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
 	  <div class="card-body">
 		<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-		  <ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="<?= urlFull(); ?>" class="text-decoration-none"><i class="fas fa-home"></i></a></li>
-			<li class="breadcrumb-item" aria-current="page"><?= seoFriendlyUrls($category['category_id'], getCategoryname($category['category_id']), true, false); ?></li>
-		  </ol>
+			<ol class="breadcrumb" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px;">
+			    <li class="breadcrumb-item"><a href="<?= urlFull(); ?>" style="color: #0d6efd;"><i class="fas fa-home"></i></a></li>
+			    <li class="breadcrumb-item active" aria-current="page"><?= seoFriendlyUrls($category['category_id'], getCategoryname($category['category_id']), true, false); ?></li>
+		    </ol>
 		</nav>
 	  </div>
 	</div>
@@ -82,21 +82,16 @@
 			
 			?>
 		
-			<div class="card">
-				<div class="card-header" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; background-color: #f5f5f5; padding: 1rem;">
-				  <small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small>
+			<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+				<div class="card-header" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; background-color: transparent; padding: 1rem;">
+					<small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($post['post_date'])); ?></strong> by <strong><span class="text-success"><?= getPostersUsername($post['post_member_id']); ?></span></strong>.</small>
 				</div>
-				<div class="card-body">	
-
-				<?php	  			  
-
-					include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php");
-
-				?>
-
+				<div class="card-body">
+					<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-post-structure.php"); ?>
 				</div>
-			    <div class="card-footer mt-3"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $post['post_views']; ?></span></small></div>
+				<div class="card-footer mt-3" style="font-size: 14px; background-color: transparent;"><small><span class="float-end"><i class="fas fa-eye"></i><?= $post['post_views']; ?></span></small></div>
 			</div>
+		
 			<?php } ?>	
 			
 		</div>

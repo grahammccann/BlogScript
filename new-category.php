@@ -60,7 +60,7 @@
 						
 					} else {
 						
-						DB::getInstance()->insert(
+						$i = DB::getInstance()->insert(
 							'categories',
 						[
 							'category_name' => $_POST['category_name'],
@@ -75,7 +75,7 @@
 				 
 				 ?>
 				
-				 <form action="new-category.php" method="post">
+				<form action="new-category.php" method="post">
 				 
 				  <div class="mb-3">
 					<label for="category_name" class="form-label"><strong>Name:</strong></label>

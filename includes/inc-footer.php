@@ -2,8 +2,8 @@
 
 <div id="resultsForSubscription" class="pt-3"></div>
 
-<div class="newsletter-container" style="border: 2px solid #eee; padding: 20px; font-family: Arial, sans-serif; font-size: 16px;">
-    <div class="container" style="background-color: #fff; border: 1px solid #eee; padding: 20px;">
+<div class="newsletter-container" style="border: 2px solid #eee; padding: 20px; font-family: Arial, sans-serif; font-size: 16px; background-color: #f5f5f5;">
+    <div class="container" style="background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         <div class="row">
             <div class="col-md-6">
                 <h4 style="margin-top: 0; font-weight: bold; font-size: 24px;">Subscribe to Our Newsletter</h4>
@@ -11,12 +11,12 @@
             </div>
             <div class="col-md-6">
                 <form class="form-inline" method="post" id="newsletter-form">
-                    <div class="form-group">
+                    <div class="form-group" style="width: 100%;">
                         <label for="newsletter-email" class="sr-only">Email address</label>
-                        <div class="input-group">
-                            <input type="email" class="form-control" id="newsletter-email" placeholder="Enter your email" required>
+                        <div class="input-group" style="width: 100%;">
+                            <input type="email" class="form-control" id="newsletter-email" placeholder="Enter your email" required style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
                             <div class="input-group-append">
-                                <button type="submit" id="submitSubscribe" class="btn btn-primary">Subscribe</button>
+                                <button type="submit" id="submitSubscribe" class="btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">Subscribe</button>
                             </div>
                         </div>
                     </div>
@@ -48,26 +48,29 @@ $(document).ready(function(){
 </script> 
 
 <footer class="pt-3 my-3 text-muted border-top text-center">
-  <p class="text-center">Copyright &copy; <?= date('Y'); ?> | <a href="<?= urlFull(); ?>" class="text-decoration-none"><?= urlFull(); ?></a> | <a href="<?= urlFull(); ?>rss.php" class="text-decoration-none"><i class="fa-solid fa-square-rss" style="color: orange;"></i></a> <?= getValue("homepage_hide_login_link") != "1" ? "" : '| <a href="'.urlFull().'login.php" class="text-decoration-none"><i class="fas fa-sign-in-alt"></i></a>'; ?></p>
-  <p class="text-center">
-    <?php if (!empty(getValue("footer_twitter"))) { ?>
-      <a class="btn btn-primary border-0" style="background-color: #55acee;" href="<?= getValue("footer_twitter"); ?>" role="button"><i class="fab fa-twitter me-2"></i>Twitter</a>  
-    <?php } ?>
+	<p class="text-center">Copyright &copy; <?= date('Y'); ?> | <a href="<?= urlFull(); ?>" class="text-decoration-none"><?= urlFull(); ?></a> | <a href="<?= urlFull(); ?>rss.php" class="text-decoration-none" aria-label="RSS Feed"><i class="fa-solid fa-square-rss" style="color: orange;"></i></a> <?= getValue("homepage_hide_login_link") != "1" ? "" : '| <a href="'.urlFull().'login.php" class="text-decoration-none" aria-label="Login"><i class="fas fa-sign-in-alt"></i></a>'; ?></p>
+	<p class="text-center">
+	<div class="icon-container">
+	  <?php if (!empty(getValue("footer_twitter"))) { ?>
+		<a href="<?= getValue("footer_twitter"); ?>" role="button">
+		  <i class="fab fa-twitter fa-2x me-3"></i>
+		</a>
+	  <?php } if (!empty(getValue("footer_meta"))) { ?>
+		<a href="<?= getValue("footer_meta"); ?>" role="button">
+		  <i class="fab fa-facebook fa-2x me-3"></i>
+		</a>
+	  <?php } if (!empty(getValue("footer_instagram"))) { ?>
+		<a href="<?= getValue("footer_instagram"); ?>" role="button">
+		  <i class="fab fa-instagram fa-2x me-3"></i>
+		</a>
+	  <?php } ?>
+	</div>
+	</p>
+	<p><?= !(empty(getValue("footer_amazon_disclosure_text"))) ? getValue("footer_amazon_disclosure_text") : ""; ?></p>
 
-    <?php if (!empty(getValue("footer_meta"))) { ?>
-      <a class="btn btn-primary border-0" style="background-color: #3b5998;" href="<?= getValue("footer_meta"); ?>" role="button"><i class="fab fa-facebook-f me-2"></i>Facebook</a> 
-    <?php } ?>   
-
-    <?php if (!empty(getValue("footer_instagram"))) { ?>
-      <a class="btn btn-primary border-0" style="background-color: #ac2bac;" href="<?= getValue("footer_instagram"); ?>" role="button"><i class="fab fa-instagram me-2"></i>Instagram</a> 
-    <?php } ?>  
-  </p>
-
-  <p><?= !(empty(getValue("footer_amazon_disclosure_text"))) ? getValue("footer_amazon_disclosure_text") : ""; ?></p>
-
-  <?php if (!empty(getValue("bottom_link_1"))) { ?>
-    <p class="text-center"><?= getValue("bottom_link_1"); ?></p>
-  <?php } ?>
+	<?php if (!empty(getValue("bottom_link_1"))) { ?>
+	<p class="text-center"><?= getValue("bottom_link_1"); ?></p>
+	<?php } ?>
 </footer>
 
 </div>

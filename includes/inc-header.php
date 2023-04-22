@@ -58,8 +58,8 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
   
   <div class="container-fluid">     
   
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-      <i class="fas fa-bars" style="color: #fff"></i>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-label="Toggle navigation">
+        <i class="fas fa-bars" style="color: #fff"></i>
     </button>    
 	
     <div class="collapse navbar-collapse w-100" id="collapsibleNavbar">

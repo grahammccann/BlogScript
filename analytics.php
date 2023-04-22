@@ -36,6 +36,43 @@
 		</div>	
 		
 		<div class="col-md-9">
+		
+			<?php
+			
+			if (isset($_POST['submitIPRange'])) {
+				
+					
+				$i = DB::getInstance()->insert(
+					'ips',
+				[
+					'ip_range' => $_POST['ip_range'],
+					'ip_date' => date('Y-m-d H:i:s')
+				]);
+				
+				stdmsg("A new <strong>IP Range</strong> has been <strong>added</strong> and will be blocked.");
+				
+			}
+			
+			?>
+			
+			<div class="card">
+			  <div class="card-header"><i class="fa-solid fa-computer-mouse"></i> IP Range</div>
+                <div class="card-body">
+			
+				<form action="analytics.php" method="post">
+				 
+				  <div class="mb-3">
+					<label for="category_name" class="form-label"><strong>IP Range:</strong></label>
+					<input type="text" class="form-control" id="ip_range" name="ip_range" required>
+				  </div>
+				  
+				  <button type="submit" name="submitIPRange" class="btn btn-success float-end"><i class="fas fa-plus"></i> IP Range</button>
+				
+				</form>  	
+
+				</div>	
+		    </div>		
+	          	
 			<div class="card">
 			  <div class="card-header"><i class="fa-solid fa-computer-mouse"></i> Clicks</div>
                 <div class="card-body">

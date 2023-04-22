@@ -304,6 +304,16 @@ function cleanUpImages() {
 	return DB::getInstance()->select("SELECT * FROM `images`");
 }
 
+function countPostsInCategories($categoryId) {
+    try {
+        $count = DB::getInstance()->select("SELECT COUNT(*) as `count` FROM `posts` WHERE `post_category_id`='{$categoryId}'");
+        return (int)$count[0]['count'];
+    } catch (Exception $e) {
+        stderr($e->getMessage());
+    }   
+}
+
+
 function createSitemap() {
     try {
         $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
@@ -363,7 +373,7 @@ function createReadMoreButton($postData)
 function createRobotsFile() {
   try {
     $robots = fopen("robots.txt", "a") or die("Unable to open file!");
-    $lines = ["User-agent: *", "Disallow:", "Disallow: images/", "Disallow: includes/", "Disallow: uploads/", "Sitemap: ".urlFull()."sitemap.xml"];
+    $lines = ["User-agent: *", "Disallow:", "Disallow: /images/", "Disallow: /includes/", "Disallow: /uploads/", "Sitemap: ".urlFull()."sitemap.xml"];
     foreach ($lines as $line) {
 		fwrite($robots, $line . "\n");
 	}
@@ -401,52 +411,6 @@ function displayCTAImage($affiliateUrl) {
 	} catch(Exception $e) {
         echo $e->getMessage();
 	}	
-}
-
-function displayProsAndCons($articleBody) {
-  $pros = array();
-  $cons = array();
-
-  preg_match_all('/(?<=Pros:|Pros\s).*?(?=Cons:|Cons\s|$)/is', $articleBody, $matches);
-
-  if (!empty($matches[0][0])) {
-    $pros = explode(",", $matches[0][0]);
-  }
-
-  if (!empty($matches[0][1])) {
-    $cons = explode(",", $matches[0][1]);
-  }
-
-  echo "<table style='border: 1px solid black;'>";
-  echo "<tr>";
-  echo "<th style='border: 1px solid black;'>Pros</th>";
-  echo "<th style='border: 1px solid black;'>Cons</th>";
-  echo "</tr>";
-  
-  $maxRows = max(count($pros), count($cons));
-
-  for ($i = 0; $i < $maxRows; $i++) {
-    echo "<tr>";
-    echo "<td style='border: 1px solid black; color: green; vertical-align: top; padding: 5px;'>";
-
-    if (isset($pros[$i])) {
-      echo "<ul style='margin: 0px;'>";
-      echo "<li>".$pros[$i]."</li>";
-      echo "</ul>";
-    }
-    echo "</td>";
-    
-    echo "<td style='border: 1px solid black; color: red; vertical-align: top; padding: 5px;'>";
-
-    if (isset($cons[$i])) {
-      echo "<ul style='margin: 0px;'>";
-      echo "<li>".$cons[$i]."</li>";
-      echo "</ul>";
-    }
-    echo "</td>";
-    echo "</tr>";
-  }
-  echo "</table>";
 }
 
 function doesPostContainAnInternalLink($postBody) {
@@ -1300,7 +1264,118 @@ function updateRedirectClicks($redirectId) {
 	}
 }
 
-function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark=true) {
+function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = true) {
+    try {
+        if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
+            stderr("Invalid <strong>file</strong> upload.");
+            return;
+        }
+
+        $validFormats = array("jpg", "png", "gif", "jpeg");
+        $imageNameFinal = "";
+        if (strlen($imageName) > 0) {
+            list($txt, $ext) = explode(".", $imageName);
+            if (in_array(strtolower($ext), $validFormats)) {
+                $size = filesize($imageTemp);
+                $maxFileSize = 5000000; // maximum file size in bytes (5MB)
+                if ($size > $maxFileSize) {
+                    stderr("File size must be <strong>less</strong> than " . $maxFileSize / 1000000 . "MB.");
+                    return;
+                }
+                $type = exif_imagetype($imageTemp);
+                if (!$type || !in_array($type, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF])) {
+                    stderr("Invalid file type. Only <strong>images</strong> are allowed.");
+                    return;
+                }
+                $randomInt = rand();
+                $imageAltText = str_replace(" ", "-", $imageAltTextName);
+                $imageNameFinal = $imageAltText . "-" . $randomInt . "." . $ext;
+                $imagePath = "uploads/" . $imageNameFinal;
+                if (!is_dir("uploads")) {
+                    mkdir("uploads");
+                }
+                if (file_exists($imagePath)) {
+                    stdmsg("The <strong>image</strong> file already exists.");
+                    return;
+                }
+
+                // Resize and compress the image
+                $maxWidth = 1200; // Set the maximum width you want for your images
+                $maxHeight = 800; // Set the maximum height you want for your images
+                $quality = 80; // Set the quality of the resized image (1-100, 100 being the best)
+
+                $src = imagecreatefromstring(file_get_contents($imageTemp));
+                list($width, $height) = getimagesize($imageTemp);
+                $ratio = min($maxWidth / $width, $maxHeight / $height);
+                $newWidth = ceil($width * $ratio);
+                $newHeight = ceil($height * $ratio);
+
+                $dst = imagecreatetruecolor($newWidth, $newHeight);
+                imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+                // Save the resized image
+                switch ($type) {
+                    case IMAGETYPE_JPEG:
+                        imagejpeg($dst, $imageTemp, $quality);
+                        break;
+                    case IMAGETYPE_PNG:
+                        imagepng($dst, $imageTemp, $quality / 10);
+                        break;
+                    case IMAGETYPE_GIF:
+                        imagegif($dst, $imageTemp);
+                        break;
+                }
+
+                imagedestroy($src);
+                imagedestroy($dst);
+
+                if (move_uploaded_file($imageTemp, $imagePath)) {
+                    if ($addWatermark) {
+                        // Add URL to the image
+                        $image = imagecreatefromstring(file_get_contents($imagePath));
+                        $color = imagecolorallocate($image, 255, 0, 0); // set text color to red
+                        $black = imagecolorallocate($image, 0, 0, 0); // set background color to black
+                        $font = "font/TiltWarp-Regular.ttf"; // path to your font file
+                        $fontSize = 16;
+                        $text = urlFull(); // your site URL
+                        $textWidth = imagettfbbox($fontSize, 0, $font, $text)[2] - imagettfbbox($fontSize, 0, $font, $text)[0];
+                        $textHeight = imagettfbbox($fontSize, 0, $font, $text)[3] - imagettfbbox($fontSize, 0, $font, $text)[5];
+                        $textX = (imagesx($image) - $textWidth) / 2;
+                        $textY = imagesy($image) - $textHeight - 10;
+
+						// Add background for the text
+						$padding = 10; // adjust the padding as needed
+						$backgroundX1 = $textX - $padding;
+						$backgroundY1 = $textY - $textHeight + 5 - $padding;
+						$backgroundX2 = $textX + $textWidth + $padding;
+						$backgroundY2 = $textY + 5 + $padding;
+						imagefilledrectangle($image, $backgroundX1, $backgroundY1, $backgroundX2, $backgroundY2, $black);
+
+						// Add a yellow border around the black background
+						$borderColor = imagecolorallocate($image, 255, 0, 0); // set border color to red
+						$borderThickness = 3; // adjust the border thickness as needed
+						for ($i = 0; $i < $borderThickness; $i++) {
+							imagerectangle($image, $backgroundX1 + $i, $backgroundY1 + $i, $backgroundX2 - $i, $backgroundY2 - $i, $borderColor);
+						}
+
+						// Add the text
+						imagettftext($image, $fontSize, 0, $textX, $textY, $color, $font, $text);
+
+						// Save and destroy the image
+						imagepng($image, $imagePath);
+						imagedestroy($image);
+                    }
+                    return $imageNameFinal;
+                }
+            }
+        }		
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}
+	
+}
+
+/* function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark=true) {
     try {
         if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
             stderr("Invalid <strong>file</strong> upload.");
@@ -1377,7 +1452,7 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark=tr
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
-}
+} */
 
 function urlFull() {
 	try {
