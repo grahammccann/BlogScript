@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 20, 2023 at 06:43 PM
+-- Generation Time: May 02, 2023 at 06:39 PM
 -- Server version: 5.7.39-0ubuntu0.18.04.2
 -- PHP Version: 7.4.30
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `admin_site.com`
+-- Database: `admin_we-review-stuff.com`
 --
 
 -- --------------------------------------------------------
@@ -62,6 +62,18 @@ CREATE TABLE `images` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ips`
+--
+
+CREATE TABLE `ips` (
+  `ip_id` bigint(11) NOT NULL,
+  `ip_range` varchar(15) NOT NULL,
+  `ip_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `members`
 --
 
@@ -80,7 +92,19 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
-(2, 'admin', 'Milkybar12022', 'Milkybar12022', 'graham23s@hotmail.com', 'yes', '2023-01-08 09:21:15');
+(2, 'Jessica', 'Milkybar12022', 'Milkybar12022', 'graham23s@hotmail.com', 'yes', '2023-02-26 09:08:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletters`
+--
+
+CREATE TABLE `newsletters` (
+  `newsletter_id` bigint(11) NOT NULL,
+  `newsletter_email` varchar(150) NOT NULL,
+  `newsletter_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -102,27 +126,33 @@ CREATE TABLE `options` (
 
 INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_description`, `option_date`) VALUES
 (1, 'homepage_title', '', 'This sets the <title></title> tag value on the homepage.', '2021-05-16 15:47:56'),
-(2, 'homepage_description', '', 'This sets the meta description on the homepage.', '2021-05-16 17:38:44'),
+(2, 'homepage_description', '', 'This sets the "<meta description>" on the homepage.', '2021-05-16 17:38:44'),
 (3, 'homepage_pagination', '5', 'This sets the number of articles to show on the homepage.', '2021-10-18 21:55:15'),
-(4, 'homepage_show_categories', '1', 'This sets if the categories section will show. (true or false)', '2021-10-23 20:40:35'),
-(5, 'homepage_about', '', 'This sets the description on what your blog is about.', '2021-10-23 20:55:27'),
-(6, 'homepage_hide_login_link', '1', 'This sets if the admin login link on the main page footer shows to everyone or not. (true or false)', '2021-10-29 20:22:40'),
-(7, 'footer_amazon_disclosure_text', '<strong>site.com</strong> is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.', 'This sets the text to be displayed to comply with Amazon Associates.', '2021-10-31 09:00:19'),
-(8, 'footer_twitter', '', 'This sets your twitter account on the footer.', '2021-10-31 09:04:15'),
-(9, 'footer_meta', '', 'This sets your meta (aka facebook) account on the footer.', '2021-10-31 09:06:06'),
-(10, 'footer_instagram', '', 'This sets your instagram account on the footer.', '2021-10-31 09:23:11'),
-(11, 'site_admin_email', 'contact@site.com', 'This sets the main email associated with your site.', '2022-09-20 20:54:07'),
-(12, 'ads_post_top', '', 'This sets the ad code at the top of the post page.', '2022-10-09 15:24:42'),
+(4, 'homepage_show_categories', '0', 'This sets if the categories section will show on the right hand side. (true=1 or false=0)', '2021-10-23 20:40:35'),
+(5, 'homepage_about', '', 'This sets the description of what your blog is about.', '2021-10-23 20:55:27'),
+(6, 'homepage_hide_login_link', '1', 'This sets if the admin login link on the main page footer shows to everyone or not. (true=1 or false=0)', '2021-10-29 20:22:40'),
+(7, 'footer_amazon_disclosure_text', '', 'This sets the text to comply with Amazon Associates, displayed on the footer.', '2021-10-31 09:00:19'),
+(8, 'footer_twitter', 'https://twitter.com/ReviewStuff100', 'This sets your Twitter account URL link on the footer.', '2021-10-31 09:04:15'),
+(9, 'footer_meta', 'https://www.facebook.com/ReviewStuff100/', 'This sets your meta (aka Facebook) account URL link on the footer.', '2021-10-31 09:06:06'),
+(10, 'footer_instagram', '', 'This sets your instagram account URL link on the footer.', '2021-10-31 09:23:11'),
+(11, 'site_admin_email', 'contact@we-review-stuff.com', 'This sets the main contact email associated with your site normally contact@site.com.', '2022-09-20 20:54:07'),
+(12, 'ads_post_top', '', 'This sets the ad code at the top of every post page.', '2022-10-09 15:24:42'),
 (13, 'category_style_icon', '', 'This sets a custom icon next to each category name.', '2022-12-18 09:59:54'),
 (14, 'google_adsense', '', 'This sets the AdSense code needed by Google in the <head></head> tags.', '2023-01-19 10:58:58'),
 (15, 'google_analytics_property_id', '', 'This sets the Google Analytics property ID, only enter a value if you want it to work else leave it blank.', '2023-01-21 21:46:26'),
-(16, 'sidebar_cta_1', '', 'This sets a new sidebar (#1) where you can add an Amazon product or banner ad.', '2023-01-29 10:59:06'),
-(17, 'sidebar_cta_1_text', '', 'This sets the text and awesome font icon above your sidebar (#1) on the card header.', '2023-01-29 11:17:34'),
-(18, 'sidebar_cta_2', '', 'This sets a new sidebar (#2) where you can add an Amazon product or banner ad.', '2023-01-29 11:29:50'),
-(19, 'sidebar_cta_2_text', '', 'This sets the text and awesome font icon above your sidebar (#1) on the card header.', '2023-01-29 11:31:13'),
-(20, 'homepage_introduction', '', 'This sets introduction text on your homepage as to what your website is about.', '2023-01-29 12:05:06'),
-(21, 'homepage_introduction_header_text', '', 'This sets the header of the introduction card, add a nice icon and a welcoming message.', '2023-01-29 12:20:16'),
-(22, 'twitter_username', '', 'This sets your Twitter username which is used by the Twitter cards feature.', '2023-02-09 21:38:34');
+(16, 'sidebar_cta_1_header', '', 'This sets the text and awesome font icon above your sidebar (#1) on the card header.', '2023-01-29 10:59:06'),
+(17, 'sidebar_cta_1_text', '', 'This sets a new sidebar body (#1) where you can add an Amazon product or banner ad.', '2023-01-29 11:17:34'),
+(18, 'sidebar_cta_2_header', '', 'This sets the text and awesome font icon above your sidebar (#2) on the card header.', '2023-01-29 11:29:50'),
+(19, 'sidebar_cta_2_text', '', 'This sets a new sidebar body (#2) where you can add an Amazon product or banner ad.', '2023-01-29 11:31:13'),
+(20, 'homepage_introduction_header', '', 'This sets the header of the introduction card, add a nice icon and a welcoming message or just a hero image.', '2023-01-29 12:05:06'),
+(21, 'homepage_introduction_header_text', '', 'This sets introduction body text add a hero image or text to your main page above the fold.', '2023-01-29 12:20:16'),
+(22, 'twitter_username', '', 'This sets your Twitter username which is used by the Twitter cards feature.', '2023-02-09 21:38:34'),
+(23, 'ip_edit', '', 'This sets the IP address of who can edit posts: ip1|ip2|etc for multiple IPs.', '2023-02-23 08:21:55'),
+(24, 'about_us_header', '', 'This sets the about us header. It can just be \"About Us\", then add a description in the body below.', '2023-02-25 21:02:18'),
+(25, 'about_us_text', '', 'This sets the body of your \"About Us\" card. Add an image if possible.', '2023-02-25 21:03:41'),
+(26, 'bottom_link_1', '', 'This sets any text or links you want to put at your website\'s bottom, this is below the footer (#1).', '2023-02-28 19:09:35'),
+(27, 'recaptcha2_site_key', '', 'This sets up your ReCaptcha2 site key to be used on your website.', '2023-03-12 14:35:56'),
+(28, 'recaptcha2_secret_key', '', 'This sets up your ReCaptcha2 secret key to be used on your website.', '2023-03-12 14:36:32');
 
 -- --------------------------------------------------------
 
@@ -159,6 +189,8 @@ CREATE TABLE `posts` (
   `post_views` bigint(20) NOT NULL DEFAULT '0',
   `post_sticky` enum('0','1') NOT NULL,
   `post_source_url` longtext NOT NULL,
+  `post_affiliate_url` longtext NOT NULL,
+  `post_will_show_ads` enum('no','yes') NOT NULL,
   `post_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -199,10 +231,22 @@ ALTER TABLE `images`
   ADD PRIMARY KEY (`image_id`);
 
 --
+-- Indexes for table `ips`
+--
+ALTER TABLE `ips`
+  ADD PRIMARY KEY (`ip_id`);
+
+--
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
   ADD PRIMARY KEY (`member_id`);
+
+--
+-- Indexes for table `newsletters`
+--
+ALTER TABLE `newsletters`
+  ADD PRIMARY KEY (`newsletter_id`);
 
 --
 -- Indexes for table `options`
@@ -236,42 +280,49 @@ ALTER TABLE `shorteners`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `category_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `clicks`
 --
 ALTER TABLE `clicks`
-  MODIFY `click_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=359;
+  MODIFY `click_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `image_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+--
+-- AUTO_INCREMENT for table `ips`
+--
+ALTER TABLE `ips`
+  MODIFY `ip_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `member_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `member_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+--
+-- AUTO_INCREMENT for table `newsletters`
+--
+ALTER TABLE `newsletters`
+  MODIFY `newsletter_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `options`
 --
 ALTER TABLE `options`
-  MODIFY `option_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `option_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `page_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `page_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `post_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 --
 -- AUTO_INCREMENT for table `shorteners`
 --
 ALTER TABLE `shorteners`
-  MODIFY `shortener_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  MODIFY `shortener_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
