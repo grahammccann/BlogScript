@@ -1,7 +1,9 @@
 <?php
 
-function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings, $moneyKeyword) {
+function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings, $moneyKeyword, $shortenersArray) {
     $linkedPages = array();
+    $linkedShorteners = array();
+	
     foreach ($pagesArray as $page) {
         $pageId = getPageIdFromUrl($page);
         if (!empty($pageId)) {
@@ -55,13 +57,57 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
             }
         }
     }
+	
+    foreach ($shortenersArray as $shortener) {
+		$shortenerTitle = getShortenerTitleFromUrl($shortener);
+		$commonSequences = findExactCommonSequences($content, $shortenerTitle);
 
+        $callback = function ($matches) use ($shortener, &$linkedShorteners) {
+            $text = $matches[0];
+            $lowerText = strtolower($text);
+            if (!in_array($lowerText, $linkedShorteners)) {
+                $linkedShorteners[] = $lowerText;
+                return '<a href="' . $shortener . '" class="text-decoration-none" style="font-weight: normal; color: red;"><strong>' . $text . '</strong></a>';
+            } else {
+                return $text;
+            }
+        };
+
+        $count = 0;
+        foreach ($commonSequences as $commonsequence) {
+            if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                continue;
+            }
+            $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+        }
+    }
+	
     // Bold the money keyword
     if (!empty($moneyKeyword)) {
         $content = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $content, 1);
     }
 
     return $content;
+}
+
+function findExactCommonSequences($content, $title) {
+    $commonSequences = array();
+    $words1 = preg_split('/\s+/', $content);
+    $words2 = preg_split('/\s+/', $title);
+    $len1 = count($words1);
+    $len2 = count($words2);
+    for ($i = 0; $i < $len1; $i++) {
+        for ($j = 0; $j < $len2; $j++) {
+            $k = 0;
+            while ($i + $k < $len1 && $j + $k < $len2 && strcasecmp($words1[$i + $k], $words2[$j + $k]) == 0) {
+                $k++;
+            }
+            if ($k == $len2) { // Only accept exact matches
+                $commonSequences[] = implode(' ', array_slice($words1, $i, $k));
+            }
+        }
+    }
+    return $commonSequences;
 }
 
 function findFilteredCommonSequences($str1, $str2) {
@@ -73,7 +119,7 @@ function findFilteredCommonSequences($str1, $str2) {
     for ($i = 0; $i < $len1; $i++) {
         for ($j = 0; $j < $len2; $j++) {
             $k = 0;
-            while ($i + $k < $len1 && $j + $k < $len2 && $words1[$i + $k] == $words2[$j + $k]) {
+            while ($i + $k < $len1 && $j + $k < $len2 && strcasecmp($words1[$i + $k], $words2[$j + $k]) == 0) {
                 $k++;
             }
             if ($k > 0) {
@@ -81,7 +127,7 @@ function findFilteredCommonSequences($str1, $str2) {
             }
         }
     }
-    // Trim stop words from common sequences and filter out those with fewer than two non-stop words
+
     $filteredSequences = array();
     foreach ($commonSequences as $sequence) {
         $sequenceWithoutStopWords = removeStopWords($sequence);
@@ -126,6 +172,18 @@ function getPageTitleFromUrl($url) {
     $pageTitle = $matches[2];
     $pageTitle = str_replace('-', ' ', $pageTitle);
     return urldecode($pageTitle);
+}
+
+function getShortenerTitleFromUrl($url) {
+    $pattern = '/recommends\/(.*)\//';
+    preg_match($pattern, $url, $matches);
+
+    if (!empty($matches[1])) {
+        $shortenerTitle = str_replace('-', ' ', $matches[1]);
+        return urldecode($shortenerTitle);
+    }
+
+    return null;
 }
 
 function atleastXWords($text) {
@@ -404,7 +462,7 @@ function displayArticle($article) {
 function displayCTAImage($affiliateUrl) {
 	try {
         if ($affiliateUrl != "...") {
-			return '<div style="text-align:center;"><a href="'.$affiliateUrl.'"><img class="img-fluid" src="'.urlFull().'images/img-visit-official-website.png" alt="Visit the official website"></a></div>';
+			return '<div style="text-align:center;"><a href="'.$affiliateUrl.'"><img class="img-fluid" src="'.urlFull().'images/img-check-prices-and-availability.png" alt="Check prices and availability!"></a></div>';
 		} else {
 			return '&nbsp;';
 		}
@@ -446,14 +504,14 @@ function doTableCount($table) {
 	}	
 }
 
-function generateTableOfContents($htmlContent, $pagesArray, $categoriesArray, $moneyKeyword) {
+function generateTableOfContents($htmlContent, $pagesArray, $categoriesArray, $moneyKeyword, $shortenersArray) {
     preg_match_all("/<h[1-6]>(.*?)<\/h[1-6]>/i", $htmlContent, $matches);
 
 	$tableOfContents = array();
 	foreach ($matches[1] as $heading) {
 		$tableOfContents[] = $heading;
 	}
-	$htmlContent = interlinkArticles($htmlContent, $pagesArray, $categoriesArray, $tableOfContents, $moneyKeyword);
+	$htmlContent = interlinkArticles($htmlContent, $pagesArray, $categoriesArray, $tableOfContents, $moneyKeyword, $shortenersArray);
 
     $i = 1;
     foreach($matches[0] as $heading) {
@@ -495,6 +553,19 @@ function getAllPages() {
 		$query = DB::getInstance()->select("SELECT * FROM `posts`");
 		foreach ($query as $page) {
 			$pages[] = rawUrls($page['post_id'], $page['post_title'], false);
+		}
+	    return $pages;	
+	} catch(Exception $e) {
+        echo $e->getMessage();		
+	}		
+}
+
+function getAllShorteners() {
+	try {
+	    $pages = [];
+		$query = DB::getInstance()->select("SELECT * FROM `shorteners`");
+		foreach ($query as $page) {
+			$pages[] = urlFull() . "recommends/" . $page['shortener_short'] . "/";
 		}
 	    return $pages;	
 	} catch(Exception $e) {

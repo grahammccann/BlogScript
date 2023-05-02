@@ -15,7 +15,8 @@
 		
 		$pagesArray = getAllPages();
 		$categoriesArray = getAllCategories();
-        //print_r($categoriesArray);
+		$shortenersArray = getAllShorteners();
+        //print_r($shortenersArray);
 	?>
 	
 		<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -63,7 +64,7 @@
 						</p>
 					<?php } ?>
 					<div id="post-cta"><?= displayCTAImage($post['post_affiliate_url']); ?></div>
-					<div id="post-content"><?= generateTableOfContents($post['post_body'], $pagesArray, $categoriesArray, $post['post_image_alt_text']); ?></div>
+					<div id="post-content"><?= generateTableOfContents($post['post_body'], $pagesArray, $categoriesArray, $post['post_image_alt_text'], $shortenersArray); ?></div>
 					<div id="post-cta"><?= displayCTAImage($post['post_affiliate_url']); ?></div>
 					<p style="font-size: 1.2em; text-align: center; font-family: 'Helvetica Neue', sans-serif;">Share this Article</p>
 					<p class="text-center">

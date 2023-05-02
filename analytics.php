@@ -53,25 +53,7 @@
 				
 			}
 			
-			?>
-			
-			<div class="card">
-			  <div class="card-header"><i class="fa-solid fa-computer-mouse"></i> IP Range</div>
-                <div class="card-body">
-			
-				<form action="analytics.php" method="post">
-				 
-				  <div class="mb-3">
-					<label for="category_name" class="form-label"><strong>IP Range:</strong></label>
-					<input type="text" class="form-control" id="ip_range" name="ip_range" required>
-				  </div>
-				  
-				  <button type="submit" name="submitIPRange" class="btn btn-success float-end"><i class="fas fa-plus"></i> IP Range</button>
-				
-				</form>  	
-
-				</div>	
-		    </div>		
+			?>	
 	          	
 			<div class="card">
 			  <div class="card-header"><i class="fa-solid fa-computer-mouse"></i> Clicks</div>
@@ -156,6 +138,25 @@
                 </div>
 				
 			</div>	
+			
+			<div class="card">
+			  <div class="card-header"><i class="fa-solid fa-computer-mouse"></i> Block IP Range</div>
+                <div class="card-body">
+			
+				<form action="analytics.php" method="post">
+				 
+				  <div class="mb-3">
+					<label for="category_name" class="form-label"><strong>Block IP Range:</strong></label>
+					<input type="text" class="form-control" id="ip_range" name="ip_range" required>
+				  </div>
+				  
+				  <button type="submit" name="submitIPRange" class="btn btn-success float-end"><i class="fas fa-plus"></i> Block IP Range</button>
+				
+				</form>  	
+
+				</div>	
+		    </div>	
+						
 		</div>
 	</div>
 
