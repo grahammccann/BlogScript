@@ -47,23 +47,33 @@
                 <div class="card-body">
 				
 				<?php
-				
-				if (isset($_GET['delete'])) {
 
+				if (isset($_GET['delete'])) {
 					try {
-						
-						$images = deleteAnyImages($_GET['postId']);
-						$delete = DB::getInstance()->remove('posts', 'post_id', $_GET['postId']);
-						if ($delete == null) {
-							stdmsg("The <strong>post</strong> has been <strong>deleted</strong>.");
+						// Fetch post details
+						$post = DB::getInstance()->selectOneByField('posts', 'post_id', $_GET['postId']);
+
+						if (!empty($post)) {
+							// Delete post image
+							$postImagePath = $_SERVER['DOCUMENT_ROOT'] . "/uploads/" . $post['post_image'];
+							if (file_exists($postImagePath)) {
+								unlink($postImagePath);
+							}
+
+							// Delete the image record from the 'images' table that has the same name as 'post_image'
+							DB::getInstance()->remove('images', 'image_name', $post['post_image']);
+
+							// Delete post from the database
+							$delete = DB::getInstance()->remove('posts', 'post_id', $_GET['postId']);
+							if ($delete) {
+								stdmsg("The <strong>post</strong> and its image have been <strong>deleted</strong>.");
+							}
 						}
-						
 					} catch (Exception $e) {
-						stdErr($e->getMessage());
-					}	
-					
+						stderr($e->getMessage());					
+					}
 				}
-				
+
 				?>
                 
 				<?php $posts = DB::getInstance()->select("SELECT * FROM `posts`"); ?>
@@ -104,7 +114,7 @@
 						
 							<tr>
 						    	<td><?= $post['post_id']; ?></td>
-								<td><?= seoFriendlyUrls($post['post_id'], $post['post_title'], false, false); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <?= seoFriendlyUrls($post['post_category_id'], getCategoryname($post['post_category_id']), true, false); ?> | <a href="edit-category.php?categoryId=<?= $post['post_category_id']; ?>" class="text-decoration-none">Edit</a> | <a href="posts.php?index=1&amp;url=&amp;keywords=" class="text-decoration-none">Index</a></small></td>
+								<td><?= seoFriendlyUrls($post['post_id'], $post['post_title'], false, false); ?><br><small><?= getPublishedStatus($post['post_status']); ?> | <?= seoFriendlyUrls($post['post_category_id'], getCategoryname($post['post_category_id']), true, false); ?> | <a href="posts.php?index=1&amp;url=&amp;keywords=" class="text-decoration-none">Index</a></small></td>
 								<td><?= ($post['post_sticky'] == 1) ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-danger">No</span>'; ?></td>
 								<td><?= date("m.d.y", strtotime($post['post_date'])); ?></td>
 								<td><?= $post['post_views']; ?></td>

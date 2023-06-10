@@ -46,7 +46,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('members', 'member_id', $_GET['userId']);
-						if ($delete == null) {
+						if ($delete) {
 							stdmsg("The <strong>user</strong> has been <strong>deleted</strong>.");
 						}
 						

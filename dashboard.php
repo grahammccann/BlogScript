@@ -38,73 +38,84 @@
 		<div class="col-md-9">		
 		
 			<div class="card">
-			  <div class="card-header"><i class="fas fa-cog"></i> Dashboard <span class="badge bg-success float-end"><a href="dashboard.php?robots=1" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Robots .txt File">Generate Robots .txt File</a>&nbsp;|&nbsp;<a href="dashboard.php?sitemap=1" class="badge badge-primary badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an xml sitemap">Generate XML Sitemap</a></span></div>
-			   <div class="card-body">
-			   
-			    <?php
-				
-				if (isset($_GET['sitemap'])) {
-					
-					if (file_exists("sitemap.xml")) {
-						createSitemap();
-						stdmsg('Sitemap <strong>updated</strong>.');
-					} else {
-						createSitemap();
-						stdmsg('Sitemap <strong>created</strong>.');
-					}
-					
-				}
-				
-				if (isset($_GET['robots'])) {
-					
-					if (file_exists("robots.txt")) {
-						stderr('Robots file already <strong>exists</strong> delete it and then recreate it.');
-					} else {
-						createRobotsFile();
-						stdmsg('Robots file <strong>created</strong>.');
-					}
-					
-				}
-				
-				?>
-			  
-				<?php
-				
-				if (isset($_POST['submitSettings'])) {
-					try {
-						foreach($_POST as $key => $value) {
-							$u = DB::getInstance()->update(
-								'options',
-								'option_name',
-								$key,
-							[
-								'option_value' => $value
-							]); 					
-						}
-						stdmsg('Settings <strong>updated</strong>.');
-					} catch (Exception $e) {
-						stderr("There was an <strong>error</strong> updating the settings!");
-					}
-				}
-				
-				?>
+				<div class="card-header">
+					<i class="fas fa-cog"></i> Dashboard
+					<div class="float-end">
+						<span class="badge bg-success badge-sm text-decoration-none me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Robots .txt File">
+							<a href="dashboard.php?robots=1" class="text-decoration-none text-white">Generate Robots .txt File</a>
+						</span>
+						<span class="badge bg-success badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an xml sitemap">
+							<a href="dashboard.php?sitemap=1" class="text-decoration-none text-white">Generate XML Sitemap</a>
+						</span>
+					</div>
+				</div>
+				<div class="card-body">
 
-				<?php $settings = DB::getInstance()->select('SELECT * FROM `options`'); ?>
-					
-				<form action="dashboard.php" method="post">
-					
-					<?php foreach($settings as $setting) { ?>
-					  <p><small><span class="text-success"><?= htmlspecialchars($setting['option_description']); ?></span></small></p>
-						<input class="form-control form-control" type="text" name="<?= $setting['option_name']; ?>" value="<?= htmlentities($setting['option_value']); ?>" />		  
-					  <hr />
-					<?php } ?>
-					  
-					  <button type="submit" name="submitSettings" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
-				
-				</form>               
-				
-                </div>
-			</div>	
+					<?php
+
+					if (isset($_GET['sitemap'])) {
+
+						if (file_exists("sitemap.xml")) {
+							createSitemap();
+							stdmsg('Sitemap <strong>updated</strong>.');
+						} else {
+							createSitemap();
+							stdmsg('Sitemap <strong>created</strong>.');
+						}
+
+					}
+
+					if (isset($_GET['robots'])) {
+
+						if (file_exists("robots.txt")) {
+							stderr('Robots file already <strong>exists</strong> delete it and then generate it again.');
+						} else {
+							createRobotsFile();
+							stdmsg('Robots file <strong>created</strong>.');
+						}
+
+					}
+
+					?>
+
+					<?php
+
+					if (isset($_POST['submitSettings'])) {
+						try {
+							foreach ($_POST as $key => $value) {
+								$u = DB::getInstance()->update(
+									'options',
+									'option_name',
+									$key,
+									[
+										'option_value' => $value
+									]);
+							}
+							stdmsg('Settings <strong>updated</strong>.');
+						} catch (Exception $e) {
+							stderr("There was an <strong>error</strong> updating the settings!");
+						}
+					}
+
+					?>
+
+					<?php $settings = DB::getInstance()->select('SELECT * FROM `options`'); ?>
+
+					<form action="dashboard.php" method="post">
+
+						<?php foreach ($settings as $setting) { ?>
+							<div class="mb-3">
+								<label for="<?= $setting['option_name']; ?>" class="form-label text-success"><?= htmlspecialchars($setting['option_description']); ?></label>
+								<input class="form-control form-control" type="text" id="<?= $setting['option_name']; ?>" name="<?= $setting['option_name']; ?>" value="<?= htmlentities($setting['option_value']); ?>">
+							</div>
+						<?php } ?>
+
+						<button type="submit" name="submitSettings" class="btn btn-success float-end"><i class="fas fa-upload"></i> Update</button>
+
+					</form>
+
+				</div>
+			</div>
 			
 		</div>
 		

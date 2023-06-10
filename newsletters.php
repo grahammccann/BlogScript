@@ -46,7 +46,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('newsletters', 'newsletter_id', $_GET['newsletterId']);
-						if ($delete == null) {
+						if ($delete) {
 							stdmsg("The <strong>email</strong> has been <strong>deleted</strong>.");
 						}
 						

@@ -6,7 +6,7 @@
     <div class="container" style="background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         <div class="row">
             <div class="col-md-6">
-                <h4 style="margin-top: 0; font-weight: bold; font-size: 24px;">Subscribe to Our Newsletter</h4>
+                <p style="margin-top: 0; font-weight: bold; font-size: 24px;">Subscribe to Our Newsletter</p>
                 <p style="font-size: 16px; line-height: 24px;">Get the latest news and updates straight to your inbox.</p>
             </div>
             <div class="col-md-6">
@@ -52,15 +52,15 @@ $(document).ready(function(){
 	<p class="text-center">
 	<div class="icon-container">
 	  <?php if (!empty(getValue("footer_twitter"))) { ?>
-		<a href="<?= getValue("footer_twitter"); ?>" role="button">
+		<a href="<?= getValue("footer_twitter"); ?>" role="button" aria-label="Visit us on Twitter">
 		  <i class="fab fa-twitter fa-2x me-3"></i>
 		</a>
 	  <?php } if (!empty(getValue("footer_meta"))) { ?>
-		<a href="<?= getValue("footer_meta"); ?>" role="button">
+		<a href="<?= getValue("footer_meta"); ?>" role="button" aria-label="Visit us on Twitter">
 		  <i class="fab fa-facebook fa-2x me-3"></i>
 		</a>
 	  <?php } if (!empty(getValue("footer_instagram"))) { ?>
-		<a href="<?= getValue("footer_instagram"); ?>" role="button">
+		<a href="<?= getValue("footer_instagram"); ?>" role="button" aria-label="Visit us on Instagram">
 		  <i class="fab fa-instagram fa-2x me-3"></i>
 		</a>
 	  <?php } ?>

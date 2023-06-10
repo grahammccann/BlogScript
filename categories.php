@@ -45,7 +45,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('categories', 'category_id', $_GET['categoryId']);
-						if ($delete == null) {
+						if ($delete) {
 							stdmsg("The <strong>category</strong> has been <strong>deleted</strong>.");
 						}
 						

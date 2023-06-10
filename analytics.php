@@ -68,7 +68,7 @@
 						if (isset($_GET['clickId'])) {
 							
 							$delete = DB::getInstance()->remove('clicks', 'click_id', $_GET['clickId']);
-							if ($delete == null) {
+							if ($delete) {
 								stdmsg("The <strong>click</strong> has been <strong>deleted</strong>.");
 							}						
 							
@@ -77,7 +77,7 @@
 						if (isset($_GET['ip'])) {
 							
 							$delete = DB::getInstance()->remove('clicks', 'click_ip', $_GET['ip']);
-							if ($delete == null) {
+							if ($delete) {
 								stdmsg("The <strong>IP</strong> has been <strong>deleted</strong>.");
 							}						
 							

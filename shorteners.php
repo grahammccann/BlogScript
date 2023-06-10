@@ -46,7 +46,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('shorteners', 'shortener_id', $_GET['shortenerId']);
-						if ($delete == null) {
+						if ($delete) {
 							stdmsg("The <strong>shortener</strong> has been <strong>deleted</strong>.");
 						}
 						

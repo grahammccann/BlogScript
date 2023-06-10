@@ -1,9 +1,19 @@
 <?php
 
+function anchorTagSafeReplace($pattern, $callback, $content, &$count) {
+    $regex = '/(?:<a [^>]*>[^<]*<\/a>(*SKIP)(*FAIL))|(?:\b' . $pattern . '\b)/i';
+    return preg_replace_callback($regex, $callback, $content, -1, $count);
+}
+
 function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings, $moneyKeyword, $shortenersArray) {
     $linkedPages = array();
     $linkedShorteners = array();
 	
+    // Bold the money keyword
+    if (!empty($moneyKeyword)) {
+        $content = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $content, 1);
+    }
+    
     foreach ($pagesArray as $page) {
         $pageId = getPageIdFromUrl($page);
         if (!empty($pageId)) {
@@ -26,11 +36,11 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                 if (in_array(strtolower($commonsequence), $excludeHeadings)) {
                     continue;
                 }
-                $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+                $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
             }
         }
     }
-	
+    
     foreach ($categoriesArray as $category) {
         $categoryId = getCategoryIdFromUrl($category);
         if (!empty($categoryId)) {
@@ -53,14 +63,14 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                 if (in_array(strtolower($commonsequence), $excludeHeadings)) {
                     continue;
                 }
-                $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+                $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
             }
         }
     }
-	
+    
     foreach ($shortenersArray as $shortener) {
-		$shortenerTitle = getShortenerTitleFromUrl($shortener);
-		$commonSequences = findExactCommonSequences($content, $shortenerTitle);
+        $shortenerTitle = getShortenerTitleFromUrl($shortener);
+        $commonSequences = findExactCommonSequences($content, $shortenerTitle);
 
         $callback = function ($matches) use ($shortener, &$linkedShorteners) {
             $text = $matches[0];
@@ -78,13 +88,8 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
             if (in_array(strtolower($commonsequence), $excludeHeadings)) {
                 continue;
             }
-            $content = preg_replace_callback('/\b' . preg_quote($commonsequence) . '\b/i', $callback, $content, -1, $count);
+            $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
         }
-    }
-	
-    // Bold the money keyword
-    if (!empty($moneyKeyword)) {
-        $content = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $content, 1);
     }
 
     return $content;
@@ -1443,87 +1448,7 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = 
 	} catch(Exception $e) {
         echo $e->getMessage();		
 	}
-	
 }
-
-/* function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark=true) {
-    try {
-        if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
-            stderr("Invalid <strong>file</strong> upload.");
-            return;
-        }
-
-        $validFormats = array("jpg", "png", "gif", "jpeg");
-        $imageNameFinal = "";
-        if (strlen($imageName) > 0) {
-            list($txt, $ext) = explode(".", $imageName);
-            if (in_array($ext, $validFormats)) {
-                $size = filesize($imageTemp);
-                $maxFileSize = 5000000; // maximum file size in bytes (5MB)
-                if ($size > $maxFileSize) {
-                    stderr("File size must be <strong>less</strong> than " . $maxFileSize/1000000 . "MB.");
-                    return;
-                }
-                $type = exif_imagetype($imageTemp);
-                if (!$type || !in_array($type, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF])) {
-                    stderr("Invalid file type. Only <strong>images</strong> are allowed.");
-                    return;
-                }
-                $randomInt = rand();
-                $imageAltText = str_replace(" ", "-", $imageAltTextName);
-                $imageNameFinal = $imageAltText . "-" . $randomInt . "." . $ext;
-                $imagePath = "uploads/" . $imageNameFinal;
-                if (!is_dir("uploads")) {
-                    mkdir("uploads");
-                }
-                if (file_exists($imagePath)) {
-                    stdmsg("The <strong>image</strong> file already exists.");
-                    return;
-                }
-                if (move_uploaded_file($imageTemp, $imagePath)) {
-                    if ($addWatermark) {
-                        // Add URL to the image
-                        $image = imagecreatefromstring(file_get_contents($imagePath));
-                        $color = imagecolorallocate($image, 255, 0, 0); // set text color to red
-                        $black = imagecolorallocate($image, 0, 0, 0); // set background color to black
-                        $font = "font/TiltWarp-Regular.ttf"; // path to your font file
-                        $fontSize = 16;
-                        $text = urlFull(); // your site URL
-                        $textWidth = imagettfbbox($fontSize, 0, $font, $text)[2] - imagettfbbox($fontSize, 0, $font, $text)[0];
-                        $textHeight = imagettfbbox($fontSize, 0, $font, $text)[3] - imagettfbbox($fontSize, 0, $font, $text)[5];
-                        $textX = (imagesx($image) - $textWidth) / 2;
-                        $textY = imagesy($image) - $textHeight - 10;
-
-						// Add background for the text
-						$padding = 10; // adjust the padding as needed
-						$backgroundX1 = $textX - $padding;
-						$backgroundY1 = $textY - $textHeight + 5 - $padding;
-						$backgroundX2 = $textX + $textWidth + $padding;
-						$backgroundY2 = $textY + 5 + $padding;
-						imagefilledrectangle($image, $backgroundX1, $backgroundY1, $backgroundX2, $backgroundY2, $black);
-
-						// Add a yellow border around the black background
-						$borderColor = imagecolorallocate($image, 255, 0, 0); // set border color to red
-						$borderThickness = 3; // adjust the border thickness as needed
-						for ($i = 0; $i < $borderThickness; $i++) {
-							imagerectangle($image, $backgroundX1 + $i, $backgroundY1 + $i, $backgroundX2 - $i, $backgroundY2 - $i, $borderColor);
-						}
-
-						// Add the text
-						imagettftext($image, $fontSize, 0, $textX, $textY, $color, $font, $text);
-
-						// Save and destroy the image
-						imagepng($image, $imagePath);
-						imagedestroy($image);
-                    }
-                    return $imageNameFinal;
-                }
-            }
-		}	
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}
-} */
 
 function urlFull() {
 	try {

@@ -13,10 +13,5 @@
 			  <i class="fas fa-hands-wash"></i> Site Maintenance
 			</a>
 		  </li>
-		  <li class="list-group-item list-group-item-light text-center">
-			<a href="ai-content.php" class="btn btn-warning" style="display: block; width: 100%; height: 100%;">
-			  <i class="fa-sharp fa-solid fa-robot"></i> AI Content
-			</a>
-		  </li>
 		</ul>
 	</ul>

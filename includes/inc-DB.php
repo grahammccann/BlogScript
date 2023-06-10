@@ -89,6 +89,41 @@ class DB
 
         return $command->fetchAll($fetchType);
     }
+	
+	public function selectAllByField($tableName, $fieldName, $value, $fetchType = PDO::FETCH_ASSOC) {
+		return $this->select(
+			sprintf('
+				SELECT  *
+				FROM    `%s`
+				WHERE   `%s` = :value',
+				$tableName,
+				$fieldName
+			),
+			[
+				':value' => $value
+			],
+			$fetchType
+		);
+	}
+	
+	public function selectOneByTwoFields($table, $field1, $value1, $field2, $value2, $fetchType = PDO::FETCH_ASSOC) {
+		return $this->selectOne(
+			sprintf('
+				SELECT  *
+				FROM    `%s`
+				WHERE   `%s` = :value1
+				AND     `%s` = :value2',
+				$table,
+				$field1,
+				$field2
+			),
+			[
+				':value1' => $value1,
+				':value2' => $value2
+			],
+			$fetchType
+		);
+	}
 
     public function selectValues($query, array $params = [], $fetchType = PDO::FETCH_ASSOC) {
         $row = $this->selectOne($query, $params, $fetchType);
@@ -215,84 +250,90 @@ class DB
             throw new Exception('DB::bulkInsert(): Can\'t execute query.');
         }
     }
+	
+	public function update($tableName, $fieldName, $fieldValue, array $updateFields, $updateAll = false) {
+		if(is_null($fieldName)) {
+			if(!$updateAll) {
+				throw new SystemException('Attempt to update all table records without confirmation.');
+			}
 
-    public function update($tableName, $fieldName, $fieldValue, array $updateFields, $updateAll = false) {
-        if(is_null($fieldName)) {
-            if(!$updateAll) {
-                throw new SystemException('Attempt to update all table records without confirmation.');
-            }
+			$sqlWhere = '';
+		} else {
+			$sqlWhere = sprintf('WHERE `%s` = :%s', $fieldName, $fieldName);
+		}
 
-            $sqlWhere = '';
-        } else {
-            $sqlWhere = sprintf('WHERE `%s` = :%s', $fieldName, $fieldName);
-        }
+		$normUpdateFields = $this->normalizeParams($updateFields);
+		$sqlSetRows = [];
+		foreach($updateFields as $updateFieldName => $updateFieldValue) {
+			$sqlSetRows[] = sprintf('`%s` = :%s', $updateFieldName, $updateFieldName);
+		}
 
-        $normUpdateFields = $this->normalizeParams($updateFields);
-        $sqlSetRows = [];
-        foreach($updateFields as $updateFieldName => $updateFieldValue) {
-            $sqlSetRows[] = sprintf('`%s` = :%s', $updateFieldName, $updateFieldName);
-        }
+		$sqlSet = implode(', ', $sqlSetRows);
 
-        $sqlSet = implode(', ', $sqlSetRows);
+		$command = $this->pdo->prepare(
+			$sql = sprintf('
+				UPDATE  `%s`
+				SET     %s
+				%s',
+				$tableName,
+				$sqlSet,
+				$sqlWhere
+			)
+		);
 
-        $command = $this->pdo->prepare(
-            $sql = sprintf('
-                UPDATE  `%s`
-                SET     %s
-                %s',
-                $tableName,
-                $sqlSet,
-                $sqlWhere
-            )
-        );
+		$command->closeCursor();
 
-        $command->closeCursor();
+		foreach($normUpdateFields as $updateFieldName => $updateFieldValue) {
+			if(is_array($updateFieldValue)
+					&& isset($updateFieldValue['type'])
+					&& isset($updateFieldValue['value'])) {
+				$command->bindValue($updateFieldName, $updateFieldValue['value'], $updateFieldValue['type']);
+			} else {
+				$command->bindValue($updateFieldName, $updateFieldValue);
+			}
+		}
 
-        foreach($normUpdateFields as $updateFieldName => $updateFieldValue) {
-            if(is_array($updateFieldValue)
-                    && isset($updateFieldValue['type'])
-                    && isset($updateFieldValue['value'])) {
-                $command->bindValue($updateFieldName, $updateFieldValue['value'], $updateFieldValue['type']);
-            } else {
-                $command->bindValue($updateFieldName, $updateFieldValue);
-            }
-        }
+		if(!empty($sqlWhere)) {
+			$command->bindValue(':' . $fieldName, $fieldValue);
+		}
 
-        if(!empty($sqlWhere)) {
-            $command->bindValue(':' . $fieldName, $fieldValue);
-        }
+		if(!$command->execute()) {
+			throw new Exception('DB::update(): Can\'t execute query.');
+		}
 
-        if(!$command->execute()) {
-            throw new Exception('DB::update(): Can\'t execute query.');
-        }
-    }
+		// Return true if the update was successful.
+		return true;
+	}
 
-    public function remove($tableName, $fieldName = null, $value = null, $removeAll = false) {
-        $isExecuted = false;
+	public function remove($tableName, $fieldName = null, $value = null, $removeAll = false) {
+		$isExecuted = false;
 
-        if(is_null($fieldName)
-                && is_null($value)
-                && $removeAll) {
-            $isExecuted = $this->execute(sprintf('DELETE FROM `%s`', $tableName));
-        } else if(!is_null($fieldName)
-                && !is_null($value)) {
-            $isExecuted = $this->execute(
-                sprintf('
-                    DELETE  FROM `%s`
-                    WHERE   `%s` = :value',
-                    $tableName,
-                    $fieldName
-                ),
-                [
-                    ':value' => $value
-                ]
-            );
-        }
+		if(is_null($fieldName)
+				&& is_null($value)
+				&& $removeAll) {
+			$isExecuted = $this->execute(sprintf('DELETE FROM `%s`', $tableName));
+		} else if(!is_null($fieldName)
+				&& !is_null($value)) {
+			$isExecuted = $this->execute(
+				sprintf('
+					DELETE  FROM `%s`
+					WHERE   `%s` = :value',
+					$tableName,
+					$fieldName
+				),
+				[
+					':value' => $value
+				]
+			);
+		}
 
-        if(!$isExecuted) {
-            throw new Exception('DB::remove(): Can\'t execute query.');
-        }
-    }
+		if(!$isExecuted) {
+			throw new Exception('DB::remove(): Can\'t execute query.');
+		}
+
+		// Return the execution status.
+		return $isExecuted;
+	}
 
     protected function normalizeParams(array $params = []) {
         $normParams = [];

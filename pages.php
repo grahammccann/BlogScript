@@ -45,7 +45,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('pages', 'page_id', $_GET['pageId']);
-						if ($delete == null) {
+						if ($delete) {
 							stdmsg("The <strong>page</strong> has been <strong>deleted</strong>.");
 						}
 						

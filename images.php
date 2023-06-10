@@ -45,7 +45,7 @@
 					try {
 						
 						$delete = DB::getInstance()->remove('images', 'image_name', $_GET['imageName']);
-						if ($delete == null) {
+						if ($delete) {
 							@unlink("uploads/" . $_GET['imageName']);
 							stdmsg("The <strong>image</strong> has been <strong>deleted</strong>.");
 						}
