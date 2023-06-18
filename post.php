@@ -57,7 +57,7 @@
 				</div>
 				
 				<div class="card-body">
-					<h1 class="text-center" style="font-family: 'Helvetica Neue', sans-serif; font-size: 24px;"><?= $post['post_title']; ?></h1>
+					<h1 style="font-family: 'Helvetica Neue', sans-serif; font-size: 24px;"><?= $post['post_title']; ?></h1>
 					<?php if (!empty($post['post_image'])) { ?>
 						<p class="text-center">
 							<img class="img-thumbnail" src="<?= getFeaturedImageToUse($post['post_image']) ?>" alt="<?= $post['post_image_alt_text']; ?>">
