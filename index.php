@@ -60,7 +60,7 @@
 		</div>
 	 
 		<!-- posts -->
-		<div class="col-md-9">
+		<div class="col-md-<?= getValue("hide_all_sidebars") == 0 ? "12" : "9"; ?>">
 
 			<?php
 
@@ -111,7 +111,9 @@
 			<?php } ?>
 
 		</div>
-				
+			
+        <?php if (getValue("hide_all_sidebars") != 0) { ?>
+			
 		<!-- categories / sidebars -->
 		<div class="col-md-3">
 		
@@ -162,6 +164,8 @@
 			?>
 
 		</div>
+		
+		<?php } ?>
 		
 	</div>
 	

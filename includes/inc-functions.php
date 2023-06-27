@@ -8,91 +8,104 @@ function anchorTagSafeReplace($pattern, $callback, $content, &$count) {
 function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHeadings, $moneyKeyword, $shortenersArray) {
     $linkedPages = array();
     $linkedShorteners = array();
-	
-    // Bold the money keyword
-    if (!empty($moneyKeyword)) {
-        $content = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $content, 1);
-    }
     
-    foreach ($pagesArray as $page) {
-        $pageId = getPageIdFromUrl($page);
-        if (!empty($pageId)) {
-            $pageTitle = getPageTitleFromUrl($page);
-            $commonSequences = findFilteredCommonSequences($content, $pageTitle);
+    // Split content into header and non-header blocks
+    $splitContent = preg_split("/(<h[1-6][^>]*>.*?<\/h[1-6]>)/", $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $processedContent = '';
 
-            $callback = function ($matches) use ($page, &$linkedPages) {
-                $text = $matches[0];
-                $lowerText = strtolower($text);
-                if (!in_array($lowerText, $linkedPages)) {
-                    $linkedPages[] = $lowerText;
-                    return '<a href="' . $page . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
-                } else {
-                    return $text;
-                }
-            };
+    // Iterate through each block
+    foreach($splitContent as $section) {
+        // Check if the block is a header
+        if (!preg_match("/^<h[1-6][^>]*>.*?<\/h[1-6]>$/", $section)) {
+            // Process non-header sections
+            // Bold the money keyword
+            if (!empty($moneyKeyword)) {
+                $section = preg_replace('/\b' . preg_quote($moneyKeyword) . '\b/i', '<strong>$0</strong>', $section, 1);
+            }
 
-            $count = 0;
-            foreach ($commonSequences as $commonsequence) {
-                if (in_array(strtolower($commonsequence), $excludeHeadings)) {
-                    continue;
+            foreach ($pagesArray as $page) {
+                $pageId = getPageIdFromUrl($page);
+                if (!empty($pageId)) {
+                    $pageTitle = getPageTitleFromUrl($page);
+                    $commonSequences = findFilteredCommonSequences($section, $pageTitle);
+
+                    $callback = function ($matches) use ($page, &$linkedPages) {
+                        $text = $matches[0];
+                        $lowerText = strtolower($text);
+                        if (!in_array($lowerText, $linkedPages)) {
+                            $linkedPages[] = $lowerText;
+                            return '<a href="' . $page . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                        } else {
+                            return $text;
+                        }
+                    };
+
+                    $count = 0;
+                    foreach ($commonSequences as $commonsequence) {
+                        if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                            continue;
+                        }
+                        $section = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $section, $count);
+                    }
                 }
-                $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
+            }
+
+            foreach ($categoriesArray as $category) {
+                $categoryId = getCategoryIdFromUrl($category);
+                if (!empty($categoryId)) {
+                    $categoryTitle = getCategoryTitleFromUrl($category);
+                    $commonSequences = findFilteredCommonSequences($section, $categoryTitle);
+
+                    $callback = function ($matches) use ($category, &$linkedPages) {
+                        $text = $matches[0];
+                        $lowerText = strtolower($text);
+                        if (!in_array($lowerText, $linkedPages)) {
+                            $linkedPages[] = $lowerText;
+                            return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                        } else {
+                            return $text;
+                        }
+                    };
+
+                    $count = 0;
+                    foreach ($commonSequences as $commonsequence) {
+                        if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                            continue;
+                        }
+                        $section = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $section, $count);
+                    }
+                }
+            }
+    
+            foreach ($shortenersArray as $shortener) {
+                $shortenerTitle = getShortenerTitleFromUrl($shortener);
+                $commonSequences = findExactCommonSequences($section, $shortenerTitle);
+
+                $callback = function ($matches) use ($shortener, &$linkedShorteners) {
+                    $text = $matches[0];
+                    $lowerText = strtolower($text);
+                    if (!in_array($lowerText, $linkedShorteners)) {
+                        $linkedShorteners[] = $lowerText;
+                        return '<a href="' . $shortener . '" class="text-decoration-none" style="font-weight: normal; color: red;"><strong>' . $text . '</strong> <i class="fas fa-external-link" aria-hidden="true"></i></a>';
+                    } else {
+                        return $text;
+                    }
+                };
+
+                $count = 0;
+                foreach ($commonSequences as $commonsequence) {
+                    if (in_array(strtolower($commonsequence), $excludeHeadings)) {
+                        continue;
+                    }
+                    $section = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $section, $count);
+                }
             }
         }
+        // Add the section to the processed content
+        $processedContent .= $section;
     }
     
-    foreach ($categoriesArray as $category) {
-        $categoryId = getCategoryIdFromUrl($category);
-        if (!empty($categoryId)) {
-            $categoryTitle = getCategoryTitleFromUrl($category);
-            $commonSequences = findFilteredCommonSequences($content, $categoryTitle);
-
-            $callback = function ($matches) use ($category, &$linkedPages) {
-                $text = $matches[0];
-                $lowerText = strtolower($text);
-                if (!in_array($lowerText, $linkedPages)) {
-                    $linkedPages[] = $lowerText;
-                    return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
-                } else {
-                    return $text;
-                }
-            };
-
-            $count = 0;
-            foreach ($commonSequences as $commonsequence) {
-                if (in_array(strtolower($commonsequence), $excludeHeadings)) {
-                    continue;
-                }
-                $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
-            }
-        }
-    }
-    
-    foreach ($shortenersArray as $shortener) {
-        $shortenerTitle = getShortenerTitleFromUrl($shortener);
-        $commonSequences = findExactCommonSequences($content, $shortenerTitle);
-
-        $callback = function ($matches) use ($shortener, &$linkedShorteners) {
-            $text = $matches[0];
-            $lowerText = strtolower($text);
-            if (!in_array($lowerText, $linkedShorteners)) {
-                $linkedShorteners[] = $lowerText;
-                return '<a href="' . $shortener . '" class="text-decoration-none" style="font-weight: normal; color: red;"><strong>' . $text . '</strong></a>';
-            } else {
-                return $text;
-            }
-        };
-
-        $count = 0;
-        foreach ($commonSequences as $commonsequence) {
-            if (in_array(strtolower($commonsequence), $excludeHeadings)) {
-                continue;
-            }
-            $content = anchorTagSafeReplace(preg_quote($commonsequence), $callback, $content, $count);
-        }
-    }
-
-    return $content;
+    return $processedContent;
 }
 
 function findExactCommonSequences($content, $title) {

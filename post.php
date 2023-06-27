@@ -33,7 +33,8 @@
 		
 		<div class="row">
 		
-		<div class="col-md-9">
+		<!-- post -->
+		<div class="col-md-<?= getValue("hide_all_sidebars") == 0 ? "12" : "9"; ?>">
 		
 			<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">           
 				<div class="card-header" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; background-color: transparent; padding: 1rem;">
@@ -96,12 +97,14 @@
 	  
 		</div>
 		
+        <?php if (getValue("hide_all_sidebars") != 0) { ?>
+			
 		<!-- categories / sidebars -->
 		<div class="col-md-3">
 		
 			<?php 
 			
-			if (!empty(getValue("about_us_text"))) { 
+			if (!empty(getValue("about_us_header")) && !empty(getValue("about_us_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-about-us.php");  
 				
@@ -127,7 +130,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_1_header"))) { 
+			if (!empty(getValue("sidebar_cta_1_header")) && !empty(getValue("sidebar_cta_1_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-1.php");  
 				
@@ -137,7 +140,7 @@
 			
 			<?php 
 			
-			if (!empty(getValue("sidebar_cta_2_header"))) { 
+			if (!empty(getValue("sidebar_cta_2_header")) && !empty(getValue("sidebar_cta_2_text"))) { 
 						
 			    include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-sidebar-cta-2.php");  
 				
@@ -146,6 +149,8 @@
 			?>
 
 		</div>
+		
+		<?php } ?>
 	
 	</div>
 	
