@@ -392,7 +392,7 @@ function countPostsInCategories($categoryId) {
 
 function createSitemap() {
     try {
-        $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` ASC");
+        $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` DESC");
         
         $xmlString = '<?xml version="1.0" encoding="UTF-8"?>';
         $xmlString .= "\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ";
@@ -478,15 +478,20 @@ function displayArticle($article) {
 }
 
 function displayCTAImage($affiliateUrl) {
-	try {
+    try {
         if ($affiliateUrl != "...") {
-			return '<div style="text-align:center;"><a href="'.$affiliateUrl.'"><img class="img-fluid" src="'.urlFull().'images/img-check-prices-and-availability.png" alt="Check prices and availability!"></a></div>';
-		} else {
-			return '&nbsp;';
-		}
-	} catch(Exception $e) {
+            return '
+            <div style="text-align:center; margin:auto; max-width:300px; border: 2px solid #28a745; border-radius: 15px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); transition: 0.3s; background-color: #28a745; margin-bottom: 20px;">
+                <a href="'.$affiliateUrl.'" style="display: block; padding: 15px; text-decoration: none; color: white; font-weight: bold; text-transform: uppercase;">
+                    Check Prices & Stock Availability
+                </a>
+            </div>';
+        } else {
+            return '&nbsp;';
+        }
+    } catch(Exception $e) {
         echo $e->getMessage();
-	}	
+    }   
 }
 
 function doesPostContainAnInternalLink($postBody) {
