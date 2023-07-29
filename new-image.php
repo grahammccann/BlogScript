@@ -40,59 +40,77 @@
 			  <div class="card-header"><i class="fas fa-image"></i> New Image</div>
                 <div class="card-body">
 				
-				 <?php
+				<?php
 				 
-				 $errors = [];
-				 
-				 if (isset($_POST['submitImage'])) {
+				$errors = [];
 
-						if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {
-							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
-							
-                            if (!empty($imageName)) {
-								
-								$i = DB::getInstance()->insert(
-									'images',
-								[
-									'image_name' => $imageName,
-									'image_alt_text' => $_POST['post_image_alt_text'],
-									'image_is_header' => "no",
-									'image_date' => date('Y-m-d H:i:s')
-								]);
-								
-								stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong>.");
-								
-							}							
-							
-						} 	
+				if (isset($_POST['submitImage'])) {
 
-                        if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {
-							
-                            $imageName = uploadImage($_FILES['post_image']['name'], $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), false);
-							
-                            if (!empty($imageName)) {
-								
-								$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);
-								
-								$i = DB::getInstance()->insert(
-									'images',
-								[
-									'image_name' => $imageName,
-									'image_alt_text' => $_POST['post_image_alt_text'],
-									'image_is_header' => "yes",
-									'image_date' => date('Y-m-d H:i:s')
-								]);
-								
-								stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong> and <strong>resized</strong>.");
-								
-							}
-							
-						} 				
-					 
-				 }
+					$filename = preg_replace("/[^a-zA-Z0-9.]/", "_", $_FILES['post_image']['name']);						
+					
+					if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {		
+					
+						$imageName = uploadImage(strtolower($filename), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
+						
+						if (!$imageName) {
+							stderr("<strong>Error:</strong> Failed to upload image for non-header.");
+							return; 
+						}
+						
+						$i = DB::getInstance()->insert(
+							'images',
+							[
+								'image_name' => $imageName,
+								'image_alt_text' => $_POST['post_image_alt_text'],
+								'image_is_header' => "no",
+								'image_date' => date('Y-m-d H:i:s')
+							]
+						);
+						
+						if (!$i) {
+							stderr("<strong>Error:</strong> Failed to insert non-header image into database.");
+							return;  // exit early
+						}
+						
+						stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong>.");							
+					} 	
+
+					if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {		
+					
+						$imageName = uploadImage(strtolower($filename), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
+						
+						if (!$imageName) {
+							stderr("<strong>Error:</strong> Failed to upload image for header.");
+							return;  
+						}
+						
+						$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);
+						
+						if (!$resizedImage) {
+							stderr("<strong>Error:</strong> Failed to resize header image.");
+							return;  
+						}
+						
+						$i = DB::getInstance()->insert(
+							'images',
+							[
+								'image_name' => $imageName,
+								'image_alt_text' => $_POST['post_image_alt_text'],
+								'image_is_header' => "yes",
+								'image_date' => date('Y-m-d H:i:s')
+							]
+						);
+						
+						if (!$i) {
+							stderr("<strong>Error:</strong> Failed to insert header image into database.");
+							return;  
+						}
+						
+						stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong> and <strong>resized</strong>.");							
+					} 		
+				}
 				 
-				 ?>
+				?>
 				
 				<form action="new-image.php" method="post" enctype="multipart/form-data">
 				 

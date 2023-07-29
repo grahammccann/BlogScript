@@ -459,6 +459,12 @@ function createRobotsFile() {
   }
 }
 
+function debug($data) {
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+}
+
 function deleteAnyImages($postId) {
 	try {
 		$image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_id`='{$postId}'");
@@ -1394,9 +1400,9 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = 
                 }
 
                 // Resize and compress the image
-                $maxWidth = 1200; // Set the maximum width you want for your images
-                $maxHeight = 800; // Set the maximum height you want for your images
-                $quality = 80; // Set the quality of the resized image (1-100, 100 being the best)
+                $maxWidth = 1200; 
+                $maxHeight = 800;
+                $quality = 80; 
 
                 $src = imagecreatefromstring(file_get_contents($imageTemp));
                 list($width, $height) = getimagesize($imageTemp);
@@ -1425,47 +1431,45 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = 
 
                 if (move_uploaded_file($imageTemp, $imagePath)) {
                     if ($addWatermark) {
-                        // Add URL to the image
-                        $image = imagecreatefromstring(file_get_contents($imagePath));
-                        $color = imagecolorallocate($image, 255, 0, 0); // set text color to red
-                        $black = imagecolorallocate($image, 0, 0, 0); // set background color to black
-                        $font = "font/TiltWarp-Regular.ttf"; // path to your font file
-                        $fontSize = 16;
-                        $text = urlFull(); // your site URL
-                        $textWidth = imagettfbbox($fontSize, 0, $font, $text)[2] - imagettfbbox($fontSize, 0, $font, $text)[0];
-                        $textHeight = imagettfbbox($fontSize, 0, $font, $text)[3] - imagettfbbox($fontSize, 0, $font, $text)[5];
-                        $textX = (imagesx($image) - $textWidth) / 2;
-                        $textY = imagesy($image) - $textHeight - 10;
-
-						// Add background for the text
-						$padding = 10; // adjust the padding as needed
-						$backgroundX1 = $textX - $padding;
-						$backgroundY1 = $textY - $textHeight + 5 - $padding;
-						$backgroundX2 = $textX + $textWidth + $padding;
-						$backgroundY2 = $textY + 5 + $padding;
-						imagefilledrectangle($image, $backgroundX1, $backgroundY1, $backgroundX2, $backgroundY2, $black);
-
-						// Add a yellow border around the black background
-						$borderColor = imagecolorallocate($image, 255, 0, 0); // set border color to red
-						$borderThickness = 3; // adjust the border thickness as needed
-						for ($i = 0; $i < $borderThickness; $i++) {
-							imagerectangle($image, $backgroundX1 + $i, $backgroundY1 + $i, $backgroundX2 - $i, $backgroundY2 - $i, $borderColor);
-						}
-
-						// Add the text
-						imagettftext($image, $fontSize, 0, $textX, $textY, $color, $font, $text);
-
-						// Save and destroy the image
-						imagepng($image, $imagePath);
-						imagedestroy($image);
+                        addWatermark($imagePath);
                     }
                     return $imageNameFinal;
                 }
             }
-        }		
-	} catch(Exception $e) {
-        echo $e->getMessage();		
-	}
+        }
+    } catch(Exception $e) {
+        echo $e->getMessage();      
+    }
+}
+
+function addWatermark($imagePath) {
+    $image = imagecreatefromstring(file_get_contents($imagePath));
+    
+    $font = "font/TiltWarp-Regular.ttf";
+    $fontSize = 16;
+    $text = urlFull();
+
+    // Calculate text dimensions
+    $textBox = imagettfbbox($fontSize, 0, $font, $text);
+    $textWidth = $textBox[2] - $textBox[0];
+    $textHeight = $textBox[3] - $textBox[5];
+    
+    // Position text to the bottom right with some padding
+    $padding = 20;
+    $textX = imagesx($image) - $textWidth - $padding;
+    $textY = imagesy($image) - $textHeight - $padding;
+    
+    // Create a semi-transparent background rectangle for the text
+    $bgColor = imagecolorallocatealpha($image, 0, 0, 0, 63); // Semi-transparent black
+    $textColor = imagecolorallocate($image, 255, 255, 255); // White text color
+    
+    imagefilledrectangle($image, $textX - 10, $textY - 10, $textX + $textWidth + 10, $textY + $textHeight + 10, $bgColor);
+    
+    // Add the watermark text
+    imagettftext($image, $fontSize, 0, $textX, $textY + $textHeight, $textColor, $font, $text);
+
+    imagepng($image, $imagePath);
+    imagedestroy($image);
 }
 
 function urlFull() {

@@ -40,78 +40,88 @@
 			  
                 <div class="card-body">
 				
-				 <?php
-				 
-				 $errors = [];
-				 
-				 if (isset($_POST['submitEditPost'])) {
-					
-                    if ($_POST['post_sticky']) {
+				<?php
 
-						$sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1'");									
+				$errors = [];
+
+				if (isset($_POST['submitEditPost'])) {
+
+					if ($_POST['post_sticky']) {
+
+						$sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1'");
 						if (count($sticky) > 0) {
 							if ($_POST['updateId'] != $sticky[0]['post_id']) {
-								$errors[] = 'A <strong>sticky</strong> post is already in use un-sticky that one first.';
+								$errors[] = 'A <strong>sticky</strong> post is already in use. Un-sticky that one first.';
 							}
-						}					
-				
-					}					
-					
-					if (!empty($errors) > 0) {
+						}
+
+					}
+
+					if (count($errors) > 0) {
 						
-						foreach($errors as $error) {
-							echo '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle"></i> '.$error.'</div>';
+						foreach ($errors as $error) {
+							echo '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle"></i> ' . $error . '</div>';
 						}
 						
 					} else {
-	
+
 						if (!empty($_FILES['post_image']['name'])) {
-							
-                            $imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);		
-							
+
+							$imageName = uploadImage(strtolower($_FILES['post_image']['name']), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
+
+							if (!$imageName) {
+								echo '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle"></i> <strong>Error:</strong> Failed to upload the image.</div>';
+								return;
+							}
+
 							$i = DB::getInstance()->insert(
 								'images',
-							[
-								'image_name' => $imageName,
-								'image_alt_text' => $_POST['post_image_alt_text'],
-								'image_is_header' => "no",
-								'image_date' => date('Y-m-d H:i:s')
-							]);
-							
+								[
+									'image_name' => $imageName,
+									'image_alt_text' => $_POST['post_image_alt_text'],
+									'image_is_header' => "no",
+									'image_date' => date('Y-m-d H:i:s')
+								]
+							);
+
+							if (!$i) {
+								echo '<div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-triangle"></i> <strong>Error:</strong> Failed to insert image into database.</div>';
+								return;
+							}
+
 							$u = DB::getInstance()->update(
 								'posts',
 								'post_id',
 								$_POST['updateId'],
-							[
-								'post_image' => $imageName,
-								'post_image_alt_text' => $_POST['post_image_alt_text']
-							]);
-						
-						} 
-	
-	                    // Fix: Small fix becuase summer note does this: class="" to <h# tags.
-                        // $cleanedHtml = removeEmptyClasses($_POST['post_body']);
-	                    // Fix: Small fix becuase summer note does this: class="" to <h# tags.
-						
+								[
+									'post_image' => $imageName,
+									'post_image_alt_text' => $_POST['post_image_alt_text']
+								]
+							);
+						}
+
+						// Removed redundant comments
+
 						$u = DB::getInstance()->update(
 							'posts',
 							'post_id',
 							$_POST['updateId'],
-						[
-						    'post_category_id' => $_POST['post_category'],
-						    'post_member_id' => getLoggedInUserId($_SESSION['member']),
-							'post_title' => htmlspecialchars(strip_tags($_POST['post_title'])),
-							'post_body' => $_POST['post_body'],
-							'post_seo_title' => $_POST['post_seo_title'],
-							'post_seo_description' => $_POST['post_seo_description'],
-							'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
-							'post_status' => $_POST['post_status'],
-							'post_date_updated' => date('Y-m-d H:i:s'),
-							'post_sticky' => $_POST['post_sticky'],
-							'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",	
-							'post_will_show_ads' => $_POST['post_will_show_ads']					
-						]);
-						
+							[
+								'post_category_id' => $_POST['post_category'],
+								'post_member_id' => getLoggedInUserId($_SESSION['member']),
+								'post_title' => htmlspecialchars(strip_tags($_POST['post_title'])),
+								'post_body' => $_POST['post_body'],
+								'post_seo_title' => $_POST['post_seo_title'],
+								'post_seo_description' => $_POST['post_seo_description'],
+								'post_image_alt_text' => strtolower($_POST['post_image_alt_text']),
+								'post_status' => $_POST['post_status'],
+								'post_date_updated' => date('Y-m-d H:i:s'),
+								'post_sticky' => $_POST['post_sticky'],
+								'post_affiliate_url' => !empty($_POST['post_affiliate_url']) ? $_POST['post_affiliate_url'] : "...",
+								'post_will_show_ads' => $_POST['post_will_show_ads']
+							]
+						);
+
 						if (file_exists("sitemap.xml")) {
 							createSitemap();
 							stdmsg('Sitemap <strong>updated</strong>.');
@@ -119,14 +129,14 @@
 							createSitemap();
 							stdmsg('Sitemap <strong>created</strong>.');
 						}
-						
+
 						stdmsg("Your <strong>post</strong> has been <strong>updated</strong>.");
-					
+
 					}
-					 
-				 }
-				 
-				 ?>
+
+				}
+
+				?>
 				 
 				<?php
 				
