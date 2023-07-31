@@ -470,7 +470,7 @@ function deleteAnyImages($postId) {
 		$image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_id`='{$postId}'");
 		@unlink("uploads/" . $image['post_image']);
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}		
 }
 
@@ -479,7 +479,7 @@ function displayArticle($article) {
 		//libxml_use_internal_errors(true);
 		return $article;
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}		
 }
 
@@ -496,7 +496,7 @@ function displayCTAImage($affiliateUrl) {
             return '&nbsp;';
         }
     } catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
     }   
 }
 
@@ -508,7 +508,7 @@ function doesPostContainAnInternalLink($postBody) {
 			return false;
 		}   
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -520,7 +520,7 @@ function doesPostContainMonetizationLinks($postBody) {
 			return false;
 		}   
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -529,7 +529,7 @@ function doTableCount($table) {
 	    $c = DB::getInstance()->selectAll($table);
 	    return count($c);	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}	
 }
 
@@ -572,7 +572,7 @@ function getAllCategories() {
 		}
 	    return $pages;	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}		
 }
 
@@ -585,7 +585,7 @@ function getAllPages() {
 		}
 	    return $pages;	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}		
 }
 
@@ -598,7 +598,7 @@ function getAllShorteners() {
 		}
 	    return $pages;	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}		
 }
 
@@ -606,7 +606,7 @@ function getArticleData($count) {
 	try {
 		return DB::getInstance()->select("SELECT * FROM (SELECT * FROM `posts`) sub WHERE LENGTH(`post_body`) - LENGTH(REPLACE(`post_body`, ' ', '')) + 1 <= {$count};"); 
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -615,7 +615,7 @@ function getCategoryname($categoryId) {
 		$category = DB::getInstance()->selectValues("SELECT `category_name` FROM `categories` WHERE `category_id`='{$categoryId}'");
 		return $category['category_name'];
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -628,7 +628,7 @@ function getCountryFromIP($ip) {
 			return 'Unknown';
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -643,7 +643,7 @@ function getFeaturedImageToUse($imageName) {
 		}
 		return $fullUrl;
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}		
 }
 
@@ -678,7 +678,7 @@ function getGenericMeta($page, $postId, $metaType) {
         }
         return $meta;
     } catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
     }
 }
 
@@ -694,7 +694,7 @@ function getPublishedStatus($status) {
 			return '<span class="badge rounded-pill bg-danger">Archived</span>';
 		}	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}	
 }
 
@@ -709,7 +709,7 @@ function getHeaderImage() {
 		}
 		return $image;	
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}	
 }
 
@@ -724,7 +724,7 @@ function getImageAltText($imageName) {
 		}
 		return $image;
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -733,7 +733,7 @@ function getLoggedInUserId($sessionUsername) {
 		$id = DB::getInstance()->selectValues("SELECT `member_id` FROM `members` WHERE `member_username`='{$sessionUsername}'");
 		return $id['member_id'];
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -742,7 +742,7 @@ function getPostersUsername($userId) {
 		$username = DB::getInstance()->selectValues("SELECT `member_username` FROM `members` WHERE `member_id`='{$userId}'");
 		return $username['member_username'];
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -751,7 +751,7 @@ function getPostersCategory($categoryId) {
 		$category = DB::getInstance()->selectValues("SELECT `category_name` FROM `categories` WHERE `category_id`='{$categoryId}'");
 		return $category['category_name'];
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -760,7 +760,7 @@ function getPostTitleOnly($postId) {
 		$title = DB::getInstance()->selectValues("SELECT `post_title` FROM `posts` WHERE `post_id`='{$postId}'");
 		return $title['post_title'];
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -779,7 +779,7 @@ function getRealIp() {
 		}
 		return $ip;
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -787,7 +787,7 @@ function getPostWordCount($postId, $postBody) {
 	try {
 		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM `posts` WHERE `post_id`='{$postId}'"); 
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -795,7 +795,7 @@ function getSiteWordCount() {
 	try {
 		return DB::getInstance()->selectValue("SELECT SUM(LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1) FROM `posts`"); 
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -803,7 +803,7 @@ function getSiteArticlesToDelete($count) {
 	try {
 		return DB::getInstance()->selectValue("SELECT COUNT(*) as row_count FROM (SELECT post_body FROM posts) sub WHERE LENGTH(post_body) - LENGTH(REPLACE(post_body, ' ', '')) + 1 <= {$count};"); 
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -814,7 +814,7 @@ function getSourceUrls($sourceUrls) {
 		    echo "<ul><li><a href=\"{$value}\" class=\"text-decoration-none\" target=\"_blank\">{$value}</a></li></ul>";
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -830,7 +830,7 @@ function getSourceVideos($sourceUrls) {
 			} 
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}	
 }
 
@@ -839,7 +839,7 @@ function getTwitterImage($postId) {
 		$image = DB::getInstance()->selectValues("SELECT * FROM `posts` WHERE `post_id`='{$postId}'");
 		return $image['post_image'];	
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}		
 }
 
@@ -847,7 +847,7 @@ function getUsersDetails($member) {
 	try {
         return DB::getInstance()->selectOneByField('members', 'member_username', $member);
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -860,7 +860,7 @@ function getValue($optionValue) {
 			return null;
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -939,7 +939,7 @@ function mobileUrls($postName, $postId, $imageUrl, $imageAltText) {
         }
         return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl . "' alt='" . $imageAltText . "'></a>";
     } catch (Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
     }
 }
 
@@ -1006,7 +1006,7 @@ function performArticlePurge($articleId, $articleImage, $imageName) {
             }
         }
     } catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
     }
 }
 
@@ -1026,7 +1026,7 @@ function rawUrls($id, $name, $category) {
 		    return "{$rootUrl}{$id}-{$replace}/";		
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1040,7 +1040,7 @@ function recordClicks($page, $ip) {
 			'click_date' => date('Y-m-d H:i:s')
 		]);		
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}	
 }
 
@@ -1098,7 +1098,7 @@ function resizeImage($source, $destination, $size, $quality = null) {
 		imagedestroy($resized);
 		
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1113,7 +1113,7 @@ function rssUrls($postName, $postId) {
         }
 		return "{$rootUrl}{$postId}-{$replace}/";
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1279,7 +1279,7 @@ function sharingSocialMediaUrls($id, $name) {
         }
 		return $rootUrl . $id . "-" . $replace . "/";
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -1302,7 +1302,7 @@ function seoFriendlyUrls($id, $name, $category, $dropdown) {
 			return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$id}-{$replace}/\">{$name}</a>";
 		}
 	} catch(Exception $e) {
-        echo $e->getMessage();
+        stderr($e->getMessage());
 	}
 }
 
@@ -1324,7 +1324,7 @@ function truncateArticle($text, $chars = 120) {
 		}
 		return $text;
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1342,7 +1342,7 @@ function updatePostViews($postId) {
 			]);			
 		}			
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1360,7 +1360,7 @@ function updateRedirectClicks($redirectId) {
 			]);			
 		}			
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 
@@ -1438,7 +1438,7 @@ function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = 
             }
         }
     } catch(Exception $e) {
-        echo $e->getMessage();      
+        stderr($e->getMessage());      
     }
 }
 
@@ -1476,7 +1476,7 @@ function urlFull() {
 	try {
 	    return sprintf("%s://%s/", isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http', $_SERVER['SERVER_NAME']);
 	} catch(Exception $e) {
-        echo $e->getMessage();		
+        stderr($e->getMessage());		
 	}
 }
 

@@ -127,8 +127,8 @@
 								<td><?= $click['click_ip']; ?></td>
 								<td>&nbsp;</td>
 								<td><?= date("m.d.y", strtotime($click['click_date'])); ?></td>
-								<td class="text-center"><a href="analytics.php?delete=1&amp;clickId=<?= $click['click_id']; ?>" onClick="return confirm('Delete the click?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
-								<td class="text-center"><a href="analytics.php?delete=1&amp;ip=<?= $click['click_ip']; ?>" onClick="return confirm('Delete the IP?')" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a></td>
+								<td class="text-center"><a href="analytics.php?delete=1&amp;clickId=<?= $click['click_id']; ?>" onClick="return confirm('Delete the click?')" class="btn btn-danger btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete click"><i class="far fa-trash-alt"></i></a></td>
+								<td class="text-center"><a href="analytics.php?delete=1&amp;ip=<?= $click['click_ip']; ?>" onClick="return confirm('Delete the IP?')" class="btn btn-warning btn-sm" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete IP"><i class="far fa-trash-alt"></i></a></td>
 							</tr>	
 							
 						<?php } ?>							
