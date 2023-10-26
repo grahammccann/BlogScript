@@ -92,7 +92,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
-(2, 'Jessica', 'Milkybar12022', 'Milkybar12022', 'graham23s@hotmail.com', 'yes', '2023-02-26 09:08:49');
+(2, 'admin', '...', '...', 'graham23s@hotmail.com', 'yes', '2023-02-26 09:08:49');
 
 -- --------------------------------------------------------
 

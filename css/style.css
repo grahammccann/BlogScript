@@ -32,12 +32,6 @@ body, html {
     padding: 5px;
 }
 
-.links-container {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1;
-}
-
 .nav-pills .nav-link {
     border: none;
     border-radius: 25px;
