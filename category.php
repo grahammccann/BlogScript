@@ -13,17 +13,17 @@
 
 	?>
 	
-	<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-	  <div class="card-body">
-		<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-			<ol class="breadcrumb" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px;">
-			    <li class="breadcrumb-item"><a href="<?= urlFull(); ?>" style="color: #0d6efd;"><i class="fas fa-home"></i></a></li>
-			    <li class="breadcrumb-item active" aria-current="page"><?= seoFriendlyUrls($category['category_id'], getCategoryname($category['category_id']), true, false); ?></li>
-		    </ol>
-		</nav>
-	  </div>
+	<div class="card breadcrumb-card">
+		<div class="card-body breadcrumb-body">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="<?= urlFull(); ?>" class="home-link"><i class="fas fa-home"></i></a></li>
+					<li class="breadcrumb-item active" aria-current="page"><?= seoFriendlyUrls($category['category_id'], getCategoryname($category['category_id']), true, false); ?></li>
+				</ol>
+			</nav>
+		</div>
 	</div>
-	
+
 	<?php
 
 		if (isset($_GET['page'])) {
