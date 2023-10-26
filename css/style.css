@@ -1,6 +1,12 @@
+/* General Styles */
 body, html {
     height: 100%;    
 	margin: 0;
+}
+
+/* Buttons */
+.btn:focus {
+    box-shadow: none !important;
 }
 
 .badge-sm {
@@ -10,18 +16,6 @@ body, html {
     margin-right: .1em;
     min-width: 1.8em;
     padding: .25em !important;
-}
-
-.btn:focus {
-    box-shadow: none !important;
-}
-
-.link-overlay {
-    height: 150px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 150px;
 }
 
 /* Navigation */
@@ -64,12 +58,22 @@ body, html {
     background-color: #007BFF;
     color: #fff;
 }
-/* Navigation */
 
+/* Overlay */
+.link-overlay {
+    height: 150px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150px;
+}
+
+/* Dropdown Button */
 .note-btn.dropdown-toggle:after {
     content: none;
 }
 
+/* Cards */
 .related-card {
     align-items: center;
     display: flex;
@@ -77,6 +81,11 @@ body, html {
     max-height: 300px;
 }
 
+.card {
+    margin-bottom: 20px;
+}
+
+/* Table of Contents */
 .table-of-contents {
     list-style-type: none;
     margin-top: 0;
@@ -96,14 +105,12 @@ body, html {
     margin-bottom: 0.5rem;
 }
 
-.card {
-    margin-bottom: 20px;
-}
-
+/* Footer */
 footer {
     width: 100%;
 }
 
+/* Content */
 #post-content a {
     font-weight: bold;
     text-decoration: none;
@@ -119,6 +126,7 @@ footer {
 	flex: 1;
 }
 
+/* Social Media Icons */
 .fab.fa-twitter {
     color: #55acee;
 }
