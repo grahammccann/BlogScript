@@ -439,7 +439,7 @@ function createPostBody($postData) {
 }
 
 function createReadMoreButton($postData) {
-    return "<a href='".rawUrls($postData['post_id'], $postData['post_title'], false)."' class='btn btn-success btn-md'>Read more</a>";
+    return "<a href='" . rawUrls($postData['post_id'], $postData['post_title'], false) . "' class='btn btn-success btn-md w-100'><i class='fas fa-arrow-right'></i> Read more</a>";
 }
 
 function createRobotsFile() {
