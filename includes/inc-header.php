@@ -96,7 +96,7 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 		<ul class="nav navbar-nav ms-auto">
 		<li>    
 		   <form class="d-flex mb-3" action="<?= urlFull(); ?>search.php" method="get">
-			   <input class="form-control me-2" type="search" name="s" placeholder="Search ..." aria-label="Search" required>
+			   <input class="form-control me-2" type="search" name="s" placeholder="Search site ..." aria-label="Search" required>
 			   <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
 		   </form>    
 		</li>           

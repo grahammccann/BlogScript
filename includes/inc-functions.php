@@ -421,13 +421,11 @@ function createSitemap() {
     }
 }
 
-function createPostBody($postData)
-{
-    return "<p>".strip_tags(truncateArticle($postData['post_body'], 650))."</p>";
+function createPostTitle($postData) {
+    return "<h1>".seoFriendlyUrls($postData['post_id'], $postData['post_title'], false, false)."</h1>";
 }
 
-function createPostImage($postData)
-{
+function createPostImage($postData) {
     $postName = $postData['post_title'];
     $postId = $postData['post_id'];
     $imageUrl = getFeaturedImageToUse($postData['post_image']);
@@ -436,13 +434,11 @@ function createPostImage($postData)
     return "<p class='text-center'>" . mobileUrls($postName, $postId, $imageUrl, $imageAltText) . "</p>";
 }
 
-function createPostTitle($postData)
-{
-    return "<h1>".seoFriendlyUrls($postData['post_id'], $postData['post_title'], false, false)."</h1>";
+function createPostBody($postData) {
+    return "<p>".strip_tags(truncateArticle($postData['post_body'], 650))."</p>";
 }
 
-function createReadMoreButton($postData)
-{
+function createReadMoreButton($postData) {
     return "<a href='".rawUrls($postData['post_id'], $postData['post_title'], false)."' class='btn btn-success btn-md'>Read more</a>";
 }
 

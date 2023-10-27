@@ -8,9 +8,19 @@
     ];
 
     $count++;
-	
-    echo createPostTitle($postData);
-    echo createPostImage($postData);
-    echo createPostBody($postData);
-    echo createReadMoreButton($postData);
 ?>
+
+<div class="row">
+    <div class="col-md-4">
+        <?= createPostImage($postData); ?>
+    </div>
+    <div class="col-md-8">
+        <?= createPostTitle($postData); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <?= createPostBody($postData); ?>
+        <?= createReadMoreButton($postData); ?>
+    </div>
+</div>
