@@ -33,7 +33,7 @@ echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$property
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_description") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "description"); ?>">
 <?php
-if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['PHP_SELF'] == "/login.php" || $_SERVER['PHP_SELF'] == "/recovery.php") {
+if (($_SERVER['PHP_SELF'] == checkUrl()) || $_SERVER['PHP_SELF'] == "/login.php" || $_SERVER['PHP_SELF'] == "/recovery.php") {
     echo "<meta name='robots' content='follow, noindex'/>\n";
 }
 ?>
@@ -64,7 +64,9 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 	
     <div class="collapse navbar-collapse w-100" id="collapsibleNavbar">
 	
-      <a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= getHeaderImage(); ?>" alt="<?= urlFull(); ?>" class="d-block d-sm-inline-block mw-100 mx-auto"></a>  
+	
+	    <?php list($imagePath, $imageWidth, $imageHeight) = getHeaderImage(); ?>
+        <a class="navbar-brand" href="<?= urlFull(); ?>"><img src="<?= urlFull(); ?><?= $imagePath ?>" alt="<?= urlFull(); ?>" width="<?= $imageWidth; ?>" height="<?= $imageHeight; ?>" class="d-block d-sm-inline-block mw-100 mx-auto"></a>
 	  
 		<ul class="nav nav-pills nav-fill ms-auto flex-column flex-sm-row mb-3" style="display: flex; gap: 10px;">   
 		<li class="nav-item"><a href="<?= urlFull(); ?>" class="nav-link <?= ($_SERVER['PHP_SELF'] == "/index.php") ? "active" : ""; ?>">Home</a></li>
@@ -94,13 +96,17 @@ if ($_SERVER['PHP_SELF'] == "/category.php" || checkUrl() == true || $_SERVER['P
 		</ul>
 
 		<ul class="nav navbar-nav ms-auto">
-		<li>    
-		   <form class="d-flex mb-3" action="<?= urlFull(); ?>search.php" method="get">
-			   <input class="form-control me-2" type="search" name="s" placeholder="Search site ..." aria-label="Search" required>
-			   <button type="submit" class="btn btn-success"><i class="fas fa-search"></i></button>
-		   </form>    
-		</li>           
-		</ul> 
+			<li>    
+				<form class="d-flex mb-3" action="<?= urlFull(); ?>search.php" method="get">
+					<div class="input-group">
+						<input type="search" name="s" class="form-control rounded-start" placeholder="Search site..." aria-label="Search" aria-describedby="search-addon" required>
+							<button class="btn btn-success rounded-end" type="submit" id="search-addon" aria-label="Search">
+								<i class="fas fa-search"></i>
+							</button>
+					</div>
+				</form>    
+			</li>           
+		</ul>
 	  
     </div>
 	

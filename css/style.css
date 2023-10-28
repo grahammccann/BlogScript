@@ -28,7 +28,7 @@ body, html {
 }
 
 .navbar-brand img {
-    max-height: 50px;
+    max-height: 100px;
     padding: 5px;
 }
 
@@ -49,8 +49,8 @@ body, html {
 }
 
 .nav-pills .nav-link.active {
-    background-color: #007BFF;
-    color: #fff;
+    background-color: #007F00; /* A more moderate green */
+    color: #FFFFFF;  /* Keeping the text white */
 }
 
 /* Overlay */
@@ -164,4 +164,42 @@ footer {
 
 nav[aria-label="breadcrumb"] {
     --bs-breadcrumb-divider: '>';
+}
+
+.recent-posts-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+.recent-posts-card .card-header {
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: transparent;
+    padding: 1rem;
+    border-bottom: 1px solid #eee; /* Light grey border for separation */
+}
+
+.recent-posts-card .fas.fa-newspaper {
+    color: green;
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.recent-posts-card .list-group-item {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+    border-top: 1px solid #eee; /* Light grey border for separation */
+}
+
+.recent-posts-card .post-thumbnail {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    border-radius: 50%; /* Optional: Makes the images circular */
 }

@@ -48,29 +48,26 @@ $(document).ready(function(){
 </script> 
 
 <footer class="pt-3 my-3 text-muted border-top text-center">
-	<p class="text-center">Copyright &copy; <?= date('Y'); ?> | <a href="<?= urlFull(); ?>" class="text-decoration-none"><?= urlFull(); ?></a> | <a href="<?= urlFull(); ?>rss.php" class="text-decoration-none" aria-label="RSS Feed"><i class="fa-solid fa-square-rss" style="color: orange;"></i></a> <?= getValue("homepage_hide_login_link") != "1" ? "" : '| <a href="'.urlFull().'login.php" class="text-decoration-none" aria-label="Login"><i class="fas fa-sign-in-alt"></i></a>'; ?></p>
-	<p class="text-center">
-	<div class="icon-container">
-	  <?php if (!empty(getValue("footer_twitter"))) { ?>
-		<a href="<?= getValue("footer_twitter"); ?>" role="button" aria-label="Visit us on Twitter">
-		  <i class="fab fa-twitter fa-2x me-3"></i>
-		</a>
-	  <?php } if (!empty(getValue("footer_meta"))) { ?>
-		<a href="<?= getValue("footer_meta"); ?>" role="button" aria-label="Visit us on Twitter">
-		  <i class="fab fa-facebook fa-2x me-3"></i>
-		</a>
-	  <?php } if (!empty(getValue("footer_instagram"))) { ?>
-		<a href="<?= getValue("footer_instagram"); ?>" role="button" aria-label="Visit us on Instagram">
-		  <i class="fab fa-instagram fa-2x me-3"></i>
-		</a>
-	  <?php } ?>
-	</div>
-	</p>
-	<p><?= !(empty(getValue("footer_amazon_disclosure_text"))) ? getValue("footer_amazon_disclosure_text") : ""; ?></p>
-
-	<?php if (!empty(getValue("bottom_link_1"))) { ?>
-	<p class="text-center"><?= getValue("bottom_link_1"); ?></p>
-	<?php } ?>
+    <p class="text-center">Copyright &copy; <?= date('Y'); ?> | <a href="<?= urlFull(); ?>" class="text-decoration-none"><?= urlFull(); ?></a> | <a href="<?= urlFull(); ?>rss.php" class="text-decoration-none" aria-label="RSS Feed"><i class="fa-solid fa-square-rss" style="color: orange;"></i></a> <?= getValue("homepage_hide_login_link") != "1" ? "" : '| <a href="'.urlFull().'login.php" class="text-decoration-none" aria-label="Login"><i class="fas fa-sign-in-alt"></i></a>'; ?></p>
+    <div class="text-center icon-container">
+        <?php if (!empty(getValue("footer_twitter"))) { ?>
+            <a href="<?= getValue("footer_twitter"); ?>" role="button" aria-label="Visit us on Twitter">
+                <i class="fab fa-twitter fa-2x me-3"></i>
+            </a>
+        <?php } if (!empty(getValue("footer_meta"))) { ?>
+            <a href="<?= getValue("footer_meta"); ?>" role="button" aria-label="Visit us on Twitter">
+                <i class="fab fa-facebook fa-2x me-3"></i>
+            </a>
+        <?php } if (!empty(getValue("footer_instagram"))) { ?>
+            <a href="<?= getValue("footer_instagram"); ?>" role="button" aria-label="Visit us on Instagram">
+                <i class="fab fa-instagram fa-2x me-3"></i>
+            </a>
+        <?php } ?>
+    </div>
+    <?= !(empty(getValue("footer_amazon_disclosure_text"))) ? '<p>' . getValue("footer_amazon_disclosure_text") . '</p>' : ""; ?>
+    <?php if (!empty(getValue("bottom_link_1"))) { ?>
+        <p class="text-center"><?= getValue("bottom_link_1"); ?></p>
+    <?php } ?>
 </footer>
 
 </div>

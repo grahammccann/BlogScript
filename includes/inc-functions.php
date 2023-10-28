@@ -439,7 +439,10 @@ function createPostBody($postData) {
 }
 
 function createReadMoreButton($postData) {
-    return "<a href='" . rawUrls($postData['post_id'], $postData['post_title'], false) . "' class='btn btn-success btn-md w-100'><i class='fas fa-arrow-right'></i> Read more</a>";
+    // Limit the title length for brevity
+    $shortTitle = substr($postData['post_title'], 0, 30) . '...';
+    
+    return "<a href='" . rawUrls($postData['post_id'], $postData['post_title'], false) . "' class='btn btn-success btn-md w-100'><i class='fas fa-arrow-right'></i> Read more about: " . $shortTitle . "</a>";
 }
 
 function createRobotsFile() {
@@ -629,18 +632,13 @@ function getCountryFromIP($ip) {
 }
 
 function getFeaturedImageToUse($imageName) {
-	try {
-		$fullUrl = "";
-        if ($imageName == "img-post-generic.png") {
-	        $fullUrl = urlFull() . "images/img-post-generic.png";
-		} else {
-		    $image = DB::getInstance()->selectValues("SELECT `post_image` FROM `posts` WHERE `post_image`='{$imageName}'");
-	        $fullUrl = urlFull() . "uploads/" . $image['post_image'];			
-		}
-		return $fullUrl;
-	} catch(Exception $e) {
+    try {
+        $fullUrl = $imageName == "img-post-generic.png" ? urlFull() . "images/{$imageName}" : urlFull() . "uploads/{$imageName}";
+        list($width, $height, $type, $attr) = getimagesize($fullUrl);
+        return [$fullUrl, $width, $height];
+    } catch(Exception $e) {
         stderr($e->getMessage());
-	}		
+    }        
 }
 
 function getGenericMeta($page, $postId, $metaType) {
@@ -695,18 +693,14 @@ function getPublishedStatus($status) {
 }
 
 function getHeaderImage() {
-	try {
-		$image = "";
-		$headerImage = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='yes' ORDER BY `image_date` DESC");
-		if (count($headerImage) < 1) {
-			$image = "images/img-original-header.png";
-		} else {
-			$image = "uploads/" . $headerImage[0]['image_name'];
-		}
-		return $image;	
-	} catch(Exception $e) {
-        stderr($e->getMessage());		
-	}	
+    try {
+        $headerImage = DB::getInstance()->select("SELECT * FROM `images` WHERE `image_is_header`='yes' ORDER BY `image_date` DESC");
+        $imagePath = count($headerImage) < 1 ? "images/img-original-header.png" : "uploads/" . $headerImage[0]['image_name'];
+        list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/" . $imagePath);
+        return [$imagePath, $width, $height];
+    } catch(Exception $e) {
+        stderr($e->getMessage());        
+    }    
 }
 
 function getImageAltText($imageName) {	
@@ -927,13 +921,14 @@ function indexNow($apiKey, $url, $keywords) {
 function mobileUrls($postName, $postId, $imageUrl, $imageAltText) {
     try {
         $rootUrl = urlFull();
+        list($width, $height) = getimagesize($imageUrl[0]);
         $replace = preg_replace("/[^A-Za-z0-9\-]/", "-", strtolower($postName));
         $replace = preg_replace("~[^-\w]+~", "", $replace);
         $replace = preg_replace('~-+~', '-', $replace);
         if (substr($replace, -1) === '-') {
             $replace = rtrim($replace, '-');
         }
-        return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl . "' alt='" . $imageAltText . "'></a>";
+        return "<a class=\"text-decoration-none\" href=\"{$rootUrl}{$postId}-{$replace}/\"><img class='img-thumbnail' src='" . $imageUrl[0] . "' alt='" . $imageAltText . "' width='" . $width . "' height='" . $height . "'></a>";
     } catch (Exception $e) {
         stderr($e->getMessage());
     }
@@ -946,50 +941,70 @@ function pagination($page, $totalResults, $maxResults, $params = array()) {
     }
     $urlTemplate = $_SERVER['PHP_SELF'] . '?page=%s';
     $paramsString = '';
-	if (is_array($params)) {
-		foreach ($params as $key => $value) {
-			$paramsString .= sprintf('&%s=%s', $key, urlencode($value));
-		}
-	}
+    if (is_array($params)) {
+        foreach ($params as $key => $value) {
+            $paramsString .= sprintf('&%s=%s', $key, urlencode($value));
+        }
+    }
 
-    $loopFrom = ($page > 3)? $page - 3: 1;
-    $loopTo = ($page < $totalPages -3)? $page + 3: $totalPages;
+    $loopFrom = ($page > 3) ? $page - 3 : 1;
+    $loopTo = ($page < $totalPages - 3) ? $page + 3 : $totalPages;
 
+    if ($totalPages > 0) {
     ?>
 
     <nav aria-label="...">
         <ul class="pagination justify-content-center mt-3">
-            <li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
-                <a class="page-link" href="<?php echo sprintf($urlTemplate, 1) . $paramsString ?>">First</a>
+            <li class="page-item <?php if ($page == 1) echo 'disabled'; ?>">
+                <?php if ($page == 1) { ?>
+                    <span class="page-link">First</span>
+                <?php } else { ?>
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, 1) . $paramsString ?>">First</a>
+                <?php } ?>
             </li>
-            <li<?php if ($page == 1) { ?> class="page-item disabled"<?php } ?>>
-                <a class="page-link" href="<?php echo ($page == 1)? 'javascript:void(0)': sprintf($urlTemplate, $page - 1) . $paramsString ?>">Prev</a>
+            <li class="page-item <?php if ($page == 1) echo 'disabled'; ?>">
+                <?php if ($page == 1) { ?>
+                    <span class="page-link">Prev</span>
+                <?php } else { ?>
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, $page - 1) . $paramsString ?>">Prev</a>
+                <?php } ?>
             </li>
             <?php if ($loopFrom > 1) { ?>
-                <li class="page-item">
-                    <a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($page / 2)) . $paramsString ?>">...</a>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
                 </li>
             <?php } ?>
             <?php for ($i = $loopFrom; $i <= $loopTo; $i++) { ?>
-                <li<?php if ($page == $i) { ?> class="page-item active"<?php } ?>>
-                    <a class="page-link" href="<?php echo ($page == $i)? 'javascript:void(0)': sprintf($urlTemplate, $i) . $paramsString ?>"><?php echo $i ?></a>
+                <li class="page-item <?php if ($page == $i) echo 'active'; ?>">
+                    <?php if ($page == $i) { ?>
+                        <span class="page-link"><?php echo $i ?></span>
+                    <?php } else { ?>
+                        <a class="page-link" href="<?php echo sprintf($urlTemplate, $i) . $paramsString ?>"><?php echo $i ?></a>
+                    <?php } ?>
                 </li>
             <?php } ?>
             <?php if ($loopTo < $totalPages) { ?>
-                <li class="page-item">
-                    <a class="page-link" href="<?php echo sprintf($urlTemplate, (int) round($totalPages - $page / 2)) . $paramsString ?>">...</a>
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
                 </li>
             <?php } ?>
-            <li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
-                <a class="page-link" href="<?php echo (($page == $totalPages) || !$totalPages)? 'javascript:void(0)': sprintf($urlTemplate, $page + 1) . $paramsString ?>">Next</a>
+            <li class="page-item <?php if ($page == $totalPages) echo 'disabled'; ?>">
+                <?php if ($page == $totalPages) { ?>
+                    <span class="page-link">Next</span>
+                <?php } else { ?>
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, $page + 1) . $paramsString ?>">Next</a>
+                <?php } ?>
             </li>
-            <li<?php if (($page == $totalPages) || !$totalPages) { ?> class="page-item disabled"<?php } ?>>
-                <a class="page-link" href="<?php echo sprintf($urlTemplate, $totalPages) .$paramsString ?>">Last</a>
-             </li>
+            <li class="page-item <?php if ($page == $totalPages) echo 'disabled'; ?>">
+                <?php if ($page == $totalPages) { ?>
+                    <span class="page-link">Last</span>
+                <?php } else { ?>
+                    <a class="page-link" href="<?php echo sprintf($urlTemplate, $totalPages) .$paramsString ?>">Last</a>
+                <?php } ?>
+            </li>
         </ul>
     </nav>
-<?php
-}
+<?php } }
 
 function performArticlePurge($articleId, $articleImage, $imageName) {
     try {
