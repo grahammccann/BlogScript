@@ -100,7 +100,7 @@ if (!empty(getValue("google_adsense"))) {
 			<li>    
 				<form class="d-flex mb-3" action="<?= urlFull(); ?>search.php" method="get">
 					<div class="input-group">
-						<input type="search" name="s" class="form-control rounded-start" placeholder="Search site..." aria-label="Search" aria-describedby="search-addon" required>
+						<input type="search" name="s" class="form-control rounded-start" placeholder="Search site ..." aria-label="Search" aria-describedby="search-addon" required>
 							<button class="btn btn-success rounded-end" type="submit" id="search-addon" aria-label="Search">
 								<i class="fas fa-search"></i>
 							</button>

@@ -34,7 +34,7 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                         $lowerText = strtolower($text);
                         if (!in_array($lowerText, $linkedPages)) {
                             $linkedPages[] = $lowerText;
-                            return '<a href="' . $page . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                            return '<a href="' . $page . '" class="text-decoration-none" style="font-weight: bold;">' . $text . '</a>';
                         } else {
                             return $text;
                         }
@@ -61,7 +61,7 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                         $lowerText = strtolower($text);
                         if (!in_array($lowerText, $linkedPages)) {
                             $linkedPages[] = $lowerText;
-                            return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: normal;">' . $text . '</a>';
+                            return '<a href="' . $category . '" class="text-decoration-none" style="font-weight: bold;">' . $text . '</a>';
                         } else {
                             return $text;
                         }
@@ -86,7 +86,7 @@ function interlinkArticles($content, $pagesArray, $categoriesArray, $excludeHead
                     $lowerText = strtolower($text);
                     if (!in_array($lowerText, $linkedShorteners)) {
                         $linkedShorteners[] = $lowerText;
-                        return '<a href="' . $shortener . '" class="text-decoration-none" style="font-weight: normal; color: red;"><strong>' . $text . '</strong> <i class="fas fa-external-link" aria-hidden="true"></i></a>';
+                        return '<a href="' . $shortener . '" class="text-decoration-none" style="color: red;"><strong>' . $text . '</strong> <i class="fas fa-external-link" aria-hidden="true"></i></a>';
                     } else {
                         return $text;
                     }
