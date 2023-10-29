@@ -66,27 +66,44 @@
 
 			$sticky = DB::getInstance()->select("SELECT * FROM `posts` WHERE `post_sticky`='1' LIMIT 1");
 
-			if (count($sticky) > 0) {
+			if (count($sticky) > 0) { ?>
 
-			?>
-
-				<div class="card" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-					<div class="card-header bg-success text-white" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; padding: 1rem;">
+				<div class="card" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
+					<div class="card-header bg-warning text-dark" style="font-family: 'Helvetica Neue', sans-serif; font-size: 16px; text-transform: uppercase; text-align: center; padding: 1rem;">
 						<small><i class="fas fa-pencil-alt"></i> Posted on <strong><?= date("F j, Y", strtotime($sticky[0]['post_date'])); ?></strong> by <strong><?= getPostersUsername($sticky[0]['post_member_id']); ?></strong>.</small>
 						<span class="float-end"><span class="badge bg-danger"><i class="fa-solid fa-note-sticky"></i></span></span>
 					</div>
 					<div class="card-body">
 
 					<?php
-
-						echo "<h1 style=\"font-family: 'Helvetica Neue', sans-serif; font-size: 24px;\">" . seoFriendlyUrls($sticky[0]['post_title'], $sticky[0]['post_id']) . "</h1>";
-						echo "<p class=\"text-center\"><img class=\"img-thumbnail\" src=\"" . getFeaturedImageToUse($sticky[0]['post_image']) . "\" alt=\"" . $sticky[0]['post_image_alt_text'] . "\"></p>";
-						echo $sticky[0]['post_body'];
+					
+						$postData = [
+							'post_title' => $sticky[0]['post_title'],
+							'post_id' => $sticky[0]['post_id'],
+							'post_image' => $sticky[0]['post_image'],
+							'post_image_alt_text' => $sticky[0]['post_image_alt_text'],
+							'post_body' => $sticky[0]['post_body']
+						];
 
 					?>
+					
+						<div class="row">
+							<div class="col-md-4">
+								<?= createPostImage($postData); ?>
+							</div>
+							<div class="col-md-8">
+								<?= createPostTitle($postData); ?>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<?= createPostBody($postData); ?>
+								<?= createReadMoreButton($postData); ?>
+							</div>
+						</div>
 
 					</div>
-					<div class="card-footer mt-3 bg-success text-white" style="font-size: 14px;"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $sticky[0]['post_views']; ?></span></small></div>
+					<div class="card-footer mt-3 bg-warning text-dark" style="font-size: 14px;"><small><span class="float-end"><i class="fas fa-eye"></i> <?= $sticky[0]['post_views']; ?></span></small></div>
 				</div>
 
 			<?php } ?>
