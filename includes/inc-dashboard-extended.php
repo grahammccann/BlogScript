@@ -13,13 +13,13 @@
         </a>
     </li>
     <li class="list-group-item list-group-item-light">
-        <a href="dashboard.php?robots=1" class="btn btn-danger w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Robots .txt File">
-            <i class="fas fa-robot"></i> Generate Robots .txt File
+        <a href="dashboard.php?robots=1" class="btn btn-danger w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Creates a robots.txt file">
+            <i class="fas fa-robot"></i> Create: robots.txt 
         </a>
     </li>
     <li class="list-group-item list-group-item-light">
-        <a href="dashboard.php?sitemap=1" class="btn btn-success w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an XML sitemap">
-            <i class="fas fa-sitemap"></i> Generate XML Sitemap
+        <a href="dashboard.php?sitemap=1" class="btn btn-success w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Creates a sitemap.xml file">
+            <i class="fas fa-sitemap"></i> Create: sitemap.xml
         </a>
     </li>
 </ul>

@@ -18,13 +18,15 @@ body, html {
     padding: .25em !important;
 }
 
-/* Navigation */
+@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap');
+
+/* Modified Navigation */
 .navbar {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #000;
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    align-items: center;
 }
 
 .navbar-brand img {
@@ -32,10 +34,17 @@ body, html {
     padding: 5px;
 }
 
+.nav-pills {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .nav-pills .nav-link {
-    border: none;
+    font-family: 'Helvetica Neue', sans-serif;
+    border: 2px solid #D3D3D3;
     border-radius: 25px;
-    background-color: #333;
+    background-color: transparent; 
     color: #fff;
     font-weight: bold;
     padding: 10px 20px;
@@ -44,16 +53,36 @@ body, html {
 }
 
 .nav-pills .nav-link:hover {
-    background-color: #555;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #000;
+}
+
+.nav-pills .nav-link:active, .nav-pills .nav-link.active {
+    background-color: #0d6efd; /* Bootstrap 5 blue */
     color: #fff;
 }
 
-.nav-pills .nav-link.active {
-    background-color: #007F00; /* A more moderate green */
-    color: #FFFFFF;  /* Keeping the text white */
+.nav-pills .dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
 }
 
-/* Overlay */
+.nav-pills .dropdown-item {
+    background-color: transparent;
+    color: #fff;
+    transition: background-color 0.3s;
+    border-radius: 25px;
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.nav-pills .dropdown-item:hover {
+    background-color: #0d6efd; /* Bootstrap 5 blue */
+    color: #000;
+}
+
 .link-overlay {
     height: 150px;
     position: absolute;
@@ -65,6 +94,17 @@ body, html {
 /* Dropdown Button */
 .note-btn.dropdown-toggle:after {
     content: none;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+    .nav-pills .nav-link {
+        width: 100%; /* Full width for mobile */
+        text-align: center;
+    }
+    .nav-pills {
+        flex-direction: column;
+    }
 }
 
 /* Cards */
