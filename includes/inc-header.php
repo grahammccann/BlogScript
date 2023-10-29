@@ -6,15 +6,15 @@
 <head>
 <?php
 if (!empty(getValue("google_analytics_property_id"))) {
-$propertyId = getValue("google_analytics_property_id");
-echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$propertyId.'"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "'.$propertyId.'");
-</script>
-';
+    $propertyId = getValue("google_analytics_property_id");
+    echo '<script async src="https://www.googletagmanager.com/gtag/js?id='.$propertyId.'"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "'.$propertyId.'");
+    </script>
+    ';
 }
 ?>
 <meta charset="utf-8">
@@ -41,15 +41,16 @@ if (($_SERVER['PHP_SELF'] == checkUrl()) || $_SERVER['PHP_SELF'] == "/login.php"
 <link href="<?= urlFull(); ?>favicon.ico" rel="icon">
 <link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
 <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
-<link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
-<link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
-<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
-<?php if (isset($_GET['postId'])) { echo '<link rel="canonical" href="'.rawUrls($thePostId, getPostTitleOnly($thePostId), false).'">'; } ?>
-<?php if (!empty(getValue("google_adsense"))) { 
-	$googleClientId = getValue("google_adsense");
-	echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; } 
+<?php 
+if (isset($_GET['postId'])) { 
+    echo '<link rel="canonical" href="'.rawUrls($thePostId, getPostTitleOnly($thePostId), false).'">'; 
+} 
+?>
+<?php 
+if (!empty(getValue("google_adsense"))) { 
+    $googleClientId = getValue("google_adsense");
+    echo "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={$googleClientId}\" crossorigin=\"anonymous\"></script>\n"; 
+} 
 ?>
 </head>
 <body> 

@@ -71,6 +71,11 @@ $(document).ready(function(){
 </footer>
 
 </div>
+    <link href="<?= urlFull(); ?>assets/datatables/datatables.min.css" rel="stylesheet" type="text/css">
+    <link href="<?= urlFull(); ?>assets/fontawesome-free-6.2.0-web/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+    <script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
     <script src="<?= urlFull(); ?>js/bootstrap.bundle.min.js"></script>  
     <script src="<?= urlFull(); ?>js/blog.js"></script>  
     <script src="<?= urlFull(); ?>assets/datatables/datatables.min.js"></script>

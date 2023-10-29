@@ -29,7 +29,7 @@
 			</div>
 			
 			<div class="card">
-			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-extended.php"); ?>
 			</div>
 			
 		</div>

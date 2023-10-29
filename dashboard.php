@@ -30,7 +30,7 @@
 			</div>
 			
 			<div class="card">
-			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+			<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-extended.php"); ?>
 			</div>
 			
 		</div>
@@ -40,14 +40,6 @@
 			<div class="card">
 				<div class="card-header">
 					<i class="fas fa-cog"></i> Dashboard
-					<div class="float-end">
-						<span class="badge bg-success badge-sm text-decoration-none me-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create Robots .txt File">
-							<a href="dashboard.php?robots=1" class="text-decoration-none text-white">Generate Robots .txt File</a>
-						</span>
-						<span class="badge bg-success badge-sm text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create an xml sitemap">
-							<a href="dashboard.php?sitemap=1" class="text-decoration-none text-white">Generate XML Sitemap</a>
-						</span>
-					</div>
 				</div>
 				<div class="card-body">
 

@@ -28,7 +28,7 @@
 			</div>
 			
 			<div class="card">
-				<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-analytics.php"); ?>
+				<?php include($_SERVER['DOCUMENT_ROOT'] . "/includes/inc-dashboard-extended.php"); ?>
 			</div>
 			
 		</div>
@@ -152,26 +152,13 @@
 			<div class="card-body">
 				<form action="maintenance.php" method="POST">
 					<div class="mb-3">
-						<label for="inputField" class="form-label"><strong>Articles:</strong></label>
-						<input type="text" class="form-control" id="inputField" name="delete_words_count" placeholder="Enter number values here only" pattern="[0-9]+" required>
+						<label for="inputField" class="form-label"><strong>Articles: (Delete all articles under this body length!)</strong></label>
+						<input type="text" class="form-control" id="inputField" name="delete_words_count" placeholder="500 - e.g. articles with 500 or less characters will be returned" pattern="[0-9]+" required>
 						<div class="invalid-feedback">Please enter a number</div>
 					</div>
 					<div class="mb-3">
 						<button type="submit" name="submitTheWordCount" class="btn btn-primary">Count Articles</button>
 						<button type="submit" name="submitWordCountDelete" class="btn btn-danger" onClick="return confirm('Are you sure you want to delete articles and images?');">Delete Articles</button>
-					</div>
-				</form>
-			</div>
-		</div>
-
-		<div class="card" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-			<div class="card-body">
-				<form action="maintenance.php" method="POST">
-					<div class="mb-3">
-						<label for="inputField" class="form-label"><strong>Images:</strong></label>
-						<div class="mb-3">
-							<button type="submit" name="submitCleanUpImages" class="btn btn-danger" onClick="return confirm('Are you sure you want to clean images?');">Clean Images</button>
-						</div>
 					</div>
 				</form>
 			</div>
