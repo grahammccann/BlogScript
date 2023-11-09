@@ -389,7 +389,6 @@ function countPostsInCategories($categoryId) {
     }   
 }
 
-
 function createSitemap() {
     try {
         $xml = DB::getInstance()->select("SELECT * FROM `posts` ORDER BY `post_date` DESC");
@@ -1020,7 +1019,6 @@ function performArticlePurge($articleId, $articleImage, $imageName) {
         stderr($e->getMessage());
     }
 }
-
 
 function rawUrls($id, $name, $category) {
 	try {

@@ -1,10 +1,10 @@
-/* General Styles */
+
 body, html {
     height: 100%;    
 	margin: 0;
 }
 
-/* Buttons */
+
 .btn:focus {
     box-shadow: none !important;
 }
@@ -20,7 +20,7 @@ body, html {
 
 @import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap');
 
-/* Modified Navigation */
+
 .navbar {
     background-color: #000;
     display: flex;
@@ -58,7 +58,7 @@ body, html {
 }
 
 .nav-pills .nav-link:active, .nav-pills .nav-link.active {
-    background-color: #0d6efd; /* Bootstrap 5 blue */
+    background-color: #0d6efd; 
     color: #fff;
 }
 
@@ -79,7 +79,7 @@ body, html {
 }
 
 .nav-pills .dropdown-item:hover {
-    background-color: #0d6efd; /* Bootstrap 5 blue */
+    background-color: #0d6efd; 
     color: #000;
 }
 
@@ -91,23 +91,70 @@ body, html {
     width: 150px;
 }
 
-/* Dropdown Button */
+
 .note-btn.dropdown-toggle:after {
     content: none;
 }
 
-/* Media query for mobile devices */
 @media (max-width: 767px) {
-    .nav-pills .nav-link {
-        width: 100%; /* Full width for mobile */
-        text-align: center;
-    }
+    
     .nav-pills {
         flex-direction: column;
+        align-items: stretch; 
+    }
+
+    .nav-pills .nav-item,
+    .nav-pills .nav-link {
+        width: 100%; 
+    }
+
+    .nav-pills .nav-link {
+        text-align: center;
+        border-radius: 25px; 
+        margin-bottom: 10px; 
+    }
+
+    
+    .navbar-custom .navbar-toggler {
+        text-align: left;
+        margin-bottom: 10px; 
+        width: 100%; 
+    }
+
+    
+    .navbar-custom .form-inline,
+    .navbar-custom .input-group {
+        display: flex;
+        flex-wrap: nowrap; 
+        align-items: stretch; 
+        width: 100%; 
+    }
+
+    
+    .navbar-custom .form-control {
+        flex-grow: 1; 
+        margin-bottom: 10px; 
+        box-sizing: border-box; 
+    }
+
+    
+    .navbar-custom .btn-outline-success {
+        flex-shrink: 0; 
+        margin-bottom: 10px; 
+        box-sizing: border-box; 
+    }
+
+    
+    .navbar-custom .form-control {
+        width: calc(100% - 45px); 
+    }
+
+    .navbar-custom .btn-outline-success {
+        width: 45px; 
     }
 }
 
-/* Cards */
+
 .related-card {
     align-items: center;
     display: flex;
@@ -119,7 +166,7 @@ body, html {
     margin-bottom: 20px;
 }
 
-/* Table of Contents */
+
 .table-of-contents {
     list-style-type: none;
     margin-top: 0;
@@ -139,12 +186,12 @@ body, html {
     margin-bottom: 0.5rem;
 }
 
-/* Footer */
+
 footer {
     width: 100%;
 }
 
-/* Content */
+
 #post-content a {
     font-weight: bold;
     text-decoration: none;
@@ -160,7 +207,7 @@ footer {
 	flex: 1;
 }
 
-/* Social Media Icons */
+
 .fab.fa-twitter {
     color: #55acee;
 }
@@ -177,21 +224,21 @@ footer {
     word-spacing: -1em;
 }
 
-/* Breadcrumb Styles */
+
 .breadcrumb-card {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .breadcrumb-body {
     display: flex;
-    align-items: center; /* Aligns items vertically */
-    padding: 0.5rem 1.25rem; /* Adds padding to match Bootstrap's default card-body padding */
+    align-items: center; 
+    padding: 0.5rem 1.25rem; 
 }
 
 .breadcrumb {
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 16px;
-    margin-bottom: 0; /* Removes the default margin */
+    margin-bottom: 0; 
 }
 
 .breadcrumb .home-link {
@@ -220,7 +267,7 @@ nav[aria-label="breadcrumb"] {
     text-align: center;
     background-color: transparent;
     padding: 1rem;
-    border-bottom: 1px solid #eee; /* Light grey border for separation */
+    border-bottom: 1px solid #eee; 
 }
 
 .recent-posts-card .fas.fa-newspaper {
@@ -234,12 +281,12 @@ nav[aria-label="breadcrumb"] {
     align-items: center;
     font-size: 16px;
     color: #333;
-    border-top: 1px solid #eee; /* Light grey border for separation */
+    border-top: 1px solid #eee; 
 }
 
 .recent-posts-card .post-thumbnail {
     width: 25px;
     height: 25px;
     margin-right: 10px;
-    border-radius: 50%; /* Optional: Makes the images circular */
+    border-radius: 50%; 
 }

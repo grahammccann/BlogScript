@@ -19,9 +19,9 @@
 	
 	?>
 	
-	<?php if (!is_writable("uploads")) { stderr('Your <strong>uploads</strong> folder is not writable, please make the permissions <strong>777</strong> before we can upload new images.'); } ?>
-
 	<div class="row">
+	
+	    <?php if (!is_writable("uploads")) { stderr('Your <strong>uploads</strong> folder is not writable, please make the permissions <strong>777</strong> before we can upload new images.'); } ?>
 	
 		<div class="col-md-3">
 		
