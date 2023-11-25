@@ -1,9 +1,137 @@
-
-body, html {
-    height: 100%;    
-	margin: 0;
+/* General Styles */
+.navbar {
+    background-color: #000; /* Black background */
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    align-items: center;
 }
 
+.navbar-brand img {
+    height: 100px;
+    width: 100px;
+}
+
+.nav-pills .nav-link {
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #fff;
+    background-color: transparent;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+    position: relative; /* Required for the underline effect */
+    margin: 0 5px; /* Space between links */
+}
+
+/* Blue underline effect */
+.nav-pills .nav-link::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #007bff; /* Blue color */
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+    transform-origin: bottom right;
+}
+
+.nav-pills .nav-link:hover::after,
+.nav-pills .nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Dropdown Menu Styling */
+.nav-pills .dropdown-menu {
+    background-color: #333; /* Dark background for dropdown */
+    border: none;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+}
+
+.nav-pills .dropdown-item {
+    color: #fff;
+    background-color: transparent;
+    padding: 0.75rem 1rem;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 0.25rem;
+    margin: 0.25rem 0;
+}
+
+.nav-pills .dropdown-item:hover,
+.nav-pills .dropdown-item:focus {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Search Form Styling */
+.form-inline .input-group {
+    flex-wrap: nowrap;
+}
+
+.form-inline .form-control {
+    flex-grow: 1;
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.form-inline .btn {
+    border-radius: 0 0.25rem 0.25rem 0;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .navbar-brand img {
+        height: 100px;
+        width: 100px;
+    }
+
+    .navbar-toggler {
+        color: #fff;
+        border-color: transparent;
+    }
+
+    .nav-pills {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-pills .nav-link {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-pills .nav-link::after {
+        bottom: -5px; /* Slightly higher underline for mobile */
+    }
+
+    .nav-pills .dropdown-menu {
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .nav-pills .dropdown-item {
+        text-align: center;
+    }
+
+    .form-inline, .input-group {
+        width: 100%;
+    }
+
+    .form-inline .form-control,
+    .form-inline .btn {
+        width: calc(50% - 2px);
+        margin-top: 0;
+    }
+
+    .form-inline .btn {
+        width: calc(50% - 2px);
+    }
+}
 
 .btn:focus {
     box-shadow: none !important;
@@ -17,143 +145,6 @@ body, html {
     min-width: 1.8em;
     padding: .25em !important;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap');
-
-
-.navbar {
-    background-color: #000;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    align-items: center;
-}
-
-.navbar-brand img {
-    max-height: 100px;
-    padding: 5px;
-}
-
-.nav-pills {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.nav-pills .nav-link {
-    font-family: 'Helvetica Neue', sans-serif;
-    border: 2px solid #D3D3D3;
-    border-radius: 25px;
-    background-color: transparent; 
-    color: #fff;
-    font-weight: bold;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav-pills .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #000;
-}
-
-.nav-pills .nav-link:active, .nav-pills .nav-link.active {
-    background-color: #0d6efd; 
-    color: #fff;
-}
-
-.nav-pills .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.9);
-    border: none;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 25px;
-}
-
-.nav-pills .dropdown-item {
-    background-color: transparent;
-    color: #fff;
-    transition: background-color 0.3s;
-    border-radius: 25px;
-    margin: 5px 0;
-    padding-left: 20px;
-}
-
-.nav-pills .dropdown-item:hover {
-    background-color: #0d6efd; 
-    color: #000;
-}
-
-.link-overlay {
-    height: 150px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 150px;
-}
-
-
-.note-btn.dropdown-toggle:after {
-    content: none;
-}
-
-@media (max-width: 767px) {
-    
-    .nav-pills {
-        flex-direction: column;
-        align-items: stretch; 
-    }
-
-    .nav-pills .nav-item,
-    .nav-pills .nav-link {
-        width: 100%; 
-    }
-
-    .nav-pills .nav-link {
-        text-align: center;
-        border-radius: 25px; 
-        margin-bottom: 10px; 
-    }
-
-    
-    .navbar-custom .navbar-toggler {
-        text-align: left;
-        margin-bottom: 10px; 
-        width: 100%; 
-    }
-
-    
-    .navbar-custom .form-inline,
-    .navbar-custom .input-group {
-        display: flex;
-        flex-wrap: nowrap; 
-        align-items: stretch; 
-        width: 100%; 
-    }
-
-    
-    .navbar-custom .form-control {
-        flex-grow: 1; 
-        margin-bottom: 10px; 
-        box-sizing: border-box; 
-    }
-
-    
-    .navbar-custom .btn-outline-success {
-        flex-shrink: 0; 
-        margin-bottom: 10px; 
-        box-sizing: border-box; 
-    }
-
-    
-    .navbar-custom .form-control {
-        width: calc(100% - 45px); 
-    }
-
-    .navbar-custom .btn-outline-success {
-        width: 45px; 
-    }
-}
-
 
 .related-card {
     align-items: center;
