@@ -1057,7 +1057,6 @@ function removeEmptyClasses($html) {
     return preg_replace('/class=""/', '', $html);
 }
 
-
 function resizeImage($source, $destination, $size, $quality = null) { 
     try {
         $ext = strtolower(pathinfo($source, PATHINFO_EXTENSION));
