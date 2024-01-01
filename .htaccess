@@ -1,9 +1,5 @@
 RewriteEngine on
 
-# Force SSL
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=302,L,NE]
-
 # Force www
 RewriteCond %{HTTP_HOST} !^$
 RewriteCond %{HTTP_HOST} !^www\. [NC]

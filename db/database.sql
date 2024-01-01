@@ -92,7 +92,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `member_username`, `member_password`, `member_password_md5`, `member_email`, `member_is_admin`, `member_date`) VALUES
-(2, 'admin', '...', '...', 'graham23s@hotmail.com', 'yes', '2023-02-26 09:08:49');
+(2, 'admin', 'test!pass!', '5d26dbc57c0e385399d8a463ee9eb0d6', 'graham23s@hotmail.com', 'yes', '2023-02-26 09:08:49');
 
 -- --------------------------------------------------------
 
@@ -124,35 +124,36 @@ CREATE TABLE `options` (
 -- Dumping data for table `options`
 --
 
+INSERT INTO `options` (`option_id`, `option_name`, `option_value`, `option_description`, `option_date`) VALUES
 (1, 'site_admin_email', 'admin@demo.com', 'Specifies the primary administrative email for the site.', '2022-09-20 20:54:07'),
 (2, 'ip_edit', '123.45.67.89', 'Specifies the IP addresses (separated by "|") authorized to edit posts.', '2023-02-23 08:21:55'),
 (3, 'homepage_title', 'Demo Title', 'Defines the title tag value for the homepage.', '2021-05-16 15:47:56'),
 (4, 'homepage_description', 'Demo Description', 'Sets the meta description tag for the homepage.', '2021-05-16 17:38:44'),
-(5, 'homepage_about', 'About our Demo Site', 'Defines the "About" section content for the homepage.', '2021-10-23 20:55:27'),
+(5, 'homepage_about', '', 'Defines the "About" section content for the homepage.', '2021-10-23 20:55:27'),
 (6, 'homepage_pagination', '5', 'Sets the number of articles displayed on the homepage.', '2021-10-18 21:55:15'),
 (7, 'homepage_show_categories', '0', 'Controls the display of the categories section on the homepage (1=show, 0=hide).', '2021-10-23 20:40:35'),
 (8, 'homepage_hide_login_link', '1', 'Controls the display of the admin login link on the homepage footer (1=hide, 0=show).', '2021-10-29 20:22:40'),
-(9, 'homepage_introduction_header', 'Demo Header', 'Sets the header for the homepage introduction card.', '2023-01-29 12:05:06'),
-(10, 'homepage_introduction_header_text', 'Demo Intro Text', 'Defines the content for the homepage introduction card.', '2023-01-29 12:20:16'),
-(11, 'sidebar_cta_1_header', 'CTA1', 'Sets the header for the first sidebar Call To Action (CTA) section.', '2023-01-29 10:59:06'),
-(12, 'sidebar_cta_1_text', 'CTA1 Text', 'Defines the content for the first sidebar CTA section.', '2023-01-29 11:17:34'),
-(13, 'sidebar_cta_2_header', 'CTA2', 'Sets the header for the second sidebar CTA section.', '2023-01-29 11:29:50'),
-(14, 'sidebar_cta_2_text', 'CTA2 Text', 'Defines the content for the second sidebar CTA section.', '2023-01-29 11:31:13'),
+(9, 'homepage_introduction_header', '', 'Sets the header for the homepage introduction card.', '2023-01-29 12:05:06'),
+(10, 'homepage_introduction_header_text', '', 'Defines the content for the homepage introduction card.', '2023-01-29 12:20:16'),
+(11, 'sidebar_cta_1_header', '', 'Sets the header for the first sidebar Call To Action (CTA) section.', '2023-01-29 10:59:06'),
+(12, 'sidebar_cta_1_text', '', 'Defines the content for the first sidebar CTA section.', '2023-01-29 11:17:34'),
+(13, 'sidebar_cta_2_header', '', 'Sets the header for the second sidebar CTA section.', '2023-01-29 11:29:50'),
+(14, 'sidebar_cta_2_text', '', 'Defines the content for the second sidebar CTA section.', '2023-01-29 11:31:13'),
 (15, 'hide_all_sidebars', '0', 'Controls the display of sidebars on the site (1=hide, 0=show).', '2023-06-27 11:15:10'),
-(16, 'footer_amazon_disclosure_text', 'Demo Amazon Disclosure', 'Sets the Amazon Associates disclosure text for the site footer.', '2021-10-31 09:00:19'),
-(17, 'footer_twitter', 'https://twitter.com/DemoTwitter', 'Sets the Twitter link for the site footer.', '2021-10-31 09:04:15'),
-(18, 'footer_meta', 'https://www.facebook.com/DemoFacebook/', 'Sets the Facebook link for the site footer.', '2021-10-31 09:06:06'),
-(19, 'footer_instagram', 'https://www.instagram.com/DemoInstagram/', 'Sets the Instagram link for the site footer.', '2021-10-31 09:23:11'),
-(20, 'bottom_link_1', 'https://demo.com/', 'Specifies an additional link to display below the footer.', '2023-02-28 19:09:35'),
-(21, 'google_adsense', 'Demo Adsense Code', 'Sets the Google AdSense code for the <head> tags.', '2023-01-19 10:58:58'),
-(22, 'google_analytics_property_id', 'G-DemoPropertyId', 'Sets the Google Analytics property ID.', '2023-01-21 21:46:26'),
-(23, 'ads_post_top', 'Demo Ad Code', 'Sets the ad code to be displayed at the top of each post page.', '2022-10-09 15:24:42'),
+(16, 'footer_amazon_disclosure_text', '', 'Sets the Amazon Associates disclosure text for the site footer.', '2021-10-31 09:00:19'),
+(17, 'footer_twitter', '', 'Sets the Twitter link for the site footer.', '2021-10-31 09:04:15'),
+(18, 'footer_meta', '', 'Sets the Facebook link for the site footer.', '2021-10-31 09:06:06'),
+(19, 'footer_instagram', '', 'Sets the Instagram link for the site footer.', '2021-10-31 09:23:11'),
+(20, 'bottom_link_1', '', 'Specifies an additional link to display below the footer.', '2023-02-28 19:09:35'),
+(21, 'google_adsense', '', 'Sets the Google AdSense code for the <head> tags.', '2023-01-19 10:58:58'),
+(22, 'google_analytics_property_id', '', 'Sets the Google Analytics property ID.', '2023-01-21 21:46:26'),
+(23, 'ads_post_top', '', 'Sets the ad code to be displayed at the top of each post page.', '2022-10-09 15:24:42'),
 (24, 'recaptcha2_site_key', '6DemoSiteKey', 'Sets the site key for ReCaptcha2.', '2023-03-12 14:35:56'),
 (25, 'recaptcha2_secret_key', '6DemoSecretKey', 'Sets the secret key for ReCaptcha2.', '2023-03-12 14:36:32'),
 (26, 'about_us_header', 'About Us', 'Sets the header for the "About Us" section.', '2023-02-25 21:02:18'),
-(27, 'about_us_text', 'Demo About Us Text', 'Defines the content for the "About Us" section.', '2023-02-25 21:03:41'),
-(28, 'category_style_icon', 'demo-icon', 'Sets a custom icon for each category name.', '2022-12-18 09:59:54'),
-(29, 'twitter_username', 'DemoTwitterUser', 'Sets the Twitter username for the Twitter cards feature.', '2023-02-09 21:38:34');
+(27, 'about_us_text', '', 'Defines the content for the "About Us" section.', '2023-02-25 21:03:41'),
+(28, 'category_style_icon', '', 'Sets a custom icon for each category name.', '2022-12-18 09:59:54'),
+(29, 'twitter_username', '', 'Sets the Twitter username for the Twitter cards feature.', '2023-02-09 21:38:34');
 
 
 -- --------------------------------------------------------

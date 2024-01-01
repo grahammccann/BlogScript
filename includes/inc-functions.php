@@ -1060,55 +1060,90 @@ function removeEmptyClasses($html) {
 
 function resizeImage($source, $destination, $size, $quality = null) { 
     try {
-		
-		$ext = strtolower(pathinfo($source)['extension']);
+        $ext = strtolower(pathinfo($source, PATHINFO_EXTENSION));
 
-		if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
-		    return false;
-		}
+        if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
+            error_log("Unsupported file extension: " . $ext);
+            return false;
+        }
 
-		if (!file_exists($source)) {
-		    return false;
-		}
+        if (!file_exists($source)) {
+            error_log("Source file does not exist: " . $source);
+            return false;
+        }
 
-		$dimensions = getimagesize($source);
-		$width      = $dimensions[0];
-		$height     = $dimensions[1];
+        $dimensions = getimagesize($source);
+        if ($dimensions === false) {
+            error_log("Failed to get image size for file: " . $source);
+            return false;
+        }
 
-		if (is_array($size)) {
-			$new_width  = $size[0];
-			$new_height = $size[1];
-		} else {
-			$new_width  = ceil(($size/100) * $width);
-			$new_height = ceil(($size/100) * $height);
-		}
+        $width = $dimensions[0];
+        $height = $dimensions[1];
 
-		$fnCreate = "imagecreatefrom" . ($ext == "jpg" ? "jpeg" : $ext);
-		$fnOutput = "image" . ($ext == "jpg" ? "jpeg" : $ext);
+        if (is_array($size)) {
+            $new_width = $size[0];
+            $new_height = $size[1];
+        } else {
+            $new_width = ceil(($size / 100) * $width);
+            $new_height = ceil(($size / 100) * $height);
+        }
 
-		$original = $fnCreate($source);
-		$resized  = imagecreatetruecolor($new_width, $new_height); 
+        $fnCreate = "imagecreatefrom" . ($ext == "jpg" ? "jpeg" : $ext);
+        $fnOutput = "image" . ($ext == "jpg" ? "jpeg" : $ext);
 
-		if ($ext == "png" || $ext == "gif") {
-			imagealphablending($resized, false);
-			imagesavealpha($resized, true);
-			imagefilledrectangle($resized, 0, 0, $new_width, $new_height, imagecolorallocatealpha($resized, 255, 255, 255, 127));
-		}
+        if (!function_exists($fnCreate)) {
+            error_log("Function does not exist: " . $fnCreate);
+            return false;
+        }
 
-		imagecopyresampled($resized, $original, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+        $original = $fnCreate($source);
+        if (!$original) {
+            error_log("Failed to create original image from source.");
+            return false;
+        }
 
-		if (is_numeric($quality)) {
-		    $fnOutput($resized, $destination, $quality);
-		} else {
-		    $fnOutput($resized, $destination);
-		}
+        $resized = imagecreatetruecolor($new_width, $new_height);
+        if (!$resized) {
+            error_log("Failed to create resized image.");
+            imagedestroy($original);
+            return false;
+        }
 
-		imagedestroy($original);
-		imagedestroy($resized);
-		
-	} catch(Exception $e) {
-        stderr($e->getMessage());		
-	}
+        if ($ext == "png" || $ext == "gif") {
+            imagealphablending($resized, false);
+            imagesavealpha($resized, true);
+            $transparent = imagecolorallocatealpha($resized, 255, 255, 255, 127);
+            imagefilledrectangle($resized, 0, 0, $new_width, $new_height, $transparent);
+        }
+
+        if (!imagecopyresampled($resized, $original, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) {
+            error_log("Failed to copy and resize image.");
+            imagedestroy($original);
+            imagedestroy($resized);
+            return false;
+        }
+
+        if (is_numeric($quality) && !$fnOutput($resized, $destination, $quality)) {
+            error_log("Failed to save resized image with quality.");
+            imagedestroy($original);
+            imagedestroy($resized);
+            return false;
+        } elseif (!is_numeric($quality) && !$fnOutput($resized, $destination)) {
+            error_log("Failed to save resized image without specified quality.");
+            imagedestroy($original);
+            imagedestroy($resized);
+            return false;
+        }
+
+        imagedestroy($original);
+        imagedestroy($resized);
+        return true;
+        
+    } catch (Exception $e) {
+        error_log("Exception in resizeImage: " . $e->getMessage());
+        return false;
+    }
 }
 
 function rssUrls($postName, $postId) {
@@ -1373,81 +1408,71 @@ function updateRedirectClicks($redirectId) {
 	}
 }
 
-function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = true) {
+function uploadImage($imageName, $imageTemp, $imageAltTextName, $addWatermark = true, $isHeader = false) {
     try {
         if (!isset($imageTemp) || !is_uploaded_file($imageTemp)) {
             stderr("Invalid <strong>file</strong> upload.");
-            return;
+            return false;
         }
 
-        $validFormats = array("jpg", "png", "gif", "jpeg");
+        $validFormats = ["jpg", "png", "gif", "jpeg"];
         $imageNameFinal = "";
         if (strlen($imageName) > 0) {
             list($txt, $ext) = explode(".", $imageName);
             if (in_array(strtolower($ext), $validFormats)) {
                 $size = filesize($imageTemp);
-                $maxFileSize = 5000000; // maximum file size in bytes (5MB)
+                $maxFileSize = 5000000; // Maximum file size in bytes (5MB)
                 if ($size > $maxFileSize) {
                     stderr("File size must be <strong>less</strong> than " . $maxFileSize / 1000000 . "MB.");
-                    return;
+                    return false;
                 }
+
                 $type = exif_imagetype($imageTemp);
                 if (!$type || !in_array($type, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF])) {
                     stderr("Invalid file type. Only <strong>images</strong> are allowed.");
-                    return;
+                    return false;
                 }
+
                 $randomInt = rand();
                 $imageAltText = str_replace(" ", "-", $imageAltTextName);
                 $imageNameFinal = $imageAltText . "-" . $randomInt . "." . $ext;
                 $imagePath = "uploads/" . $imageNameFinal;
+                
                 if (!is_dir("uploads")) {
                     mkdir("uploads");
                 }
+                
                 if (file_exists($imagePath)) {
                     stdmsg("The <strong>image</strong> file already exists.");
-                    return;
+                    return false;
                 }
 
-                // Resize and compress the image
-                $maxWidth = 1200; 
-                $maxHeight = 800;
-                $quality = 80; 
-
-                $src = imagecreatefromstring(file_get_contents($imageTemp));
-                list($width, $height) = getimagesize($imageTemp);
-                $ratio = min($maxWidth / $width, $maxHeight / $height);
-                $newWidth = ceil($width * $ratio);
-                $newHeight = ceil($height * $ratio);
-
-                $dst = imagecreatetruecolor($newWidth, $newHeight);
-                imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-                // Save the resized image
-                switch ($type) {
-                    case IMAGETYPE_JPEG:
-                        imagejpeg($dst, $imageTemp, $quality);
-                        break;
-                    case IMAGETYPE_PNG:
-                        imagepng($dst, $imageTemp, $quality / 10);
-                        break;
-                    case IMAGETYPE_GIF:
-                        imagegif($dst, $imageTemp);
-                        break;
+                if (!move_uploaded_file($imageTemp, $imagePath)) {
+                    stderr("<strong>Error:</strong> Failed to move uploaded file.");
+                    return false;
                 }
 
-                imagedestroy($src);
-                imagedestroy($dst);
-
-                if (move_uploaded_file($imageTemp, $imagePath)) {
+                if ($isHeader) {
+                    $resized = resizeImage($imagePath, $imagePath, [100, 100]);
+                    if (!$resized) {
+                        stderr("<strong>Error:</strong> Failed to resize header image.");
+                        return false;
+                    }
+                } else {
                     if ($addWatermark) {
                         addWatermark($imagePath);
                     }
-                    return $imageNameFinal;
                 }
+
+                return $imageNameFinal;
+            } else {
+                stderr("Invalid file extension.");
+                return false;
             }
         }
-    } catch(Exception $e) {
-        stderr($e->getMessage());      
+    } catch (Exception $e) {
+        stderr($e->getMessage());
+        return false;
     }
 }
 

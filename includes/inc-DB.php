@@ -42,7 +42,7 @@ class DB
                     //PDO::ATTR_PERSISTENT => true,
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8; SET CHARACTER SET utf8;'
+                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4; SET CHARACTER SET utf8mb4;'
                 )
             );
         } catch(Exception $ex) {

@@ -42,73 +42,88 @@
 				
 				<?php
 				 
-				$errors = [];
+					$errors = [];
 
-				if (isset($_POST['submitImage'])) {
+					if (isset($_POST['submitImage'])) {
 
-					$filename = preg_replace("/[^a-zA-Z0-9.]/", "_", $_FILES['post_image']['name']);						
-					
-					if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {		
-					
-						$imageName = uploadImage(strtolower($filename), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
-						
-						if (!$imageName) {
-							stderr("<strong>Error:</strong> Failed to upload image for non-header.");
-							return; 
-						}
-						
-						$i = DB::getInstance()->insert(
-							'images',
-							[
-								'image_name' => $imageName,
-								'image_alt_text' => $_POST['post_image_alt_text'],
-								'image_is_header' => "no",
-								'image_date' => date('Y-m-d H:i:s')
-							]
-						);
-						
-						if (!$i) {
-							stderr("<strong>Error:</strong> Failed to insert non-header image into database.");
-							return;  // exit early
-						}
-						
-						stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong>.");							
-					} 	
+						$filename = preg_replace("/[^a-zA-Z0-9.]/", "_", $_FILES['post_image']['name']);	
 
-					if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {		
-					
-						$imageName = uploadImage(strtolower($filename), $_FILES['post_image']['tmp_name'], strtolower($_POST['post_image_alt_text']), true);
+					    // Determine if the image is a header based on the form input
+                        $isHeader = isset($_POST['post_image_header']) && $_POST['post_image_header'] == 'yes';	
 						
-						if (!$imageName) {
-							stderr("<strong>Error:</strong> Failed to upload image for header.");
-							return;  
-						}
+						if (!empty($_FILES['post_image']['name']) && empty($_POST['post_image_header'])) {		
 						
-						$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);
+							$imageName = uploadImage(
+								strtolower($filename),
+								$_FILES['post_image']['tmp_name'],
+								strtolower($_POST['post_image_alt_text']),
+								!$isHeader,
+								$isHeader
+							);
+													
+							if (!$imageName) {
+								stderr("<strong>Error:</strong> Failed to upload image for non-header.");
+								return; 
+							}
+							
+							$i = DB::getInstance()->insert(
+								'images',
+								[
+									'image_name' => $imageName,
+									'image_alt_text' => $_POST['post_image_alt_text'],
+									'image_is_header' => "no",
+									'image_date' => date('Y-m-d H:i:s')
+								]
+							);
+							
+							if (!$i) {
+								stderr("<strong>Error:</strong> Failed to insert non-header image into database.");
+								return; 
+							}
+							
+							stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong>.");							
+						} 	
+
+						if (!empty($_FILES['post_image']['name']) && !empty($_POST['post_image_header'])) {		
 						
-						if (!$resizedImage) {
-							stderr("<strong>Error:</strong> Failed to resize header image.");
-							return;  
-						}
+							$imageName = uploadImage(
+								strtolower($filename),
+								$_FILES['post_image']['tmp_name'],
+								strtolower($_POST['post_image_alt_text']),
+								!$isHeader,
+								$isHeader
+							);
 						
-						$i = DB::getInstance()->insert(
-							'images',
-							[
-								'image_name' => $imageName,
-								'image_alt_text' => $_POST['post_image_alt_text'],
-								'image_is_header' => "yes",
-								'image_date' => date('Y-m-d H:i:s')
-							]
-						);
-						
-						if (!$i) {
-							stderr("<strong>Error:</strong> Failed to insert header image into database.");
-							return;  
-						}
-						
-						stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong> and <strong>resized</strong>.");							
-					} 		
-				}
+							if (!$imageName) {
+								stderr("<strong>Error:</strong> Failed to upload image for header.");
+								return;  
+							}
+							
+							$resizedImage = resizeImage("uploads/" . $imageName, "uploads/" . $imageName, [100, 100]);
+
+							if (!$resizedImage) {
+								stderr("<strong>Error:</strong> Failed to resize header image.");
+								return;  
+							}
+							
+							$i = DB::getInstance()->insert(
+								'images',
+								[
+									'image_name' => $imageName,
+									'image_alt_text' => $_POST['post_image_alt_text'],
+									'image_is_header' => "yes",
+									'image_date' => date('Y-m-d H:i:s')
+								]
+							);
+							
+							if (!$i) {
+								stderr("<strong>Error:</strong> Failed to insert header image into database.");
+								return;  
+							}
+							
+							stdmsg("Your new <strong>image</strong> has been <strong>uploaded</strong> and <strong>resized</strong>.");							
+						} 		
+					}
 				 
 				?>
 				

@@ -22,11 +22,11 @@ if (!empty(getValue("google_analytics_property_id"))) {
 <meta name="twitter:site" content="@<?= getValue("twitter_username"); ?>">
 <meta name="twitter:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta name="twitter:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
-<meta name="twitter:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
+<meta name="twitter:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . (is_array(getTwitterImage($_GET['postId'])) ? current(getTwitterImage($_GET['postId'])) : getTwitterImage($_GET['postId'])) : urlFull() . (is_array(getHeaderImage()) ? current(getHeaderImage()) : getHeaderImage()); ?>">
 <meta property="og:title" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?= isset($_GET['postId']) ? rawUrls($thePostId, getPostTitleOnly($thePostId), false) : $_SERVER['REQUEST_URI']; ?>">
-<meta property="og:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . getTwitterImage($_GET['postId']) : urlFull() . getHeaderImage(); ?>">
+<meta property="og:image" content="<?= isset($_GET['postId']) ? urlFull() . "uploads/" . (is_array(getTwitterImage($_GET['postId'])) ? current(getTwitterImage($_GET['postId'])) : getTwitterImage($_GET['postId'])) : urlFull() . (is_array(getHeaderImage()) ? current(getHeaderImage()) : getHeaderImage()); ?>">
 <meta property="og:description" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta property="og:site_name" content="<?= $_SERVER['PHP_SELF'] == "/index.php" ? getValue("homepage_title") : getGenericMeta($_SERVER['PHP_SELF'], $thePostId, "title"); ?>">
 <meta property="og:locale" content="en_US">
@@ -41,6 +41,7 @@ if (($_SERVER['PHP_SELF'] == checkUrl()) || $_SERVER['PHP_SELF'] == "/login.php"
 <link href="<?= urlFull(); ?>favicon.ico" rel="icon">
 <link href="<?= urlFull(); ?>css/bootstrap.min.css" rel="stylesheet">
 <link href="<?= urlFull(); ?>css/style.css" rel="stylesheet">
+<script src="<?= urlFull(); ?>js/jquery-3.6.0.js"></script> 
 <?php 
 if (isset($_GET['postId'])) { 
     echo '<link rel="canonical" href="'.rawUrls($thePostId, getPostTitleOnly($thePostId), false).'">'; 
